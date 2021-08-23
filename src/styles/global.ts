@@ -10,13 +10,18 @@ export default createGlobalStyle`
         font-size: 62.5%;
     };
     body {
-        color: #eee;
+        color: #fff;
         background-color: #151515;
         font-family: 'Roboto', sans-serif;
     };
     #root {
         width: 100vw;
         height: 100%;
+    };
+    a {
+        color: #fff;
+        text-decoration: none;
+        font-family: 'Noto Sans', sans-serif;
     };
 
     ::-webkit-scrollbar {
