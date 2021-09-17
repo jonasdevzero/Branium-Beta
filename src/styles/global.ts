@@ -12,7 +12,7 @@ export default createGlobalStyle`
     body {
         color: #fff;
         background-color: #151515;
-        font-family: 'Roboto', sans-serif;
+        font-family: 'Roboto', sans-serif;        
     };
     #root {
         width: 100vw;
