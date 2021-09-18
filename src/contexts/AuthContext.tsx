@@ -13,7 +13,7 @@ type AuthContextType = {
 
 export const AuthContext = createContext({} as AuthContextType)
 
-export function AuthProvider({ children }: { children: React.ReactChild[] }) {
+export function AuthProvider({ children }: { children: React.ReactChild }) {
     const [loadingAuth, setLoadingAuth] = useState(false)
 
     const user = useAppSelector(state => state.user)
@@ -22,12 +22,12 @@ export function AuthProvider({ children }: { children: React.ReactChild[] }) {
     const router = useRouter()
 
     useEffect(() => {
-        router.asPath.startsWith(constants.routes.chat.HOME) && userService.hasJwt() && !user.id.length ?
+        router.asPath.startsWith(constants.routes.chat.HOME) && userService.hasJwt() && !isAuthenticated ?
             userService.auth(() => setLoadingAuth(true))
                 .catch((message) => router.replace(`${constants.routes.SIGN_IN}?error=${message}`))
                 .then(() => setTimeout(() => { setLoadingAuth(false) }, 150))
             : null
-    }, [user, router])
+    }, [router, isAuthenticated])
 
     return (
         <AuthContext.Provider value={{ isAuthenticated, loadingAuth }}>

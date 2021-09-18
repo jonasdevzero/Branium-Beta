@@ -19,6 +19,7 @@ export const Container = styled.div<LoadingProps>`
     background-color: #090909;
 
     opacity: ${({ hide }) => hide ? 0 : 1};
+    z-index: 998;
 `
 
 export const Title = styled.h1`

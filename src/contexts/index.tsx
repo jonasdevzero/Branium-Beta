@@ -3,7 +3,7 @@ import { WarnProvider } from "./WarnContext"
 import { AuthProvider } from "./AuthContext"
 import store from "../store"
 
-export default function Contexts({ children }: { children: React.ReactChild[] }) {
+export default function Contexts({ children }: { children: React.ReactChild }) {
     return (
         <ReduxProvider store={store}>
             <WarnProvider>
