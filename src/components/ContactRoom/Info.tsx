@@ -22,10 +22,6 @@ type InfoProps = {
 export default function Info({ contact, show, close }: InfoProps) {
     const warn = useWarn()
 
-    function deleteAllMessages() {
-
-    }
-
     async function block() {
         await contactService.block(contact.id)
         warn.info(`${contact.username} foi ${contact.you_blocked ? "" : "des"}bloqueado!`)
