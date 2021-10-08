@@ -35,10 +35,10 @@ const contactService = {
         })
     },
 
-    getMessages(contact_id) {
+    getMessages(contact_id, skip) {
         return new Promise(async (resolve, reject) => {
             try {
-                const { data } = await api.get(`/contact/messages/${contact_id}`)
+                const { data } = await api.get(`/contact/messages/${contact_id}?limit=30&skip=${skip}`)
                 resolve(data.messages)
             } catch (error) {
                 reject(error)
@@ -67,6 +67,17 @@ const contactService = {
         return new Promise(async (resolve, reject) => {
             try {
                 await api.patch(`/contact/messages/view/${contact_id}`)
+                resolve()
+            } catch (error: any) {
+                reject(error.response.data.message)
+            }
+        })
+    },
+
+    block(contact_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await api.patch(`/contact/block/${contact_id}`)
                 resolve()
             } catch (error: any) {
                 reject(error.response.data.message)

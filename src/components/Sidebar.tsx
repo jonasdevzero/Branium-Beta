@@ -33,7 +33,6 @@ import {
     PlusButton,
     PendingInvitations,
 } from "../styles/components/Sidebar"
-
 import {
     FiUser,
     FiUsers,
@@ -44,7 +43,9 @@ import {
 } from "react-icons/fi"
 
 export default function Sidebar() {
-    const { user, config } = useAppSelector(state => ({ user: state.user, config: state.sidebar }))
+    const user = useAppSelector(state => state.user)
+    const config = useAppSelector(state => state.sidebar)
+
     const [contacts, setContacts] = useState(user.contacts)
     const pending = {
         contacts: user.contacts.reduce((acc, crr) => acc += crr.unread_messages, 0) + user.contact_invitations.length,
@@ -128,7 +129,7 @@ export default function Sidebar() {
                 <Inner>
                     <Header>
                         <HeaderTitle>{config.optionName}</HeaderTitle>
-                        
+
                         {!!pending[config.currentOption] ? (
                             <HeaderPending>{pending[config.currentOption]}</HeaderPending>
                         ) : null}

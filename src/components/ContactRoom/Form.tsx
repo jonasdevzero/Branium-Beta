@@ -73,7 +73,7 @@ export default function Form({ contact_id }: { contact_id: string }) {
                     onFocus={() => setShowEmojiPicker(false)}
                 />
 
-                <Submit>
+                <Submit type="submit">
                     <FiSend />
                 </Submit>
             </Inner>

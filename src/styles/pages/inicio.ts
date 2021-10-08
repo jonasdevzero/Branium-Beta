@@ -26,7 +26,7 @@ export const Presentation = styled.div`
 
     h1 {
         font-size: 6.4rem;
-        font-family: 'Raleway', sans-serif;
+        font-family: 'Arial', sans-serif;
         font-weight: 400;
         max-width: 90rem;
         text-align: center;

@@ -3,21 +3,16 @@ import { useRouter } from "next/router"
 import { userService } from "../services/api"
 import { constants } from "../constants"
 import { useAppSelector } from "../hooks"
+import { AuthContextType } from "../types/contexts"
 
 import { Loading } from "../components"
-
-type AuthContextType = {
-    isAuthenticated: boolean
-    loadingAuth: boolean
-}
-
 export const AuthContext = createContext({} as AuthContextType)
 
 export function AuthProvider({ children }: { children: React.ReactChild }) {
     const [loadingAuth, setLoadingAuth] = useState(false)
 
-    const user = useAppSelector(state => state.user)
-    const isAuthenticated = !!user.id
+    const userId = useAppSelector(state => state.user.id)
+    const isAuthenticated = !!userId
 
     const router = useRouter()
 

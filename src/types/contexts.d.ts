@@ -31,3 +31,8 @@ export type Warn = {
     info(message: string, options?: WarnOptions): WarnObject
     remove(warn: WarnObject): void
 }
+
+export type AuthContextType = {
+    isAuthenticated: boolean
+    loadingAuth: boolean
+}

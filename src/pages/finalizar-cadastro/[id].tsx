@@ -7,7 +7,7 @@ import api from "../../services/api"
 import userService from "../../services/api/userService"
 import { constants } from "../../constants"
 
-import { Header, Footer } from "../../components"
+import { Header, Footer, Loading } from "../../components"
 import {
     Container,
     Content,
@@ -31,6 +31,7 @@ export default function FinalizarCadastro({ }: FinishSubscribeProps) {
     const [confirmPassword, setConfirmPassword] = useState("")
 
     const [loadingRequest, setLoadingRequest] = useState(false)
+    const [success, setSuccess] = useState(false)
     const [error, setError] = useState<string>()
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -43,6 +44,7 @@ export default function FinalizarCadastro({ }: FinishSubscribeProps) {
         userService.registration(id, { username, password, confirm_password: confirmPassword })
             .catch(error => setError(error))
             .then(() => {
+                setSuccess(true)
                 setLoadingRequest(false)
                 Router.replace(constants.routes.chat.HOME)
             })
@@ -54,36 +56,41 @@ export default function FinalizarCadastro({ }: FinishSubscribeProps) {
                 <title>Branium | Finalizar Cadastro</title>
             </Head>
 
-            <Header links={false} />
+            {success ? (<Loading hide={false} />) : (
+                <>
+                    <Header links={false} />
 
-            <Content alignCenter>
-                <FitForm onSubmit={handleSubmit}>
-                    <Title>Finalizar</Title>
+                    <Content alignCenter>
+                        <FitForm onSubmit={handleSubmit}>
+                            <Title>Finalizar</Title>
 
-                    {error ? (<ErrorMessage>{error}</ErrorMessage>) : null}
+                            {error ? (<ErrorMessage>{error}</ErrorMessage>) : null}
 
-                    <InputWrapper>
-                        <Label htmlFor="username">Username</Label>
-                        <Input required id="username" type="text" value={username} onChange={e => setUsername(e.target.value)} />
-                    </InputWrapper>
+                            <InputWrapper>
+                                <Label htmlFor="username">Username</Label>
+                                <Input required id="username" type="text" value={username} onChange={e => setUsername(e.target.value)} />
+                            </InputWrapper>
 
-                    <InputWrapper>
-                        <Label htmlFor="password">Senha</Label>
-                        <Input required id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
-                    </InputWrapper>
+                            <InputWrapper>
+                                <Label htmlFor="password">Senha</Label>
+                                <Input required id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                            </InputWrapper>
 
-                    <InputWrapper>
-                        <Label htmlFor="confirm_password">Confirmar Senha</Label>
-                        <Input required id="confirm_password" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
-                    </InputWrapper>
+                            <InputWrapper>
+                                <Label htmlFor="confirm_password">Confirmar Senha</Label>
+                                <Input required id="confirm_password" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+                            </InputWrapper>
 
-                    <Submit type="submit">
-                        {!loadingRequest ? "Cadastrar" : (<Image src="/images/loading-light.svg" alt="loading" width={30} height={30} />)}
-                    </Submit>
-                </FitForm>
-            </Content>
+                            <Submit type="submit">
+                                {!loadingRequest ? "Cadastrar" : (<Image src="/images/loading-light.svg" alt="loading" width={30} height={30} />)}
+                            </Submit>
+                        </FitForm>
+                    </Content>
 
-            <Footer />
+                    <Footer />
+                </>
+            )}
+
         </Container>
     )
 }

@@ -30,6 +30,7 @@ export class Contact {
     you_blocked: boolean
     online: boolean
     loaded_messages: boolean
+    loaded_messages_count: number
 }
 
 export class User {

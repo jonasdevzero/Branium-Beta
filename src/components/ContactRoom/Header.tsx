@@ -7,11 +7,16 @@ import {
     Room
 } from "../../styles/components/Room/Header"
 
-export default function Header({ contact }: { contact: Contact }) {
+type HeaderProps = {
+    contact: Contact
+    toggleInfo:() => void
+}
+
+export default function Header({ contact, toggleInfo }: HeaderProps) {
 
     return (
         <Container>
-            <Room>
+            <Room onClick={() => toggleInfo()}>
                 <Avatar />
                 <h2>{contact.username}</h2>
             </Room>

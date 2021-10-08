@@ -2,6 +2,7 @@ import styled from "styled-components"
 
 export const Logo = styled.a`
     font-size: 4.8rem;
+    font-family: 'Roboto', sans-serif;
     font-weight: 700;
     margin-left: 2rem;
     cursor: pointer;

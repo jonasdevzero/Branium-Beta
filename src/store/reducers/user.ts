@@ -1,4 +1,4 @@
-import { User } from "../../types/user"
+import { ContactMessage, User } from "../../types/user"
 import { Actions } from "../../types/store"
 import { constants } from "../../constants"
 
@@ -72,6 +72,22 @@ const reducers = {
                 contact.messages.push(message)
                 if (state.id !== message?.sender_id) {
                     contact.unread_messages += 1
+                }
+            }
+
+            return contact
+        })
+
+        return { ...state, contacts }
+    },
+
+    "UNSHIFT_CONTACT_MESSAGES"(state, action: { messages: ContactMessage[], where: string }) {
+        const { messages, where } = action
+
+        const contacts = state.contacts.map(contact => {
+            if (where === contact.id) {
+                for(let i = messages.length - 1; i >= 0; i--) {
+                    contact.messages.unshift(messages[i])
                 }
             }
 

@@ -1,6 +1,6 @@
 import io from "socket.io-client"
 
-const URL = process.env.WEBSOCKET_SERVER || "http://localhost:5000"
+const URL = "https://branium-api.herokuapp.com"
 
 export default io(URL, {
     autoConnect: false,

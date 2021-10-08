@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import React, { useCallback, useState } from "react"
 
 export default function useMsgContainer(ref: React.RefObject<HTMLDivElement>) {
     const [showScrollBtn, setShowScrollButton] = useState(false)
@@ -16,11 +16,12 @@ export default function useMsgContainer(ref: React.RefObject<HTMLDivElement>) {
             }
     }, [ref])
 
-    const handleScroll = useCallback(() => {
+    const handleScroll = useCallback((callback: () => void) => {
         if (!ref.current) return;
         const { scrollTop, clientHeight, scrollHeight } = ref.current
 
         setShowScrollButton(!(scrollTop + 100 > scrollHeight - clientHeight))
+        callback()
     }, [ref])
 
     return {

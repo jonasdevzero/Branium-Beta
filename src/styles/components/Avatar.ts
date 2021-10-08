@@ -9,6 +9,7 @@ export const AvatarWrapper = styled.div<AvatarWrapperProps>`
     height: ${({ size }) => size ? size : "5.5rem"};
     border-radius: 50%;
     background-color: lightgray;
+    transition: width .3s ease, height .3s ease;
 
     div {
         position: unset !important;

@@ -9,7 +9,7 @@ import userService from "../services/api/userService"
 import { constants } from "../constants"
 
 
-import { Header, Footer } from "../components"
+import { Header, Footer, Loading } from "../components"
 import {
     Container,
     Content,
@@ -29,11 +29,11 @@ export default function Entrar() {
     const [password, setPassword] = useState("")
 
     const [loadingRequest, setLoadingRequest] = useState(false)
+    const [success, setSuccess] = useState(false)
     const [error, setError] = useState<string>()
 
     useEffect(() => {
         Router.query?.error ? setError(Router.query.error.toString()) : null
-
         return () => { }
     }, [])
 
@@ -45,6 +45,7 @@ export default function Entrar() {
         userService.login({ username, password })
             .catch(message => setError(message))
             .then(() => {
+                setSuccess(true)
                 setLoadingRequest(false)
                 Router.push(constants.routes.chat.HOME)
             })
@@ -56,41 +57,44 @@ export default function Entrar() {
                 <title>Branium | Entrar</title>
             </Head>
 
-            <Header links={false} />
+            {success ? (<Loading hide={false} />) : (
+                <>
+                    <Header links={false} />
 
-            <Content>
-                <Form onSubmit={handleSubmit}>
-                    <Title>Entrar</Title>
+                    <Content>
+                        <Form onSubmit={handleSubmit}>
+                            <Title>Entrar</Title>
 
-                    {error && <ErrorMessage>{error}</ErrorMessage>}
+                            {error && <ErrorMessage>{error}</ErrorMessage>}
 
-                    <InputWrapper>
-                        <Label htmlFor="username">Username / E-mail</Label>
-                        <Input id="username" type="text" value={username} onChange={e => setUsername(e.target.value)} />
-                    </InputWrapper>
+                            <InputWrapper>
+                                <Label htmlFor="username">Username / E-mail</Label>
+                                <Input id="username" type="text" value={username} onChange={e => setUsername(e.target.value)} />
+                            </InputWrapper>
 
-                    <InputWrapper>
-                        <Label htmlFor="password">Senha</Label>
-                        <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
-                    </InputWrapper>
+                            <InputWrapper>
+                                <Label htmlFor="password">Senha</Label>
+                                <Input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                            </InputWrapper>
 
-                    <Submit type="submit">
-                        {!loadingRequest ? "Entrar" : (<Image src="/images/loading-light.svg" width={30} height={30} alt="loading" />)}
-                    </Submit>
+                            <Submit type="submit">
+                                {!loadingRequest ? "Entrar" : (<Image src="/images/loading-light.svg" width={30} height={30} alt="loading" />)}
+                            </Submit>
 
-                    <Links>
-                        <Link href={constants.routes.SIGN_UP} passHref>
-                            <RedirectLink>Não é um membro?</RedirectLink>
-                        </Link>
+                            <Links>
+                                <Link href={constants.routes.SIGN_UP} passHref>
+                                    <RedirectLink>Não é um membro?</RedirectLink>
+                                </Link>
 
-                        <Link href={constants.routes.RECOVER_PASSWORD} passHref>
-                            <RedirectLink>Esqueceu a Senha?</RedirectLink>
-                        </Link>
-                    </Links>
-                </Form>
-            </Content>
+                                <Link href={constants.routes.RECOVER_PASSWORD} passHref>
+                                    <RedirectLink>Esqueceu a Senha?</RedirectLink>
+                                </Link>
+                            </Links>
+                        </Form>
+                    </Content>
 
-            <Footer />
+                    <Footer />
+                </>)}
         </Container>
     )
 }

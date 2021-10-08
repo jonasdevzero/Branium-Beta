@@ -23,8 +23,8 @@ export namespace Actions {
         messages?: ContactMessage[]
         unread_messages?: number
         description?: string
-        block?: boolean
-        you_block?: boolean
+        blocked?: boolean
+        you_blocked?: boolean
         online?: boolean
         loaded_messages?: boolean
     }

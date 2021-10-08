@@ -22,7 +22,6 @@ const userService = {
                 socket.connect()
 
                 socket.once("auth", (error, action) => {
-                    console.log("auth", error, action)
                     if (error) {
                         destroyCookie(undefined, "branium.jwt", { path: "/" })
                         return reject(error)
