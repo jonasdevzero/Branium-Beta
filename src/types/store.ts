@@ -6,6 +6,10 @@ export declare module Reducers {
 
 export namespace Actions {
 
+    export type Where = {
+        id: string | string[]
+    }
+
     /* ------------ UserActions ----------------  */
 
     export class UpdateUserSet {
@@ -26,22 +30,32 @@ export namespace Actions {
         blocked?: boolean
         you_blocked?: boolean
         online?: boolean
-        loaded_messages?: boolean
     }
     export type UpdateRoomSetKeys = Array<keyof UpdateRoomSet>
+
+    export class UpdateExtraData {
+        last_scroll_position?: number
+        pushed_messages?: number
+        fetch_messages_count?: number
+        full_loaded?: boolean
+        has_messages?: boolean
+    }
+    export type UpdateExtraDataKeys = Array<keyof UpdateExtraData>
 
     export type PushDataKey = "contacts" | "contact_invitations"
     export type RemoveDataKey = PushDataKey
     export type UpdateRoomData = {
-        roomType: UserRooms
-        whereId: string
+        field: UserRooms
+        where: Where
         set: UpdateRoomSet
     }
 
     export interface UserActions {
         setUser(user: User): {
             type: string,
-            user: User
+            set: {
+                user: User
+            }
         }
 
         updateUser(set: UpdateUserSet): {
@@ -49,23 +63,30 @@ export namespace Actions {
             set: UpdateUserSet
         }
 
-        pushData(dataKey: PushDataKey, data: Contact | ContactInvitation): {
+        pushData(field: PushDataKey, set: Contact | ContactInvitation): {
             type: string,
-            dataKey: PushDataKey,
-            data: Contact | ContactInvitation,
+            field: PushDataKey,
+            set: Contact | ContactInvitation,
         }
 
-        removeData(dataKey: RemoveDataKey, whereId: string): {
+        removeData(field: RemoveDataKey, where: Where): {
             type: string,
-            dataKey: RemoveDataKey,
-            whereId: string
+            field: RemoveDataKey,
+            where: Where
         }
 
-        updateRoom({ roomType, whereId, set }: UpdateRoomData): {
+        updateRoom({ set, where, field }: UpdateRoomData): {
             type: string,
-            roomType: UserRooms,
-            whereId: string,
+            field: UserRooms,
+            where: Where,
             set: UpdateRoomSet
+        }
+
+        updateExtraRoomData({ field, where, set }: { field: UserRooms, where: Where, set: UpdateExtraData }): {
+            type: string,
+            field: UserRooms
+            where: Where,
+            set: UpdateExtraData
         }
     }
 }

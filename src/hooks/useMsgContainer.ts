@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react"
 export default function useMsgContainer(ref: React.RefObject<HTMLDivElement>) {
     const [showScrollBtn, setShowScrollButton] = useState(false)
 
-    const scroll = useCallback((isNewMessage?: boolean) => {
+    const scrollToBottom = useCallback((isNewMessage?: boolean) => {
         if (!ref.current) return;
             const { scrollTop, clientHeight, scrollHeight } = ref.current;
             const scroll = scrollHeight - clientHeight;
@@ -26,7 +26,7 @@ export default function useMsgContainer(ref: React.RefObject<HTMLDivElement>) {
 
     return {
         showScrollBtn,
-        scroll,
+        scrollToBottom,
         handleScroll,
     }
 }

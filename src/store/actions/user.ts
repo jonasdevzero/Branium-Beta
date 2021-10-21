@@ -7,7 +7,9 @@ export default {
     setUser(user) {
         return {
             type: userReducers.SET_USER,
-            user
+            set: {
+                user            
+            }
         }
     },
 
@@ -18,27 +20,36 @@ export default {
         }
     },
 
-    pushData(dataKey, data) {
+    pushData(field, set) {
         return {
             type: userReducers.USER_PUSH_DATA,
-            dataKey,
-            data
+            field,
+            set
         }
     },
 
-    removeData(dataKey, whereId) {
+    removeData(field, where) {
         return {
             type: userReducers.USER_REMOVE_DATA,
-            dataKey,
-            whereId
+            field,
+            where
         }
     },
 
-    updateRoom({ roomType, whereId, set }) {
+    updateRoom({ set, field, where }) {
         return {
             type: userReducers.UPDATE_ROOM,
-            roomType,
-            whereId, 
+            set,
+            field,
+            where, 
+        }
+    },
+
+    updateExtraRoomData({ field, where, set }) {
+        return {
+            type: "UPDATE_EXTRA_CONTACT_DATA",
+            field,
+            where,
             set
         }
     }

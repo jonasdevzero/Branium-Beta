@@ -30,3 +30,12 @@ export const Room = styled.div`
         margin-left: 1rem;
     }
 `
+
+export const Icon = styled.span`
+    font-size: 2.2rem;
+    cursor: pointer;
+
+    & + & {
+        margin-left: 3rem;
+    }
+`

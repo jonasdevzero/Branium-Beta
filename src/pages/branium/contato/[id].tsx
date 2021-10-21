@@ -5,7 +5,7 @@ import { authPage, useAuth, useAppSelector } from "../../../hooks"
 import { constants } from "../../../constants"
 
 import { Sidebar } from "../../../components"
-import { Header, Messages, Form, Info } from "../../../components/ContactRoom"
+import { Header, Messages, Form, Info } from "../../../components/Room/Contact"
 import { Container, Inner } from "../../../styles/pages/app"
 
 export default function Contact() {
@@ -35,7 +35,7 @@ export default function Contact() {
                         <Form contact_id={contact.id} />
                     </Inner>
 
-                    <Info contact={contact} show={showInfo} close={() => setShowInfo(false)} />
+                    {showInfo && (<Info contact={contact} close={() => setShowInfo(false)} />)}
                 </>
             ) : null}
         </Container>

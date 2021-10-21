@@ -48,7 +48,7 @@ export const OptionSelected = styled.span<OptionSelectedData>`
     left: -.3rem;
 
     width: .1rem;
-    height: ${({ selected }) => selected ? "3rem" : "1rem"};
+    height: ${({ selected }) => selected ? "3rem" : "0"};
     background-color: #eee;
 
     transition: height .3s ease;

@@ -3,7 +3,7 @@ import {
     Overlay,
     Container,
     Close
-} from "../styles/components/Notifications"
+} from "../../../styles/components/Sidebar/Notifications"
 import { FiX } from "react-icons/fi"
 
 export default function Notifications({ close }: { close: () => void }) {

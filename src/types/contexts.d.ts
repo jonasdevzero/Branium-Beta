@@ -36,3 +36,8 @@ export type AuthContextType = {
     isAuthenticated: boolean
     loadingAuth: boolean
 }
+
+export type CallContextType = {
+    inCall: boolean
+    callTo(): void
+}

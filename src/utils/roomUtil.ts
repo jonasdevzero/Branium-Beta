@@ -1,5 +1,4 @@
 import moment from "moment"
-import { useState } from "react"
 
 function getDay(day: Date) {
     const dayFormated = moment(day).format('DD/MM/YYYY');

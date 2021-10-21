@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { Picker, BaseEmoji } from "emoji-mart"
 import "emoji-mart/css/emoji-mart.css"
-import { contactService } from "../../services/api"
-import { useWarn } from "../../hooks"
+import { contactService } from "../../../services/api"
+import { useWarn } from "../../../hooks"
 
 import {
     Container,
@@ -12,7 +12,7 @@ import {
     Submit,
     Icon,
     EmojiPickerContainer,
-} from "../../styles/components/Room/Form"
+} from "../../../styles/components/Room/Form"
 import {
     FiSmile,
     FiPaperclip,
@@ -71,6 +71,7 @@ export default function Form({ contact_id }: { contact_id: string }) {
                     onChange={e => setMessage(e.target.value)}
                     autoComplete="off"
                     onFocus={() => setShowEmojiPicker(false)}
+                    placeholder="Digite algum texto..."
                 />
 
                 <Submit type="submit">

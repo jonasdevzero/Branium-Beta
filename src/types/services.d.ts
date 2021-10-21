@@ -34,7 +34,7 @@ export namespace Services {
     
         refuseInvite(invite_id: string): Promise<void>
     
-        getMessages(contact_id: string, skip: number): Promise<ContactMessage[]>
+        getMessages(contact: Contact): Promise<ContactMessage[]>
     
         createMessage({ to, text }: { to: string, text: string }): Promise<void>
     

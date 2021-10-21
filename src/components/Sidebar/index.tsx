@@ -2,13 +2,13 @@ import { useState, useCallback } from "react"
 import Router from "next/router"
 import Fuse from "fuse.js"
 import { destroyCookie } from "nookies"
-import { useAppSelector, useAppDispatch } from "../hooks"
-import socket from "../services/socket"
-import { constants } from "../constants"
-import { setOption } from "../store/actions/sidebar"
+import { useAppSelector, useAppDispatch } from "../../hooks"
+import socket from "../../services/socket"
+import { constants } from "../../constants"
+import { setOption } from "../../store/actions/sidebar"
 
-import { Avatar, AddContact } from "../components"
-import Notifications from "./Notifications"
+import { Avatar } from "../"
+import { Plus, Notifications } from "./components"
 
 import {
     Container,
@@ -30,21 +30,19 @@ import {
     Room,
     Status,
     UnreadMessages,
-    PlusButton,
     PendingInvitations,
-} from "../styles/components/Sidebar"
+} from "../../styles/components/Sidebar"
 import {
+    FiSearch,
     FiUser,
     FiUsers,
-    FiPower,
-    FiSearch,
     FiPlus,
     FiBell,
+    FiPower,
 } from "react-icons/fi"
 
 export default function Sidebar() {
-    const user = useAppSelector(state => state.user)
-    const config = useAppSelector(state => state.sidebar)
+    const { user, config } = useAppSelector(state => ({ user: state.user, config: state.sidebar }))
 
     const [contacts, setContacts] = useState(user.contacts)
     const pending = {
@@ -52,8 +50,7 @@ export default function Sidebar() {
         groups: 0
     }
 
-    const [showAddContact, setShowAddContact] = useState(false)
-    const [showNotifications, setShowNotifications] = useState(false)
+    const [showScreen, setShowScreen] = useState<"plus" | "notifications">()
 
     const dispatch = useAppDispatch()
 
@@ -74,15 +71,17 @@ export default function Sidebar() {
     }, [config.currentOption, user.contacts])
 
     function renderContacts() {
-        return contacts.map(contact => (
-            <Room key={contact.id} onClick={() => Router.push(constants.routes.chat.CONTACT(contact.id))}>
-                <Avatar src={contact.picture} size="5rem" />
-                <h3>{contact.username}</h3>
+        return contacts.map(contact => {
+            return (
+                <Room key={contact.id} onClick={() => Router.push(constants.routes.chat.CONTACT(contact.id))}>
+                    <Avatar src={contact.picture} size="5rem" />
+                    <h3>{contact.username}</h3>
 
-                <Status className={contact.online ? "online" : "offline"} />
-                {contact.unread_messages > 0 ? (<UnreadMessages>{contact.unread_messages}</UnreadMessages>) : null}
-            </Room>
-        ))
+                    <Status className={contact.online ? "online" : "offline"} />
+                    {contact.unread_messages > 0 ? (<UnreadMessages>{contact.unread_messages}</UnreadMessages>) : null}
+                </Room>
+            )
+        })
     }
 
     function renderGroups() {
@@ -113,10 +112,18 @@ export default function Sidebar() {
                             <OptionSelected selected={config.currentOption === "groups"} />
                         </Option>
 
+                        <Option onClick={() => setShowScreen("plus")}>
+                            <FiPlus />
+                            {user.contact_invitations.length ? (
+                                <PendingInvitations>
+                                    {user.contact_invitations.length > 9 ? "9+" : user.contact_invitations.length}
+                                </PendingInvitations>
+                            ) : null}
+                        </Option>
                     </OptionsInner>
 
                     <OptionsPlus>
-                        <Option onClick={() => setShowNotifications(true)}>
+                        <Option onClick={() => setShowScreen("notifications")}>
                             <FiBell />
                         </Option>
 
@@ -151,22 +158,18 @@ export default function Sidebar() {
 
                     <RoomsContainer>
                         {config.currentOption === "contacts" ? renderContacts() : renderGroups()}
-
-                        <PlusButton onClick={() => setShowAddContact(true)}>
-                            <FiPlus />
-
-                            {user.contact_invitations.length ? (
-                                <PendingInvitations>
-                                    {user.contact_invitations.length > 9 ? "9+" : user.contact_invitations.length}
-                                </PendingInvitations>
-                            ) : null}
-                        </PlusButton>
                     </RoomsContainer>
                 </Inner>
             </Container>
 
-            {showAddContact ? (<AddContact close={() => setShowAddContact(false)} />) : null}
-            {showNotifications ? (<Notifications close={() => setShowNotifications(false)} />) : null}
+            {function () {
+                switch (showScreen) {
+                    case "plus":
+                        return (<Plus close={() => setShowScreen(undefined)} />)
+                    case "notifications":
+                        return (<Notifications close={() => setShowScreen(undefined)} />)
+                }
+            }()}
         </>
     )
 }

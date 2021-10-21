@@ -1,57 +1,150 @@
 import styled from "styled-components"
 
-type ContainerProps = {
-    show: boolean
-}
+export const Overlay = styled.div`
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
-export const Container = styled.div<ContainerProps>`
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+`
+
+export const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
 
-    width: ${({ show })  => show ? "65rem" : "0px"};
     background-color: #131313;
-    padding: ${({ show })  => show ? "4rem 1rem" : "0"};
-    transition: width .3s ease, opacity .5s ease;
-    overflow: hidden;
-    opacity: ${({ show }) => show ? 1 : 0};
+    z-index: 2;
+
+    width: 34rem;
+    height: 45rem;
+    padding: 1.5rem;
+    border: solid .1rem #151515;
 `
 
-export const Close = styled.button`
-    background-color: transparent;
-    color: #fff;
-    font-size: 2.5rem;
-    border: none;
-    cursor: pointer;
-
+export const Close = styled.span`
     position: absolute;
-    top: 2.5rem;
-    right: 2.5rem;
+    top: 0;
+    right: 0;
+    font-size: 2.5rem;
+    cursor: pointer;
+`
+
+export const User = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative;
 `
 
 export const Username = styled.span`
     font-size: 2.5rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
 `
 
-export const Options = styled.div`
-    margin-top: auto;
+export const Dropdown = styled.div`
+    position: absolute;
+    bottom: 0;
+    right: 1.5rem;
+    cursor: pointer;
+    `
+
+export const DropdownButton = styled.button`
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+`
+
+export const DropdownList = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 18rem;
+    position: absolute;
+    right: -15rem;
+    top: 2.7rem;
+    background-color: rgba(0, 0, 0, .3);
+`
+
+export const DropdownItem = styled.button`
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 1.4rem;
+    padding: .8rem .5rem;
+    transition: background-color .3s ease;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, .4);
+    }
+
+    &.danger {
+        color: #dc3545
+    }
+`
+
+export const Inner = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: -webkit-fill-available;
+    margin-top: 3rem;
+` 
+
+export const Header = styled.header`
+    display: flex;
+    justify-content: center;
+    width: 100%;
 `
 
-export const Option = styled.button`
-    font-size: 1.6rem;
-    background-color: #101010;
-    padding: 1.2rem 1rem;
-    margin: 0 1rem;
-    color: #fff;
+export const Option =  styled.button`
+    background-color: transparent;
     border: none;
+    outline: none;
+    color: lightgray;
+    font-size: 1.5rem;
+    width: 13rem;
+
+    position: relative;
     cursor: pointer;
 
     & + & {
-        margin-top: 1rem;
+        margin-left: 2rem;
     }
+`
+
+type OptionSelectedType = {
+    selected: boolean
+}
+export const OptionSelected = styled.span<OptionSelectedType>`
+    position: absolute;
+    bottom: -.3rem;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: ${({ selected }) => selected ? "100%" : "0"};
+    height: .1rem;
+    background-color: darkgray;
+
+    transition: width .3s ease;
+`
+
+export const Content  = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto 0;
+    color: lightgray; 
 `

@@ -29,8 +29,12 @@ export class Contact {
     blocked: boolean 
     you_blocked: boolean
     online: boolean
-    loaded_messages: boolean
-    loaded_messages_count: number
+    extra: {
+        last_scroll_position: number
+        pushed_messages: number
+        fetch_messages_count: number
+        full_loaded: boolean
+    }
 }
 
 export class User {

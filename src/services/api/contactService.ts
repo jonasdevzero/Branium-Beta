@@ -35,10 +35,11 @@ const contactService = {
         })
     },
 
-    getMessages(contact_id, skip) {
+    getMessages(contact) {
         return new Promise(async (resolve, reject) => {
             try {
-                const { data } = await api.get(`/contact/messages/${contact_id}?limit=30&skip=${skip}`)
+                const { fetch_messages_count, pushed_messages } = contact.extra
+                const { data } = await api.get(`/contact/messages/${contact.id}?limit=30&skip=${fetch_messages_count}&skip_u=${pushed_messages}`)
                 resolve(data.messages)
             } catch (error) {
                 reject(error)

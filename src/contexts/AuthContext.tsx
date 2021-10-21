@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react"
+import Head from "next/head"
 import { useRouter } from "next/router"
 import { userService } from "../services/api"
 import { constants } from "../constants"
@@ -26,7 +27,15 @@ export function AuthProvider({ children }: { children: React.ReactChild }) {
 
     return (
         <AuthContext.Provider value={{ isAuthenticated, loadingAuth }}>
-            {loadingAuth ? (<Loading hide={loadingAuth && isAuthenticated} />) : children}
+            {loadingAuth ? (
+                <>
+                    <Head>
+                        <title>Branium</title>
+                    </Head>
+
+                    <Loading hide={loadingAuth && isAuthenticated} />
+                </>
+            ) : children}
         </AuthContext.Provider>
     )
 }

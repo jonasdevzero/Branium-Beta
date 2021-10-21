@@ -15,7 +15,7 @@ export const Container = styled.form`
     background-color: #121212;
 
     svg {
-        color: #eee;
+        color: #ddd;
         cursor: pointer;
         font-size: 2.5rem;
     };
@@ -36,7 +36,7 @@ export const Input = styled.input`
 
     font-size: 1.6rem;
     color: #fff;
-    background-color: #252525;
+    background-color: #202020;
     margin: 0 1rem;
     padding: 0 5rem 0 1.5rem;
     border-radius: 10rem;

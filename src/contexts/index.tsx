@@ -1,6 +1,7 @@
 import { Provider as ReduxProvider } from "react-redux"
 import { WarnProvider } from "./WarnContext"
 import { AuthProvider } from "./AuthContext"
+import { CallProvider } from "./CallContext"
 import store from "../store"
 
 export default function Contexts({ children }: { children: React.ReactChild }) {
@@ -8,7 +9,9 @@ export default function Contexts({ children }: { children: React.ReactChild }) {
         <ReduxProvider store={store}>
             <WarnProvider>
                 <AuthProvider>
-                    {children}
+                    <CallProvider>
+                        {children}
+                    </CallProvider>
                 </AuthProvider>
             </WarnProvider>
         </ReduxProvider>
