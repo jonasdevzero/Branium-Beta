@@ -263,11 +263,11 @@ export const PendingInvitations = styled.span`
     width: 2.7rem;
     height: 2.7rem;
     position: absolute;
-    top: -1.3rem;
+    bottom: -1.3rem;
     right: -.6rem;
 
-    background-color: #000;
+    background-color: #080808;
     color: #fff;
-    border: solid .2rem #131313;
+    border: solid .3rem #101010;
     border-radius: 1.5rem;
 `

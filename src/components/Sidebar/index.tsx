@@ -46,8 +46,9 @@ export default function Sidebar() {
 
     const [contacts, setContacts] = useState(user.contacts)
     const pending = {
-        contacts: user.contacts.reduce((acc, crr) => acc += crr.unread_messages, 0) + user.contact_invitations.length,
-        groups: 0
+        contacts: user.contacts.reduce((acc, crr) => acc += crr.unread_messages, 0),
+        groups: 0,
+        invitations: user.contact_invitations.length
     }
 
     const [showScreen, setShowScreen] = useState<"plus" | "notifications">()
@@ -114,9 +115,9 @@ export default function Sidebar() {
 
                         <Option onClick={() => setShowScreen("plus")}>
                             <FiPlus />
-                            {user.contact_invitations.length ? (
+                            {pending.invitations ? (
                                 <PendingInvitations>
-                                    {user.contact_invitations.length > 9 ? "9+" : user.contact_invitations.length}
+                                    {pending.invitations > 9 ? "9+" : pending.invitations}
                                 </PendingInvitations>
                             ) : null}
                         </Option>
