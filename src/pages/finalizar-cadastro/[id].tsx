@@ -41,13 +41,13 @@ export default function FinalizarCadastro({ }: FinishSubscribeProps) {
 
         setError(undefined)
         setLoadingRequest(true)
-        userService.registration(id, { username, password, confirm_password: confirmPassword })
-            .catch(error => setError(error))
+        userService.registration(id, { username, password, confirm_password: confirmPassword })            
             .then(() => {
                 setSuccess(true)
                 setLoadingRequest(false)
                 Router.replace(constants.routes.chat.HOME)
             })
+            .catch(error => setError(error))
     }
 
     return (
