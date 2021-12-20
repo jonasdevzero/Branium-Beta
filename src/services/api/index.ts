@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const baseURL = "https://branium-api.herokuapp.com"
+const baseURL = process.env.NEXT_PUBLIC_API_URL
 
 export default axios.create({ baseURL })
 

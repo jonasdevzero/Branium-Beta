@@ -1,6 +1,6 @@
 import io from "socket.io-client"
 
-const URL = "https://branium-api.herokuapp.com"
+const URL = process.env.NEXT_PUBLIC_API_URL || ""
 
 export default io(URL, {
     autoConnect: false,
