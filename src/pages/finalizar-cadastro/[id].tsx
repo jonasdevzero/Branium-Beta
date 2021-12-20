@@ -47,7 +47,10 @@ export default function FinalizarCadastro({ }: FinishSubscribeProps) {
                 setLoadingRequest(false)
                 Router.replace(constants.routes.chat.HOME)
             })
-            .catch(error => setError(error))
+            .catch(error => {
+                setError(error)
+                setLoadingRequest(false)
+            })
     }
 
     return (
