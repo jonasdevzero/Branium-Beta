@@ -33,6 +33,9 @@ export default function Entrar() {
     const [error, setError] = useState<string>()
 
     useEffect(() => {
+        const { ["branium.jwt"]: jwt } = parseCookies(null)
+        if (jwt) Router.replace(constant.routes.chat.HOME);
+
         Router.query?.error ? setError(Router.query.error.toString()) : null
         return () => { }
     }, [])
@@ -97,21 +100,4 @@ export default function Entrar() {
                 </>)}
         </Container>
     )
-}
-
-export async function getServerSideProps(ctx: NextPageContext) {
-    const { ["branium.jwt"]: jwt } = parseCookies(ctx)
-
-    if (jwt) {
-        return {
-            redirect: {
-                destination: constant.routes.chat.HOME,
-                permanent: false
-            }
-        }
-    }
-
-    return {
-        props: {}
-    }
 }

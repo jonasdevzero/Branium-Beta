@@ -43,7 +43,7 @@ export default function Messages({ contact }: { contact: Contact }) {
      }, [contact.id, scrollToBottom])
 
     useEffect(() => {
-        if (!contact.extra.fetch_messages_count) {
+        if (!contact.extra?.fetch_messages_count) {
             setLoadingMessages(true)
             contactService.getMessages(contact).then(messages => {
                 dispatch({ type: "UNSHIFT_CONTACT_MESSAGES", where: { id: contact.id }, set: { messages } })

@@ -54,18 +54,18 @@ const reducers = {
         return { ...state, ...data }
     },
 
+    // Push contact or contact_invitation
     [userReducers.USER_PUSH_DATA](state, action: { set: { data: any }, field: Actions.PushDataKey }) {
+        console.log("pushing data", action)
         const { field, set } = action
 
         const items: any[] = state[field]
         if (!items || !Array.isArray(items)) return state;
 
-        items.unshift(set.data)
-        state[field] = items
-
-        return state
+        return { ...state, [field]: [set.data, ...state[field]] }
     },
 
+    // Remove contact or contact_invitation
     [userReducers.USER_REMOVE_DATA](state, action: { where: Actions.Where, field: Actions.RemoveDataKey }) {
         const { field, where } = action
 
