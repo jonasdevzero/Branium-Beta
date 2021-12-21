@@ -63,10 +63,10 @@ export namespace Actions {
             set: UpdateUserSet
         }
 
-        pushData(field: PushDataKey, set: Contact | ContactInvitation): {
+        pushData(field: PushDataKey, set: { data: Contact | ContactInvitation }): {
             type: string,
             field: PushDataKey,
-            set: Contact | ContactInvitation,
+            set: { data: Contact | ContactInvitation },
         }
 
         removeData(field: RemoveDataKey, where: Where): {
