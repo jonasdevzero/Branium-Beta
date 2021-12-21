@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import userService from "../services/api/userService"
 import { useWarn } from "../hooks"
-import { constants } from "../constants"
+import { constant } from "../constant"
 
 import { Header, Footer } from "../components"
 import {
@@ -65,7 +65,7 @@ export default function FinalizarCadastro() {
                     </Submit>
 
                     <Links>
-                        <Link href={constants.routes.SIGN_IN} passHref>
+                        <Link href={constant.routes.SIGN_IN} passHref>
                             <RedirectLink>Lembrou a senha?</RedirectLink>
                         </Link>
                     </Links>

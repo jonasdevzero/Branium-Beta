@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { authPage, useAuth, useAppSelector } from "../../../hooks"
-import { constants } from "../../../constants"
+import { constant } from "../../../constant"
 
 import { Sidebar } from "../../../components"
 import { Header, Messages, Form, Info } from "../../../components/Room/Contact"
@@ -16,7 +16,7 @@ export default function Contact() {
     const { isAuthenticated } = useAuth()
 
     useEffect(() => {
-        isAuthenticated && !contact ? router.replace(constants.routes.chat.HOME) : null
+        isAuthenticated && !contact ? router.replace(constant.routes.chat.HOME) : null
     }, [contact, router, isAuthenticated])
 
     return (

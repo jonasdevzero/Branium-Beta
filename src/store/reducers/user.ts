@@ -1,8 +1,8 @@
 import { ContactMessage, User, UserRooms } from "../../types/user"
 import { Actions } from "../../types/store"
-import { constants } from "../../constants"
+import { constant } from "../../constant"
 
-const { reducer: { user: userReducers } } = constants
+const { reducer: { user: userReducers } } = constant
 
 const INITIAL_STATE = {
     id: "",

@@ -6,7 +6,7 @@ import Image from "next/image"
 import Router from "next/router"
 import { parseCookies } from "nookies"
 import userService from "../services/api/userService"
-import { constants } from "../constants"
+import { constant } from "../constant"
 
 
 import { Header, Footer, Loading } from "../components"
@@ -47,7 +47,7 @@ export default function Entrar() {
             .then(() => {
                 setSuccess(true)
                 setLoadingRequest(false)
-                Router.push(constants.routes.chat.HOME)
+                Router.push(constant.routes.chat.HOME)
             })
     }
 
@@ -82,11 +82,11 @@ export default function Entrar() {
                             </Submit>
 
                             <Links>
-                                <Link href={constants.routes.SIGN_UP} passHref>
+                                <Link href={constant.routes.SIGN_UP} passHref>
                                     <RedirectLink>Não é um membro?</RedirectLink>
                                 </Link>
 
-                                <Link href={constants.routes.RECOVER_PASSWORD} passHref>
+                                <Link href={constant.routes.RECOVER_PASSWORD} passHref>
                                     <RedirectLink>Esqueceu a Senha?</RedirectLink>
                                 </Link>
                             </Links>
@@ -105,7 +105,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
     if (jwt) {
         return {
             redirect: {
-                destination: constants.routes.chat.HOME,
+                destination: constant.routes.chat.HOME,
                 permanent: false
             }
         }

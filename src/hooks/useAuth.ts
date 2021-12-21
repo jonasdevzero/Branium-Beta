@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { NextPageContext } from "next"
 import { parseCookies } from "nookies"
 import { AuthContext } from "../contexts/AuthContext"
-import { constants } from "../constants"
+import { constant } from "../constant"
 
 export function useAuth() {
     return useContext(AuthContext)
@@ -22,7 +22,7 @@ export async function authPage(ctx: NextPageContext, fn?: InterceptionFunction) 
     if (!jwt) {
         return {
             redirect: {
-                destination: constants.routes.SIGN_IN,
+                destination: constant.routes.SIGN_IN,
                 permanent: false
             }
         }

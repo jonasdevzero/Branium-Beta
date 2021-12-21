@@ -1,7 +1,7 @@
 import { Actions } from "../../types/store"
-import { constants } from "../../constants"
+import { constant } from "../../constant"
 
-const { reducer: { user: userReducers } } = constants
+const { reducer: { user: userReducers } } = constant
 
 export default {
     setUser(user) {

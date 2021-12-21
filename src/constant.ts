@@ -1,5 +1,5 @@
 
-export const constants = {
+export const constant = {
     routes: {
         HOME: "/",
         SIGN_IN: "/entrar",

@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { userService } from "../services/api"
-import { constants } from "../constants"
+import { constant } from "../constant"
 import { useAppSelector } from "../hooks"
 import { AuthContextType } from "../types/contexts"
 
@@ -18,9 +18,9 @@ export function AuthProvider({ children }: { children: React.ReactChild }) {
     const router = useRouter()
 
     useEffect(() => {
-        router.asPath.startsWith(constants.routes.chat.HOME) && userService.hasJwt() && !isAuthenticated ?
+        router.asPath.startsWith(constant.routes.chat.HOME) && userService.hasJwt() && !isAuthenticated ?
             userService.auth(() => setLoadingAuth(true))
-                .catch((message) => router.replace(`${constants.routes.SIGN_IN}?error=${message}`))
+                .catch((message) => router.replace(`${constant.routes.SIGN_IN}?error=${message}`))
                 .then(() => setTimeout(() => { setLoadingAuth(false) }, 150))
             : null
     }, [router, isAuthenticated])

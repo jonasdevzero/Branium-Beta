@@ -1,7 +1,7 @@
 import Head from "next/head"
 import Link from "next/link"
 import Image from "next/image"
-import { constants } from "../constants"
+import { constant } from "../constant"
 
 import { Header, Footer } from "../components"
 import {
@@ -40,7 +40,7 @@ export default function Home() {
         <Presentation>
           <h1>Um Chat Brasileiro para Brasileiros</h1>
 
-          <Link href={constants.routes.SIGN_UP} passHref>
+          <Link href={constant.routes.SIGN_UP} passHref>
             <CallToAction>Começe agora!</CallToAction>
           </Link>
         </Presentation>
@@ -109,7 +109,7 @@ export default function Home() {
           <h3>Vamos Nessa!</h3>
           <h3>Inscreva-se Agora para Brasileirar Aqui!</h3>
 
-          <Link href={constants.routes.SIGN_UP} passHref>
+          <Link href={constant.routes.SIGN_UP} passHref>
             <CallToAction>Inscreva-se!</CallToAction>
           </Link>
         </CallToActionCard>

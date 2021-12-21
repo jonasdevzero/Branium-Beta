@@ -4,7 +4,7 @@ import Fuse from "fuse.js"
 import { destroyCookie } from "nookies"
 import { useAppSelector, useAppDispatch } from "../../hooks"
 import socket from "../../services/socket"
-import { constants } from "../../constants"
+import { constant } from "../../constant"
 import { setOption } from "../../store/actions/sidebar"
 
 import { Avatar } from "../"
@@ -59,7 +59,7 @@ export default function Sidebar() {
         dispatch({ type: "RESET" })
         socket.disconnect()
         destroyCookie(undefined, "branium.jwt", { path: "/" })
-        Router.push(constants.routes.HOME)
+        Router.push(constant.routes.HOME)
     }
 
     const search = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +74,7 @@ export default function Sidebar() {
     function renderContacts() {
         return contacts.map(contact => {
             return (
-                <Room key={contact.id} onClick={() => Router.push(constants.routes.chat.CONTACT(contact.id))}>
+                <Room key={contact.id} onClick={() => Router.push(constant.routes.chat.CONTACT(contact.id))}>
                     <Avatar src={contact.picture} size="5rem" />
                     <h3>{contact.username}</h3>
 

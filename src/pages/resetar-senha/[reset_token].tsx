@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 import Image from "next/image"
 import useWarn from "../../hooks/useWarn"
 import userService from "../../services/api/userService"
-import { constants } from "../../constants"
+import { constant } from "../../constant"
 
 import { Header, Footer } from "../../components"
 import {
@@ -39,7 +39,7 @@ export default function FinalizarCadastro() {
         userService.resetPassword({ reset_token, password, confirm_password: confirmPassword })
             .then(message => {
                 warn.show(message)
-                setTimeout(() => { router.push(constants.routes.SIGN_IN) }, 2500)
+                setTimeout(() => { router.push(constant.routes.SIGN_IN) }, 2500)
             })
             .catch(message => setError(message))
             .then(() => setLoadingRequest(false))

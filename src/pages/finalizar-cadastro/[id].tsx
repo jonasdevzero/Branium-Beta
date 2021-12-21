@@ -5,7 +5,7 @@ import Image from "next/image"
 import { AxiosError } from "axios"
 import api from "../../services/api"
 import userService from "../../services/api/userService"
-import { constants } from "../../constants"
+import { constant } from "../../constant"
 
 import { Header, Footer, Loading } from "../../components"
 import {
@@ -44,7 +44,7 @@ export default function FinalizarCadastro({ }: FinishSubscribeProps) {
         userService.registration(id, { username, password, confirm_password: confirmPassword })            
             .then(() => {
                 setSuccess(true)
-                Router.replace(constants.routes.chat.HOME)
+                Router.replace(constant.routes.chat.HOME)
             })
             .catch(error => setError(error))
             .then(() => setLoadingRequest(false))
@@ -105,7 +105,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
 
         return !preRegistration.pending ? {
             redirect: {
-                destination: constants.routes.SIGN_IN,
+                destination: constant.routes.SIGN_IN,
                 permanent: false
             }
         } : {
@@ -114,7 +114,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
     } catch (error: any) {
         return error.response?.status === 404 ? {
             redirect: {
-                destination: constants.routes.HOME,
+                destination: constant.routes.HOME,
                 permanent: false
             }
         } : {

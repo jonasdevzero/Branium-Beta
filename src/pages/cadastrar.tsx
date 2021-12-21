@@ -5,7 +5,7 @@ import Image from "next/image"
 import userService from "../services/api/userService"
 import { AxiosError } from "axios"
 import { useWarn } from "../hooks"
-import { constants } from "../constants"
+import { constant } from "../constant"
 
 import { Header, Footer } from "../components"
 import {
@@ -78,12 +78,12 @@ export default function Cadastrar() {
                     </Submit>
 
                     <Links>
-                        <Link href={constants.routes.SIGN_IN} passHref>
+                        <Link href={constant.routes.SIGN_IN} passHref>
                             <RedirectLink>Já é um membro?</RedirectLink>
                         </Link>
 
                         {newRegistration ? (
-                            <Link href={constants.routes.FAQ} passHref>
+                            <Link href={constant.routes.FAQ} passHref>
                                 <RedirectLink>Não recebeu o email?</RedirectLink>
                             </Link>
                         ): null}

@@ -1,7 +1,7 @@
 import Head from "next/head"
 import Link from "next/link"
 import { authPage } from "../../hooks"
-import { constants } from "../../constants"
+import { constant } from "../../constant"
 
 import { Sidebar } from "../../components"
 
@@ -25,7 +25,7 @@ export default function App() {
                 <Title>Branium</Title>
 
                 <Text>
-                    Tá de bobeira? <Link href={constants.routes.chat.GAMES}>Que tal um jogo?</Link>
+                    Tá de bobeira? <Link href={constant.routes.chat.GAMES}>Que tal um jogo?</Link>
                 </Text>
             </Center>
         </Container>
