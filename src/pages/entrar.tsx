@@ -43,12 +43,12 @@ export default function Entrar() {
         setError(undefined)
         setLoadingRequest(true)
         userService.login({ username, password })
-            .catch(message => setError(message))
-            .then(() => {
-                setSuccess(true)
-                setLoadingRequest(false)
-                Router.push(constant.routes.chat.HOME)
-            })
+        .then(() => {
+            setSuccess(true)
+            Router.push(constant.routes.chat.HOME)
+        })
+        .catch(message => setError(message))
+        .then(() => setLoadingRequest(false))
     }
 
     return (
