@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import Router from "next/router"
 import Fuse from "fuse.js"
 import { destroyCookie } from "nookies"
@@ -6,6 +6,7 @@ import { useAppSelector, useAppDispatch } from "../../hooks"
 import socket from "../../services/socket"
 import { constant } from "../../constant"
 import { setOption } from "../../store/actions/sidebar"
+import { Contact } from "../../types/user"
 
 import { Avatar } from "../"
 import { Plus, Notifications } from "./components"
@@ -44,7 +45,7 @@ import {
 export default function Sidebar() {
     const { user, config } = useAppSelector(state => ({ user: state.user, config: state.sidebar }))
 
-    const [contacts, setContacts] = useState(user.contacts)
+    const [searchResult, setSearchResult] = useState<Contact[]>()
     const pending = {
         contacts: user.contacts.reduce((acc, crr) => acc += crr.unread_messages, 0),
         groups: 0,
@@ -67,12 +68,12 @@ export default function Sidebar() {
 
         if (config.currentOption === "contacts") {
             const fuse = new Fuse(user.contacts, { keys: ["username"] })
-            query.length ? setContacts(fuse.search(query).map(({ item }) => item)) : setContacts(user.contacts)
+            query.length ? setSearchResult(fuse.search(query).map(({ item }) => item)) : setSearchResult(undefined)
         }
     }, [config.currentOption, user.contacts])
 
     function renderContacts() {
-        return contacts.map(contact => {
+        return (searchResult || user.contacts).map(contact => {
             return (
                 <Room key={contact.id} onClick={() => Router.push(constant.routes.chat.CONTACT(contact.id))}>
                     <Avatar src={contact.picture} size="5rem" />

@@ -84,6 +84,13 @@ export default function Plus({ close }: AddContactProps) {
         contactService.acceptInvite(invite.id)
             .then(contact => socket.emit("is-online", contact.id, (isOnline: boolean) => {
                 contact.online = isOnline
+                contact.extra = {
+                    last_scroll_position: 0,
+                    pushed_messages: 0,
+                    fetch_messages_count: 0,
+                    full_loaded: false,
+                }
+                
                 dispatch(UserActions.pushData("contacts", { data: contact }))
                 dispatch(UserActions.removeData("contact_invitations", { id: invite.id }))
                 warn.success(`O Convite de ${invite.sender.username} foi aceito!`)
