@@ -7,11 +7,14 @@ import { orderMessages } from "../../../utils/roomUtil"
 import { Contact } from "../../../types/user"
 import { contactService } from "../../../services/api"
 
+import { AudioPlayer } from "../../"
 import {
     Container,
     LoadingMessages,
     Message,
     Inner,
+    Content,
+    Medias,
     Text,
     Time,
     Date,
@@ -37,10 +40,11 @@ export default function Messages({ contact }: { contact: Contact }) {
     const contacts = useAppSelector(state => state.user.contacts)
     const dispatch = useAppDispatch()
 
-    useEffect(() => { 
+
+    useEffect(() => {
         // use the saved position
         scrollToBottom()
-     }, [contact.id, scrollToBottom])
+    }, [contact.id, scrollToBottom])
 
     useEffect(() => {
         if (!contact.extra?.fetch_messages_count) {
@@ -110,11 +114,35 @@ export default function Messages({ contact }: { contact: Contact }) {
             if (message.date) return (<Date key={message.id}>{message.date}</Date>);
 
             return (
-                <Message key={message.id} className={message?.sender_id === arr[i - 1]?.sender_id ? "concat" : undefined}>
-                    <Inner className={message.sender_id === user_id ? "sender" : undefined}>
-                        <Text>{message.text}</Text>
+                <Message
+                    key={message.id}
+                    className={`${message?.sender_id === arr[i - 1]?.sender_id ? "concat" : ""} ${message.sender_id === user_id ? "sender" : ""}`}
+                >
+                    <Content>
+                        {message?.medias?.length ? (
+                            <Medias>
+                                {message?.medias?.map(m => m.type === "image" ? (
+                                    <img key={m.id} src={m.url} />
+                                ) : null)}
+
+                                {message?.medias?.map(m => m.type === "video" ? (
+                                    <video key={m.id} src={m.url} controls />
+                                ) : null)}
+
+                                {message?.medias?.map(m => m.type === "audio" ? (
+                                    <AudioPlayer key={m.id} src={m.url} />
+                                ) : null)}
+                            </Medias>
+                        ) : null}
+
+                        {message.text ? (
+                            <Inner>
+                                <Text>{message.text}</Text>
+                            </Inner>
+                        ) : null}
+
                         <Time>{moment(message.created_at).format("HH:mm A")}</Time>
-                    </Inner>
+                    </Content>
                 </Message>
             )
         })
