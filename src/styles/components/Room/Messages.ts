@@ -41,23 +41,40 @@ export const Message = styled.div`
 
 export const Content = styled.div`
   background-color: #222;
-  padding: .3rem;
-  border-radius: .5rem;
+  padding: 0.3rem;
+  border-radius: 0.5rem;
   position: relative;
 `;
 
 export const Inner = styled.div`
-  padding: .5rem;
+  padding: 0.5rem;
 `;
 
 export const Medias = styled.div`
-  margin-bottom: .7rem;
+  display: flex;
+  margin-bottom: 0.7rem;
+`;
+
+export const ImageContainer = styled.button`
+  background-color: transparent;
+  border: none;
+  outline: none;
+
+  max-width: 20rem;
+  max-height: 20rem;
+  width: 100%;
+  height: 100%;
+
+  cursor: pointer;
+
+  div {
+    position: unset !important;
+  }
 
   img {
-    max-width: 20rem;
-    max-height: 20rem;
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    position: relative !important;
+    height: unset !important;
   }
 `;
 

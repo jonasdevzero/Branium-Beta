@@ -15,6 +15,7 @@ import {
     Inner,
     Content,
     Medias,
+    ImageContainer,
     Text,
     Time,
     Date,
@@ -44,6 +45,7 @@ export default function Messages({ contact }: { contact: Contact }) {
     useEffect(() => {
         // use the saved position
         scrollToBottom()
+        setTimeout(() => scrollToBottom(), 500)
     }, [contact.id, scrollToBottom])
 
     useEffect(() => {
@@ -122,7 +124,9 @@ export default function Messages({ contact }: { contact: Contact }) {
                         {message?.medias?.length ? (
                             <Medias>
                                 {message?.medias?.map(m => m.type === "image" ? (
-                                    <img key={m.id} src={m.url} />
+                                    <ImageContainer key={m.id} onClick={() => {}}>
+                                        <Image src={m.url} layout="fill" className="image" />
+                                    </ImageContainer>
                                 ) : null)}
 
                                 {message?.medias?.map(m => m.type === "video" ? (
