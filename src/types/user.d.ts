@@ -10,6 +10,13 @@ export class ContactInvitation {
     created_at: Date
 } 
 
+export class ContactMediaMessage {
+    id: string
+    message_id: string
+    url: string
+    type: string
+}
+
 export class ContactMessage {
     id: string 
     text: string 
@@ -17,6 +24,7 @@ export class ContactMessage {
     created_at: Date
     sender_id: string
     bidirectional_id: string
+    medias: ContactMediaMessage[]
 }
 
 export class Contact {
