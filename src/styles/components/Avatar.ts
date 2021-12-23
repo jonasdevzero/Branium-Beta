@@ -10,6 +10,7 @@ export const AvatarWrapper = styled.div<AvatarWrapperProps>`
     border-radius: 50%;
     background-color: lightgray;
     transition: width .3s ease, height .3s ease;
+    position: relative;
 
     div {
         position: unset !important;
