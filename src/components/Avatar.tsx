@@ -17,7 +17,7 @@ export default function Avatar({ src, size, user }: AvatarProps) {
         <AvatarWrapper size={size}>
             <Image 
                 src={user ? (store.getState().user?.picture || noProfile) : (src || noProfile)} 
-                alt="Conta" 
+                alt="" 
                 layout="fill"
                 className="image"
             />
