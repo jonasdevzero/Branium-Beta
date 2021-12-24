@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react"
+import { useState, useRef, useEffect } from "react"
 
 import {
     Container,
@@ -7,7 +7,7 @@ import {
     ProgressBar,
     Time,
     SpeedButton,
-} from "../styles/components/AudioPlayer"
+} from "../../styles/components/AudioPlayer"
 import {
     FaPause,
     FaPlay,
