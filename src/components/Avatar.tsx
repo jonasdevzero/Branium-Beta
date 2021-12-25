@@ -19,7 +19,6 @@ export default function Avatar({ src, size, user }: AvatarProps) {
                 src={user ? (store.getState().user?.picture || noProfile) : (src || noProfile)} 
                 alt="" 
                 layout="fill"
-                className="image"
             />
         </AvatarWrapper>
     )

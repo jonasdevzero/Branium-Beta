@@ -56,6 +56,7 @@ export const Medias = styled.div`
 `;
 
 export const ImageContainer = styled.button`
+  position: relative;
   background-color: transparent;
   border: none;
   outline: none;

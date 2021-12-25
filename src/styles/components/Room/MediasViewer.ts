@@ -25,20 +25,44 @@ export const Close = styled.button`
   font-size: 3rem;
   color: #fff;
   cursor: pointer;
+  z-index: 2;
+`;
+
+export const Button = styled.button`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 20rem;
+
+  color: #fff;
+  font-size: 3.5rem;
+  background-color: transparent;
+  border: none;
+  outline: none;
   z-index: 1;
+  cursor: pointer;
+
+  &.prev {
+    left: 2rem;
+  }
+
+  &.next {
+    right: 2rem;
+  }
 `;
 
 export const ImageContainer = styled.div`
+  position: relative;
   max-width: 80vw;
   max-height: 70vh;
   width: 100%;
-  height:100%;
+  height: 100%;
 
   transition: opacity 0.2s ease;
 
   img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 `;
