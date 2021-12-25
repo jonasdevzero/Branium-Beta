@@ -1,83 +1,185 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const Container = styled.form`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 
-    height: 6rem;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    padding: 0 1.5rem;
+  height: 6rem;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 0 1.5rem;
 
-    background-color: #121212;
+  background-color: #121212;
 
-    svg {
-        color: #ddd;
-        cursor: pointer;
-        font-size: 2.5rem;
-    };
-`
+  svg {
+    color: #ddd;
+    cursor: pointer;
+    font-size: 2.5rem;
+  }
+`;
+
 export const Inner = styled.div`
-    display: flex;
-    width: 100%;
-    position: relative;
-`
+  display: flex;
+  width: 100%;
+  position: relative;
+`;
 
 export const Input = styled.input`
-    width: 100%;
-    height: 4rem;
+  width: 100%;
+  height: 4rem;
 
-    outline: none;
-    border: none;
-    border-radius: 0;
+  outline: none;
+  border: none;
+  border-radius: 0;
 
-    font-size: 1.6rem;
-    color: #fff;
-    background-color: #202020;
-    margin: 0 1rem;
-    padding: 0 5rem 0 1.5rem;
-    border-radius: 10rem;
-`
+  font-size: 1.6rem;
+  color: #fff;
+  background-color: #202020;
+  margin: 0 1rem;
+  padding: 0 5rem 0 1.5rem;
+  border-radius: 10rem;
+`;
 
 export const MediaInput = styled.input`
-    display: none;
-`
+  display: none;
+`;
 
 export const Submit = styled.button`
-    width: 4rem;
-    height: 4rem;
+  width: 4rem;
+  height: 4rem;
 
-    outline: none;
-    border: none;
-    border-radius: 0;
+  outline: none;
+  border: none;
+  border-radius: 0;
 
-    cursor: pointer;
-    background-color: transparent;
+  cursor: pointer;
+  background-color: transparent;
 
-    position: absolute;
-    top: 57%;
-    right: 2rem;
-    transform: translateY(-50%);
-`
+  position: absolute;
+  top: 57%;
+  right: 2rem;
+  transform: translateY(-50%);
+`;
 
-export const Icon = styled.label`
-    display: flex;
-    align-items: center;
-    width: 3.5rem;
-    height: 3.5rem;
+export const Icon = styled.button`
+  display: flex;
+  align-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  position: relative;
 
-    background-color: transparent;
+  background-color: transparent;
+  border: none;
+  outline: none;
 
-    & + & {
-        margin-left: 1.5rem;
-    };
-`
+  & + & {
+    margin-left: 1.5rem;
+  }
+`;
 
 export const EmojiPickerContainer = styled.div`
-    position: absolute;
-    bottom: 6rem;
-    left: 1rem;
+  position: absolute;
+  bottom: 6rem;
+  left: 1rem;
+`;
+
+export const UploadOptions = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
+export const UploadOption = styled.label`
+  background-color: #000;
+
+  padding: 1.8rem;
+  margin-top: 1rem !important;
+  border-radius: 100%;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  :hover {
+    opacity: 0.7;
+  }
+`;
+
+export const PreviewMediasContainer = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+
+  img {
+    width: 20rem;
+    height: 20rem;
+  }
+  video {
+    width: 50rem;
+  }
+`;
+
+export const PreviewMediasContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 70rem;
+
+  ${Inner} {
+      margin-top: 2rem;
+      justify-content: center;
+  }
+`;
+
+export const AudioWrapper = styled.div`
+  background-color: #222;
+  padding: 0.3rem;
+  border-radius: 0.5rem;
+  
+  svg {
+      font-size: 1.8rem;
+  }
+`;
+
+export const MediaSubmit = styled.button`
+    color: #fff;
+    background-color: #191919;
+    border: none;
+    background-color: none;
+    padding: 1rem 1.5rem;
+
+    cursor: pointer;
+    transition: opacity .2s ease;
+
+    :hover {
+        opacity: .7;
+    }
+`
+
+export const FilesContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+        font-size: 2rem;
+        align-self: center;
+        margin-bottom: 2rem;
+    }
+
+    p {
+        font-size: 1.5rem;
+    }
 `

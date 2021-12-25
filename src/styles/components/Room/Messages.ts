@@ -53,6 +53,10 @@ export const Inner = styled.div`
 export const Medias = styled.div`
   display: flex;
   margin-bottom: 0.7rem;
+  
+  video {
+    max-width: 50rem;
+  }
 `;
 
 export const ImageContainer = styled.button`
