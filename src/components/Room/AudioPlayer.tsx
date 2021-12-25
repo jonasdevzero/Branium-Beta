@@ -7,7 +7,7 @@ import {
     ProgressBar,
     Time,
     SpeedButton,
-} from "../../styles/components/AudioPlayer"
+} from "../../styles/components/Room/AudioPlayer"
 import {
     FaPause,
     FaPlay,
