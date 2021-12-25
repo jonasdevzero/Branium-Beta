@@ -47,14 +47,18 @@ const contactService = {
         })
     },
 
-    createMessage({ to, text }) {
+    createMessage({ to, text, medias }) {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!text.trim().length) return resolve()
+                console.log("text", text)
+                console.log("medias", medias)
+                if (!text.trim().length && !medias.length) return resolve()
 
                 const data = new FormData()
                 data.append("to", to)
                 data.append("text", text)
+
+                for (const media of medias) data.append("medias", media);
                 
                 await api.post(`/contact/messages`, data)
                 resolve()

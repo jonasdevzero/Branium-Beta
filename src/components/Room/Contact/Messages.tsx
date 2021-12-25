@@ -4,10 +4,10 @@ import moment from "moment"
 import { useAppDispatch, useAppSelector, useMsgContainer } from "../../../hooks"
 import UserActions from "../../../store/actions/user"
 import { orderMessages } from "../../../utils/roomUtil"
-import { Contact } from "../../../types/user"
+import { Contact, ContactMediaMessage } from "../../../types/user"
 import { contactService } from "../../../services/api"
 
-import { AudioPlayer } from "../../"
+import { AudioPlayer, MediasViewer } from "../../"
 import {
     Container,
     LoadingMessages,
@@ -35,6 +35,8 @@ export default function Messages({ contact }: { contact: Contact }) {
     const [conatinerScroll, setContainerScroll] = useState<ContainerScroll>()
     const { showScrollBtn, handleScroll, scrollToBottom } = useMsgContainer(containerRef)
 
+    const [viewMedias, setViewMedias] = useState<ContactMediaMessage[]>()
+    const [viewMediaIndex, setViewMediaIndex] = useState(0)
     const [loadingMessages, setLoadingMessages] = useState(false)
 
     const user_id = useAppSelector(state => state.user.id)
@@ -103,6 +105,11 @@ export default function Messages({ contact }: { contact: Contact }) {
         }
     }
 
+    function selectMediasToView(medias: ContactMediaMessage[], initialIndex: number) {
+        setViewMedias(medias)
+        setViewMediaIndex(initialIndex)
+    }
+
     const renderMessages = useCallback(() => {
         if (conatinerScroll && containerRef.current) {
             const { scrollHeight, scrollTop } = containerRef.current
@@ -123,17 +130,13 @@ export default function Messages({ contact }: { contact: Contact }) {
                     <Content>
                         {message?.medias?.length ? (
                             <Medias>
-                                {message?.medias?.map(m => m.type === "image" ? (
-                                    <ImageContainer key={m.id} onClick={() => {}}>
-                                        <Image src={m.url} layout="fill" className="image" />
+                                {message.medias.map((m, index) => m.type === "image" ? (
+                                    <ImageContainer key={m.id} onClick={() => selectMediasToView(message.medias, index)}>
+                                        <Image src={m.url} layout="fill" />
                                     </ImageContainer>
-                                ) : null)}
-
-                                {message?.medias?.map(m => m.type === "video" ? (
+                                ) : m.type === "video" ? (
                                     <video key={m.id} src={m.url} controls />
-                                ) : null)}
-
-                                {message?.medias?.map(m => m.type === "audio" ? (
+                                ) : m.type === "audio" ? (
                                     <AudioPlayer key={m.id} src={m.url} />
                                 ) : null)}
                             </Medias>
@@ -147,10 +150,18 @@ export default function Messages({ contact }: { contact: Contact }) {
 
                         <Time>{moment(message.created_at).format("HH:mm A")}</Time>
                     </Content>
+
+                    {viewMedias ? (
+                        <MediasViewer 
+                            medias={viewMedias}
+                            initialIndex={viewMediaIndex}
+                            close={() => setViewMedias(undefined)} 
+                        />
+                    ) : null}
                 </Message>
             )
         })
-    }, [contacts, contact.id, user_id, conatinerScroll])
+    }, [contacts, contact.id, user_id, conatinerScroll, viewMedias, viewMediaIndex])
 
     return (
         <Container ref={containerRef} onScroll={() => handleScroll(handleScrollCallback)}>

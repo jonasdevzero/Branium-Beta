@@ -17,7 +17,7 @@ export const AvatarWrapper = styled.div<AvatarWrapperProps>`
         border-radius: 50%;
     }
 
-    .image {
+    img {
         object-fit: contain;
         width: 100% !important;
         position: relative !important;

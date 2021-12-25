@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react"
+import { useState, useRef, useEffect } from "react"
 
 import {
     Container,
@@ -7,7 +7,7 @@ import {
     ProgressBar,
     Time,
     SpeedButton,
-} from "../styles/components/AudioPlayer"
+} from "../../styles/components/Room/AudioPlayer"
 import {
     FaPause,
     FaPlay,
@@ -88,7 +88,7 @@ export default function AudioPlayer({ src }: { src: string }) {
         <Container>
             <audio ref={audioPlayer} src={src}></audio>
 
-            <PlayPauseButton onClick={() => togglePlayPause()}>
+            <PlayPauseButton type="button" onClick={() => togglePlayPause()}>
                 {isPlaying ? (<FaPause />) : (<FaPlay />)}
             </PlayPauseButton>
 
@@ -98,7 +98,7 @@ export default function AudioPlayer({ src }: { src: string }) {
                 <Time>{calculateTime(currentTime)} / {calculateTime(duration)}</Time>
             </RangeContainer>
 
-            <SpeedButton onClick={() => toggleSpeed()}>{speed}x</SpeedButton>
+            <SpeedButton type="button" onClick={() => toggleSpeed()}>{speed}x</SpeedButton>
         </Container>
     )
 }

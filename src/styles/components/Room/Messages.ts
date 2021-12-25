@@ -53,9 +53,14 @@ export const Inner = styled.div`
 export const Medias = styled.div`
   display: flex;
   margin-bottom: 0.7rem;
+  
+  video {
+    max-width: 50rem;
+  }
 `;
 
 export const ImageContainer = styled.button`
+  position: relative;
   background-color: transparent;
   border: none;
   outline: none;
@@ -66,6 +71,7 @@ export const ImageContainer = styled.button`
   height: 100%;
 
   cursor: pointer;
+  transition: opacity .2s ease;
 
   div {
     position: unset !important;
@@ -75,6 +81,10 @@ export const ImageContainer = styled.button`
     width: 100% !important;
     position: relative !important;
     height: unset !important;
+  }
+
+  :hover {
+    opacity: .8;
   }
 `;
 

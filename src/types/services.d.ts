@@ -36,7 +36,7 @@ export namespace Services {
     
         getMessages(contact: Contact): Promise<ContactMessage[]>
     
-        createMessage({ to, text }: { to: string, text: string }): Promise<void>
+        createMessage({ to, text, medias }: { to: string, text: string, medias: File[] }): Promise<void>
     
         viewMessages(contact_id: string): Promise<void>
 
