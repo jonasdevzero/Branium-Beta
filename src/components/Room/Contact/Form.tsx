@@ -1,4 +1,5 @@
 import { useState } from "react"
+import Image from "next/image"
 import { Picker, BaseEmoji } from "emoji-mart"
 import "emoji-mart/css/emoji-mart.css"
 import { contactService } from "../../../services/api"
@@ -75,7 +76,7 @@ export default function Form({ contact_id }: { contact_id: string }) {
             <PreviewMediasContainer>
                 <PreviewMediasContent>
                     {mediaType === "image" ? (
-                        mediasPreview.map(m => (<img key={m} src={m} />))
+                        mediasPreview.map(m => (<Image key={m} src={m} width="200px" height="200px" />))
                     ) : mediaType === "application" ? (
                         <FilesContainer>
                             <h3>Files</h3>
