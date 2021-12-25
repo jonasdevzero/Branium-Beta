@@ -66,6 +66,7 @@ export const ImageContainer = styled.button`
   height: 100%;
 
   cursor: pointer;
+  transition: opacity .2s ease;
 
   div {
     position: unset !important;
@@ -75,6 +76,10 @@ export const ImageContainer = styled.button`
     width: 100% !important;
     position: relative !important;
     height: unset !important;
+  }
+
+  :hover {
+    opacity: .8;
   }
 `;
 
