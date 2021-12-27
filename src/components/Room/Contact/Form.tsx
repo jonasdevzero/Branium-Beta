@@ -5,6 +5,7 @@ import "emoji-mart/css/emoji-mart.css"
 import { contactService } from "../../../services/api"
 import { useWarn } from "../../../hooks"
 
+import AudioPlayer from "../AudioPlayer"
 import {
     Container,
     Inner,
@@ -17,9 +18,12 @@ import {
     UploadOption,
     PreviewMediasContainer,
     PreviewMediasContent,
+    PreviewMediasInner,
+    PreviewMediasForm,
     FilesContainer,
+    FileBox,
     AudioWrapper,
-    MediaSubmit,
+    ImageContainer,
 } from "../../../styles/components/Room/Form"
 import {
     FiSmile,
@@ -28,9 +32,12 @@ import {
     FiMic,
     FiFile,
     FiFilm,
+    FiChevronRight,
+    FiChevronLeft,
+    FiX,
+    FiTrash2,
 } from "react-icons/fi"
 import { AiOutlinePicture } from "react-icons/ai"
-import AudioPlayer from "../AudioPlayer"
 
 type MediaType = "image" | "application" | "audio" | "video"
 
@@ -39,23 +46,27 @@ export default function Form({ contact_id }: { contact_id: string }) {
     const [medias, setMedias] = useState<File[]>([])
     const [mediaType, setMediaType] = useState<MediaType>()
     const [mediasPreview, setMediasPreview] = useState<string[]>([])
+    const [previewIndex, setPreviewIndex] = useState(0)
 
     const [uploadOptions, setUploadOptions] = useState(false)
     const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+
+    const [loading, setLoading] = useState(false)
 
     const warn = useWarn()
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
+        if (loading) return;
+        setLoading(true)
 
         contactService.createMessage({ to: contact_id, text: message, medias })
             .then(() => {
                 setMessage("")
-                setMedias([])
-                setMediasPreview([])
-                setMediaType(undefined)
+                clearMedias()
             })
             .catch(error => warn.error(error))
+            .then(() => setLoading(false))
     }
 
     function handleMedia(e: React.ChangeEvent<HTMLInputElement>) {
@@ -71,52 +82,122 @@ export default function Form({ contact_id }: { contact_id: string }) {
         setMediasPreview([...mediasPreview, ...selectedMediasPreview])
     }
 
+    function removeMedia(index: number) {
+        setMedias(medias.filter((_, i) => i !== index))
+        setMediasPreview(mediasPreview.filter((_, i) => i !== index))
+
+        medias.length === 0 ? clearMedias() : null;
+    }
+
+    function clearMedias() {
+        setMediaType(undefined)
+        setMedias([])
+        setMediasPreview([])
+        setPreviewIndex(0)
+    }
+
+    function previewImages() {
+        const previous = () => previewIndex === 0 ? setPreviewIndex(mediasPreview.length - 1) : setPreviewIndex(previewIndex - 1)
+        const next = () => previewIndex === mediasPreview.length - 1 ? setPreviewIndex(0) : setPreviewIndex(previewIndex + 1)
+        const remove = () => {
+            previewIndex !== medias.length - 2 ? next() : null
+            removeMedia(previewIndex)
+        }
+
+        return (
+            <>
+                <button type="button" className="remove__media" onClick={remove}>
+                    <FiTrash2 />
+                </button>
+
+                {mediasPreview.length > 1 ? (
+                    <button type="button" className="previous" onClick={previous}>
+                        <FiChevronLeft />
+                    </button>
+                ) : null}
+
+                <ImageContainer>
+                    <Image src={mediasPreview[previewIndex] || ""} layout="fill" />
+                </ImageContainer>
+
+                {mediasPreview.length > 1 ? (
+                    <button type="button" className="next" onClick={next}>
+                        <FiChevronRight />
+                    </button>
+                ) : null}
+            </>
+        )
+    }
+
+    function previewFiles() {
+        return (
+            <FilesContainer>
+                {medias.map((m, i) => (
+                    <FileBox key={m.name}>
+                        <span className="extension">
+                            {m.type.split("/")[1]}
+
+                            <span onClick={() => removeMedia(i)}>
+                                <FiX />
+                            </span>
+                        </span>
+
+                        <span className="name">
+                            <a href={mediasPreview[i]} target={"_blank"}>{m.name}</a>
+                        </span>
+                    </FileBox>
+                ))}
+            </FilesContainer>
+        )
+    }
+
     function renderMediasPreview() {
         return (
             <PreviewMediasContainer>
                 <PreviewMediasContent>
-                    {mediaType === "image" ? (
-                        mediasPreview.map(m => (<Image key={m} src={m} width="200px" height="200px" />))
-                    ) : mediaType === "application" ? (
-                        <FilesContainer>
-                            <h3>Files</h3>
+                    <PreviewMediasInner>
+                        {mediaType === "image" ? (
+                            previewImages()
+                        ) : mediaType === "application" ? (
+                            previewFiles()
+                        ) : mediaType === "audio" ? (
+                            <AudioWrapper>
+                                <AudioPlayer src={mediasPreview[0]} />
+                            </AudioWrapper>
+                        ) : mediaType === "video" ? (
+                            <video src={mediasPreview[0]} controls />
+                        ) : null}
 
-                            {medias.map(m => (<p key={m.name}>{m.name}</p>))}
-                        </FilesContainer>
-                    ) : mediaType === "audio" ? (
-                        <AudioWrapper>
-                            <AudioPlayer src={mediasPreview[0]} />
-                        </AudioWrapper>
-                    ) : mediaType === "video" ? (
-                        <video src={mediasPreview[0]} controls />
-                    ) : null}
+                    </PreviewMediasInner>
 
-                    <Inner>
-                        {mediaType !== "audio" ? (
-                            <>
-                                <Input
-                                    type="text"
-                                    value={message}
-                                    onChange={e => setMessage(e.target.value)}
-                                    autoComplete="off"
-                                    onFocus={() => {
-                                        setShowEmojiPicker(false)
-                                        setUploadOptions(false)
-                                    }}
-                                    placeholder="Digite alguma coisa..."
-                                />
+                    <PreviewMediasForm>
+                        <div className="input__wrapper">
+                            <Input
+                                type="text"
+                                value={message}
+                                onChange={e => setMessage(e.target.value)}
+                                autoComplete="off"
+                                onFocus={() => {
+                                    setShowEmojiPicker(false)
+                                    setUploadOptions(false)
+                                }}
+                                placeholder={mediaType === "audio" ? "Você não pode digitar uma mensagem em um aúdio" : "Digite alguma coisa..."}
+                                disabled={mediaType === "audio"}
+                            />
 
-                                <Submit type="submit">
+                            <Submit type="submit">
+                                {!loading ? (
                                     <FiSend />
-                                </Submit>
-                            </>
-                        ) : (
-                            <MediaSubmit type="submit">
-                                Enviar
-                            </MediaSubmit>
-                        )}
+                                ) : (
+                                    <Image src="/images/loading-light.svg" width="15px" height="15px" alt="loading" />
+                                )}
+                            </Submit>
+                        </div>
 
-                    </Inner>
+                        <button className="cancel" type="button" onClick={clearMedias}>
+                            <FiX />
+                        </button>
+                    </PreviewMediasForm>
                 </PreviewMediasContent>
             </PreviewMediasContainer>
         )
@@ -180,7 +261,11 @@ export default function Form({ contact_id }: { contact_id: string }) {
                 />
 
                 <Submit type="submit">
-                    <FiSend />
+                    {!loading ? (
+                        <FiSend />
+                    ) : (
+                        <Image src="/images/loading-light.svg" width="15px" height="15px" alt="loading" />
+                    )}
                 </Submit>
             </Inner>
 
