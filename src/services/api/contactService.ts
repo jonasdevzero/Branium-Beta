@@ -50,8 +50,6 @@ const contactService = {
     createMessage({ to, text, medias }) {
         return new Promise(async (resolve, reject) => {
             try {
-                console.log("text", text)
-                console.log("medias", medias)
                 if (!text.trim().length && !medias.length) return resolve()
 
                 const data = new FormData()
