@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { authPage, useAuth, useAppSelector } from "../../../hooks"
@@ -10,7 +10,9 @@ import { Container, Inner } from "../../../styles/pages/app"
 
 export default function Contact() {
     const router = useRouter()
-    const contact = useAppSelector(state => state.user.contacts.find(c => c.id === router.query.id))
+    const contacts = useAppSelector(state => state.user.contacts)
+    const contact = useMemo(() => contacts.find(c => c.id === router.query.id), [router, contacts])
+
     const [showInfo, setShowInfo] = useState(false)
 
     const { isAuthenticated } = useAuth()
