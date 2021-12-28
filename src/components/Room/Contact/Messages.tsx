@@ -39,10 +39,9 @@ export default function Messages({ contact }: { contact: Contact }) {
     const [viewMediaIndex, setViewMediaIndex] = useState(0)
     const [loadingMessages, setLoadingMessages] = useState(false)
 
-    const user_id = useAppSelector(state => state.user.id)
-    const contacts = useAppSelector(state => state.user.contacts)
-    const dispatch = useAppDispatch()
+    const user = useAppSelector(state => state.user)
 
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         // use the saved position
@@ -76,7 +75,7 @@ export default function Messages({ contact }: { contact: Contact }) {
                 .then(() => dispatch(UserActions.updateRoom({ field: "contacts", where: { id: contact.id }, set: { unread_messages: 0 } })))
         }
 
-        scrollToBottom(true)
+        scrollToBottom(contact.messages[contact.messages.length - 1]?.sender_id === contact.id)
     }, [contact, contact.messages.length, dispatch, scrollToBottom])
 
     function handleScrollCallback() {
@@ -90,6 +89,7 @@ export default function Messages({ contact }: { contact: Contact }) {
 
             contactService.getMessages(contact).then(messages => {
                 if (!messages.length) {
+                    setLoadingMessages(false)
                     dispatch(UserActions.updateExtraRoomData({ field: "contacts", where: { id: contact.id }, set: { full_loaded: true } }))
                     return
                 }
@@ -119,17 +119,17 @@ export default function Messages({ contact }: { contact: Contact }) {
             setContainerScroll(undefined)
         }
 
-        return orderMessages(contacts.find(c => c.id === contact.id)?.messages || []).map((message, i, arr) => {
+        return orderMessages(contact.messages || []).map((message, i, arr) => {
             if (message.date) return (<Date key={message.id}>{message.date}</Date>);
 
             return (
                 <Message
                     key={message.id}
-                    className={`${message?.sender_id === arr[i - 1]?.sender_id ? "concat" : ""} ${message.sender_id === user_id ? "sender" : ""}`}
+                    className={`${message?.sender_id === arr[i - 1]?.sender_id ? "concat" : ""} ${message.sender_id === user.id ? "sender" : ""}`}
                 >
                     <Content>
                         {message?.medias?.length ? (
-                            <Medias>
+                            <Medias className={message?.medias[0]?.type}>
                                 {message.medias.map((m, index) => m.type === "image" ? (
                                     <ImageContainer key={m.id} onClick={() => selectMediasToView(message.medias, index)}>
                                         <Image src={m.url} layout="fill" />
@@ -142,26 +142,26 @@ export default function Messages({ contact }: { contact: Contact }) {
                             </Medias>
                         ) : null}
 
-                        {message.text ? (
-                            <Inner>
+                        <Inner className={!message.text ? "no__text" : ""}>
+                            {message.text ? (
                                 <Text>{message.text}</Text>
-                            </Inner>
-                        ) : null}
+                            ) : null}
+                        </Inner>
 
                         <Time>{moment(message.created_at).format("HH:mm A")}</Time>
                     </Content>
 
                     {viewMedias ? (
-                        <MediasViewer 
+                        <MediasViewer
                             medias={viewMedias}
                             initialIndex={viewMediaIndex}
-                            close={() => setViewMedias(undefined)} 
+                            close={() => setViewMedias(undefined)}
                         />
                     ) : null}
                 </Message>
             )
         })
-    }, [contacts, contact.id, user_id, conatinerScroll, viewMedias, viewMediaIndex])
+    }, [user, contact, conatinerScroll, viewMedias, viewMediaIndex])
 
     return (
         <Container ref={containerRef} onScroll={() => handleScroll(handleScrollCallback)}>

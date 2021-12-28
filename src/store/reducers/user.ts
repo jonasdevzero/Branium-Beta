@@ -80,7 +80,7 @@ const reducers = {
     [userReducers.PUSH_CONTACT_MESSAGE](state, action: { set: { message: ContactMessage }, where: Actions.Where }) {
         const { where, set: { message } } = action
 
-        const contacts = state.contacts.map(contact => {
+        state.contacts = state.contacts.map(contact => {
             if (where.id === contact.id) {
                 contact.messages.push(message)
                 contact.extra.pushed_messages += 1 
@@ -94,7 +94,7 @@ const reducers = {
             return contact
         })
 
-        return { ...state, contacts }
+        return state
     },
 
     "UNSHIFT_CONTACT_MESSAGES"(state, action: { set: { messages: ContactMessage[] }, where: Actions.Where }) {

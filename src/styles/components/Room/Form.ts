@@ -62,6 +62,17 @@ export const Submit = styled.button`
   top: 57%;
   right: 2rem;
   transform: translateY(-50%);
+
+  & > div {
+    div {
+      position: absolute;
+    }
+  }
+  img {
+    position: unset !important;
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+  }
 `;
 
 export const Icon = styled.button`
@@ -120,7 +131,7 @@ export const PreviewMediasContainer = styled.div`
   align-items: center;
   justify-content: center;
 
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 1;
 
   img {
@@ -136,11 +147,87 @@ export const PreviewMediasContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 70rem;
+  max-width: 80%;
+  width: 100%;
+  min-height: 90vh;
+`;
 
-  ${Inner} {
-      margin-top: 2rem;
-      justify-content: center;
+export const PreviewMediasInner = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0.8;
+  position: relative;
+  width: 100%;
+
+  button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    z-index: 1;
+    cursor: pointer;
+
+    svg:hover {
+      opacity: .7;
+    }
+  }
+  button.remove__media {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+
+    svg:hover {
+      opacity: 1;
+      color: red;
+    }
+  }
+  button.previous {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 5rem;
+  }
+  button.next {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 5rem;
+  }
+
+  svg {
+    font-size: 3.5rem;
+    transition: opacity .2s ease, color .2s ease-in-out;
+  }
+`;
+
+export const PreviewMediasForm = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0.2;
+  width: 80%;
+
+  div.input__wrapper {
+    display: flex;
+    width: 100%;
+    position: relative;
+    height: fit-content;
+  }
+
+  button.cancel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+
+    background-color: #dc3545;
+    border-radius: 50%;
+    border: 0;
+    outline: 0;
   }
 `;
 
@@ -148,38 +235,68 @@ export const AudioWrapper = styled.div`
   background-color: #222;
   padding: 0.3rem;
   border-radius: 0.5rem;
-  
+
   svg {
-      font-size: 1.8rem;
+    font-size: 1.8rem;
   }
 `;
 
-export const MediaSubmit = styled.button`
-    color: #fff;
-    background-color: #191919;
-    border: none;
-    background-color: none;
-    padding: 1rem 1.5rem;
-
-    cursor: pointer;
-    transition: opacity .2s ease;
-
-    :hover {
-        opacity: .7;
-    }
-`
-
 export const FilesContainer = styled.div`
+  display: flex;
+
+  h3 {
+    font-size: 2rem;
+    align-self: center;
+    margin-bottom: 2rem;
+  }
+
+  p {
+    font-size: 1.5rem;
+  }
+`;
+
+export const FileBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 10rem;
+  height: 12rem;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+
+  background-color: #222;  
+
+  span {
+    border-radius: 0.5rem;
+    padding: 0.7rem;
+    font-size: 1.2rem;
+    overflow-wrap: break-word;
+  }
+
+  span.name {
+    cursor: pointer;
+  }
+
+  span.extension {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.4rem;
+    background-color: red;
 
-    h3 {
-        font-size: 2rem;
-        align-self: center;
-        margin-bottom: 2rem;
-    }
+    span {
+      padding: 0;
+      z-index: 2;
 
-    p {
-        font-size: 1.5rem;
+      svg {
+        font-size: 1.8rem;
+      }
     }
-`
+  }
+`;
+
+export const ImageContainer = styled.div`
+  img {
+    object-fit: contain;
+  }
+`;

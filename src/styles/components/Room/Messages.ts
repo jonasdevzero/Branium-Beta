@@ -48,11 +48,20 @@ export const Content = styled.div`
 
 export const Inner = styled.div`
   padding: 0.5rem;
+  margin-bottom: .1rem;
+
+  &.no__text {
+    margin-bottom: .5rem;
+  }
 `;
 
 export const Medias = styled.div`
   display: flex;
   margin-bottom: 0.7rem;
+
+  &.audio {
+    margin-bottom: 0;
+  }
   
   video {
     max-width: 50rem;
