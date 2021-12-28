@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react"
-import { AudioPlayer } from ".."
 import { useAppSelector } from "../../hooks"
 
 import {
@@ -41,12 +40,13 @@ export default function AudioRecorder({ record, stop, setMedias, setMediasPrevie
 
     useEffect(() => {
         const blob = new Blob(recordedBlobs, { type: audioType })
+
         if (blob.size) {
             const url = URL.createObjectURL(blob)
-            const filename = `${username}-audio-${Date.now()}`
-            const file = new File(recordedBlobs, filename, { type: audioType })
+            const file = new File(recordedBlobs, `${username}-audio-${Date.now()}`, { type: audioType })
 
             mediaRecorder.current?.stream.getTracks().forEach(t => t.stop())
+            
             setMedias([file])
             setMediasPreview([url])
             setMediaType("audio")
