@@ -6,6 +6,7 @@ import { contactService } from "../../../services/api"
 import { useWarn } from "../../../hooks"
 
 import AudioPlayer from "../AudioPlayer"
+import AudioRecorder from "../AudioRecorder"
 import {
     Container,
     Inner,
@@ -44,6 +45,8 @@ type MediaType = "image" | "application" | "audio" | "video"
 export default function Form({ contact_id }: { contact_id: string }) {
     const [message, setMessage] = useState("")
     const [medias, setMedias] = useState<File[]>([])
+    const [record, setRecord] = useState(false)
+
     const [mediaType, setMediaType] = useState<MediaType>()
     const [mediasPreview, setMediasPreview] = useState<string[]>([])
     const [previewIndex, setPreviewIndex] = useState(0)
@@ -205,6 +208,14 @@ export default function Form({ contact_id }: { contact_id: string }) {
 
     return (
         <Container onSubmit={handleSubmit}>
+            <AudioRecorder
+                record={record}
+                stop={() => setRecord(false)}
+                setMedias={setMedias}
+                setMediasPreview={setMediasPreview}
+                setMediaType={setMediaType}
+            />
+
             {mediasPreview.length ? renderMediasPreview() : null}
 
             {showEmojiPicker ? (
@@ -269,7 +280,7 @@ export default function Form({ contact_id }: { contact_id: string }) {
                 </Submit>
             </Inner>
 
-            <Icon type="button">
+            <Icon type="button" onClick={() => setRecord(true)}>
                 <FiMic />
             </Icon>
         </Container>
