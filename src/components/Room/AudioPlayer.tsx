@@ -25,11 +25,11 @@ export default function AudioPlayer({ src }: { src: string }) {
     const animationRef = useRef<any>()
 
     useEffect(() => {
-        const seconds = Math.floor(audioPlayer.current?.duration || 0)
-
-        setDuration(seconds)
-
-        progressBar.current!.max = `${seconds}`
+        audioPlayer.current!.ondurationchange = () => {
+            const seconds = Math.floor(audioPlayer.current?.duration || 0)
+            setDuration(seconds)
+            progressBar.current!.max = `${seconds}`
+        }
     }, [audioPlayer.current?.readyState])
 
     function togglePlayPause() {
@@ -95,7 +95,9 @@ export default function AudioPlayer({ src }: { src: string }) {
             <RangeContainer>
                 <ProgressBar ref={progressBar} type="range" defaultValue={0} onChange={changeRange} />
 
-                <Time>{calculateTime(currentTime)} / {calculateTime(duration)}</Time>
+                {duration !== Infinity ? (
+                    <Time>{calculateTime(currentTime)} / {calculateTime(duration)}</Time>
+                ) : null}
             </RangeContainer>
 
             <SpeedButton type="button" onClick={() => toggleSpeed()}>{speed}x</SpeedButton>
