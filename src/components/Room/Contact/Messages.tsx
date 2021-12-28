@@ -132,7 +132,7 @@ export default function Messages({ contact }: { contact: Contact }) {
                             <Medias className={message?.medias[0]?.type}>
                                 {message.medias.map((m, index) => m.type === "image" ? (
                                     <ImageContainer key={m.id} onClick={() => selectMediasToView(message.medias, index)}>
-                                        <Image src={m.url} layout="fill" />
+                                        <Image src={m.url} alt="" layout="fill" />
                                     </ImageContainer>
                                 ) : m.type === "video" ? (
                                     <video key={m.id} src={m.url} controls />

@@ -117,7 +117,7 @@ export default function Form({ contact_id }: { contact_id: string }) {
                 ) : null}
 
                 <ImageContainer>
-                    <Image src={mediasPreview[previewIndex] || ""} layout="fill" />
+                    <Image src={mediasPreview[previewIndex] || ""} alt="" layout="fill" />
                 </ImageContainer>
 
                 {mediasPreview.length > 1 ? (
