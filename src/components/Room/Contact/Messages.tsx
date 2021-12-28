@@ -129,7 +129,7 @@ export default function Messages({ contact }: { contact: Contact }) {
                 >
                     <Content>
                         {message?.medias?.length ? (
-                            <Medias>
+                            <Medias className={message?.medias[0]?.type}>
                                 {message.medias.map((m, index) => m.type === "image" ? (
                                     <ImageContainer key={m.id} onClick={() => selectMediasToView(message.medias, index)}>
                                         <Image src={m.url} layout="fill" />
@@ -142,20 +142,20 @@ export default function Messages({ contact }: { contact: Contact }) {
                             </Medias>
                         ) : null}
 
-                        {message.text ? (
-                            <Inner>
+                        <Inner className={!message.text ? "no__text" : ""}>
+                            {message.text ? (
                                 <Text>{message.text}</Text>
-                            </Inner>
-                        ) : null}
+                            ) : null}
+                        </Inner>
 
                         <Time>{moment(message.created_at).format("HH:mm A")}</Time>
                     </Content>
 
                     {viewMedias ? (
-                        <MediasViewer 
+                        <MediasViewer
                             medias={viewMedias}
                             initialIndex={viewMediaIndex}
-                            close={() => setViewMedias(undefined)} 
+                            close={() => setViewMedias(undefined)}
                         />
                     ) : null}
                 </Message>
