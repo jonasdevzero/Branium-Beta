@@ -3,7 +3,14 @@ import { useAppSelector } from "../../hooks"
 
 import {
     Container,
+    AnimationContainer,
+    StopButton,
+    Error,
 } from "../../styles/components/Room/AudioRecorder"
+import {
+    FiStopCircle,
+    FiX,
+} from "react-icons/fi"
 
 type MediaType = "image" | "application" | "audio" | "video"
 interface AudioRecorderI {
@@ -31,12 +38,12 @@ export default function AudioRecorder({ record, stop, setMedias, setMediasPrevie
             if (isSupported) {
                 getAudio()
                     .then(startRecording)
-                    .catch(error => setError(error))
+                    .catch(error => setError(error.toString()))
             } else {
                 setError(`Seu navegador não suporta: ${audioType}`)
             }
         }
-    }, [record])
+    }, [record, startRecording])
 
     useEffect(() => {
         const blob = new Blob(recordedBlobs, { type: audioType })
@@ -46,14 +53,14 @@ export default function AudioRecorder({ record, stop, setMedias, setMediasPrevie
             const file = new File(recordedBlobs, `${username}-audio-${Date.now()}`, { type: audioType })
 
             mediaRecorder.current?.stream.getTracks().forEach(t => t.stop())
-            
+
             setMedias([file])
             setMediasPreview([url])
             setMediaType("audio")
             setRecordedBlobs([])
             stop()
         }
-    }, [recordedBlobs, username])
+    }, [recordedBlobs, username, setMediaType, setMedias, setMediasPreview, stop])
 
     async function getAudio() {
         return navigator.mediaDevices.getUserMedia({ audio: true })
@@ -81,9 +88,37 @@ export default function AudioRecorder({ record, stop, setMedias, setMediasPrevie
 
     return record ? (
         <Container>
-            <h1>Record audio</h1>
+            {!!mediaRecorder.current ? (
+                <>
+                    <AnimationContainer>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                    </AnimationContainer>
 
-            <button type="button" onClick={stopRecording}>Stop</button>
+                    <StopButton type="button" onClick={stopRecording}>
+                        <FiStopCircle />
+                    </StopButton>
+                </>
+            ) : null}
+
+            {error ? (
+                <>
+                    <Error>{error}</Error>
+
+                    <StopButton type="button" onClick={stop}>
+                        <FiX />
+                    </StopButton>
+                </>
+            ) : null}
         </Container>
     ) : null
 }
