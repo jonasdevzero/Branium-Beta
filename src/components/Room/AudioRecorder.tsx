@@ -23,7 +23,7 @@ export default function AudioRecorder({ record, stop, setMedias, setMediasPrevie
 
     const [error, setError] = useState<string>()
 
-    const audioType = "audio/webm"
+    const audioType = "audio/webm;codecs=opus"
 
     useEffect(() => {
         if (record) {
@@ -46,6 +46,7 @@ export default function AudioRecorder({ record, stop, setMedias, setMediasPrevie
             const filename = `${username}-audio-${Date.now()}`
             const file = new File(recordedBlobs, filename, { type: audioType })
 
+            mediaRecorder.current?.stream.getTracks().forEach(t => t.stop())
             setMedias([file])
             setMediasPreview([url])
             setMediaType("audio")
