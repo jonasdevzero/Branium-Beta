@@ -143,7 +143,7 @@ export default function Form({ contact_id }: { contact_id: string }) {
                         </span>
 
                         <span className="name">
-                            <a href={mediasPreview[i]} target={"_blank"}>{m.name}</a>
+                            <a href={mediasPreview[i]} rel="noopener noreferrer external nofollow" target={"_blank"}>{m.name}</a>
                         </span>
                     </FileBox>
                 ))}
