@@ -73,6 +73,11 @@ export const AnimationContainer = styled.div`
   }
 `;
 
+export const Time = styled.span`
+  font-size: 1.7rem;
+  margin: 1rem 0;
+`
+
 export const StopButton = styled.button`
   display: flex;
   align-items: center;
