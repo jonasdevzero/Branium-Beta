@@ -26,6 +26,7 @@ export default function AudioRecorder({ record, stop, setMedias, setMediasPrevie
 
     const mediaRecorder = useRef<MediaRecorder>()
     const [recordedBlobs, setRecordedBlobs] = useState<Blob[]>([])
+    const [recording, setRecording] = useState(false)
 
     const [error, setError] = useState<string>()
 
@@ -78,17 +79,19 @@ export default function AudioRecorder({ record, stop, setMedias, setMediasPrevie
         }
 
         mediaRecorder.current.start()
+        setRecording(true)
     }
 
     function stopRecording() {
         if (mediaRecorder.current?.state === "inactive") return;
 
         mediaRecorder.current?.stop()
+        setRecording(false)
     }
 
     return record ? (
         <Container>
-            {!!mediaRecorder.current ? (
+            {recording ? (
                 <>
                     <AnimationContainer>
                         <div className="bar"></div>
