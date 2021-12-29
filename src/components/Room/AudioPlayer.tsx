@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react"
+import { convertSeconds } from "../../utils/time"
 
 import {
     Container,
@@ -25,10 +26,19 @@ export default function AudioPlayer({ src }: { src: string }) {
     const animationRef = useRef<any>()
 
     useEffect(() => {
-        audioPlayer.current!.ondurationchange = () => {
-            const seconds = Math.floor(audioPlayer.current?.duration || 0)
-            setDuration(seconds)
-            progressBar.current!.max = `${seconds}`
+        if (audioPlayer.current) {
+            audioPlayer.current.ondurationchange = () => {
+                const seconds = Math.floor(audioPlayer.current?.duration || 0)
+                setDuration(seconds)
+                progressBar.current!.max = `${seconds}`
+            }
+
+            audioPlayer.current.onended = () => {
+                progressBar.current!.value = "0"
+                changeRange()
+                changePlayerCurrentTime()
+                setIsPlaying(false)
+            }
         }
     }, [audioPlayer.current?.readyState])
 
@@ -68,16 +78,6 @@ export default function AudioPlayer({ src }: { src: string }) {
         }
     }
 
-    function calculateTime(secs: number) {
-        const minutes = Math.floor(secs / 60)
-        const returnedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`
-
-        const seconds = Math.floor(secs % 60)
-        const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`
-
-        return `${returnedMinutes}:${returnedSeconds}`
-    }
-
     function toggleSpeed() {
         const newSpeed = speed === 1 ? 1.5 : speed === 1.5 ? 2 : 1
         audioPlayer.current!.playbackRate = newSpeed
@@ -96,7 +96,7 @@ export default function AudioPlayer({ src }: { src: string }) {
                 <ProgressBar ref={progressBar} type="range" defaultValue={0} onChange={changeRange} />
 
                 {duration !== Infinity ? (
-                    <Time>{calculateTime(currentTime)} / {calculateTime(duration)}</Time>
+                    <Time>{convertSeconds(currentTime)} / {convertSeconds(duration)}</Time>
                 ) : null}
             </RangeContainer>
 

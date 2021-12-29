@@ -17,7 +17,7 @@ export const PlayPauseButton = styled.button`
   min-width: 4rem;
   height: 4rem;
 
-  background-color: #151515;
+  background-color: #151515 !important;
   border: none;
   outline: none;
   border-radius: 50%;
@@ -30,7 +30,7 @@ export const PlayPauseButton = styled.button`
   }
 
   :hover {
-    background-color: #070707;
+    background-color: #070707 !important;
   }
 `;
 
@@ -160,7 +160,7 @@ export const SpeedButton = styled.button`
 
   color: #fff;
   font-size: 1.2rem;
-  background-color: #111;
+  background-color: #111 !important;
   border: none;
   outline: none;
   border-radius: 50%;
@@ -169,6 +169,6 @@ export const SpeedButton = styled.button`
   transition: background-color 0.2s ease;
 
   :hover {
-    background-color: #070707;
+    background-color: #070707 !important;
   }
 `;
