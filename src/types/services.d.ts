@@ -4,7 +4,7 @@ export namespace Services {
     export interface UserService {
         auth(before: () => void): Promise<void>
         
-        login(data: { username: string, password: string }): Promise<void>
+        login(data: { login: string, password: string }): Promise<void>
     
         preRegistration(data: { name: string, email: string }): Promise<string>
     

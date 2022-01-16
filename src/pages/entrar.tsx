@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { NextPageContext } from "next"
 import Head from "next/head"
 import Link from "next/link"
 import Image from "next/image"
@@ -25,7 +24,7 @@ import {
 } from "../styles/utils/FormPage"
 
 export default function Entrar() {
-    const [username, setUsername] = useState("")
+    const [login, setLogin] = useState("")
     const [password, setPassword] = useState("")
 
     const [loadingRequest, setLoadingRequest] = useState(false)
@@ -45,7 +44,7 @@ export default function Entrar() {
 
         setError(undefined)
         setLoadingRequest(true)
-        userService.login({ username, password })
+        userService.login({ login, password })
         .then(() => {
             setSuccess(true)
             Router.push(constant.routes.chat.HOME)
@@ -71,8 +70,8 @@ export default function Entrar() {
                             {error && <ErrorMessage>{error}</ErrorMessage>}
 
                             <InputWrapper>
-                                <Label htmlFor="username">Username / E-mail</Label>
-                                <Input id="username" type="text" value={username} onChange={e => setUsername(e.target.value)} />
+                                <Label htmlFor="login">Username / E-mail</Label>
+                                <Input id="login" type="text" value={login} onChange={e => setLogin(e.target.value)} />
                             </InputWrapper>
 
                             <InputWrapper>
