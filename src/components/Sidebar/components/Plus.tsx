@@ -122,7 +122,7 @@ export default function Plus({ close }: AddContactProps) {
                 </SearchWrapper>
 
                 <Users>
-                    {searchResult.map(u => (
+                    {searchResult?.map(u => (
                         <User key={u.id}>
                             <Avatar size="4.5rem" src={u.picture} />
                             <h4>{u.username}</h4>

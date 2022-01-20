@@ -56,7 +56,6 @@ const reducers = {
 
     // Push contact or contact_invitation
     [userReducers.USER_PUSH_DATA](state, action: { set: { data: any }, field: Actions.PushDataKey }) {
-        console.log("pushing data", action)
         const { field, set } = action
 
         const items: any[] = state[field]
@@ -154,7 +153,7 @@ const reducers = {
         return { ...state, [field]: rooms }
     },
 
-    "SET_CONTACTS_ONLINE"(state, action: { set: { contacts: string[] } }) {
+    [constant.reducer.user.SET_CONTACTS_ONLINE](state, action: { set: { contacts: string[] } }) {
         const { set: { contacts } } = action
 
         state.contacts.map(c => {

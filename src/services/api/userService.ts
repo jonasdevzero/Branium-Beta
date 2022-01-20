@@ -116,7 +116,7 @@ const userService = {
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await api.get(`/user/search?username=${username}`)
-                resolve(response.data.user)
+                resolve(response.data.users)
             } catch (error) {
                 reject(error)
             }

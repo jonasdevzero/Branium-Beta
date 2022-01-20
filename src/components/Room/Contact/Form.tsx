@@ -272,11 +272,7 @@ export default function Form({ contact_id }: { contact_id: string }) {
                 />
 
                 <Submit type="submit">
-                    {!loading ? (
-                        <FiSend />
-                    ) : (
-                        <Image src="/images/loading-light.svg" width="15px" height="15px" alt="loading" />
-                    )}
+                    <FiSend />
                 </Submit>
             </Inner>
 

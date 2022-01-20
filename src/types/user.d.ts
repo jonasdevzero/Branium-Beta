@@ -1,3 +1,55 @@
+export class GroupMessageView {
+    id: string;
+    message_id: string;
+    viewed: boolean;
+    viewed_at: Date;
+    viewer: {
+        id: string;
+        username: string;
+        picture: string;
+    }
+}
+
+export class GroupMessageMedia {
+    id: string;
+    message_id: string;
+    url: string;
+    type: string;
+}
+
+export class GroupMessage {
+    id: string;
+    sender_id: string;
+    text: string;
+    sender: {
+        id: string;
+        username: string;
+        picture: string;
+    };
+    medias: GroupMessageMedia[];
+    views: GroupMessageView[];
+    created_at: Date;
+}
+
+export class GroupUser {
+    id: string; // User ID
+    username: string;
+    picture: string;
+    role: number;
+}
+
+export class Group {
+    id: string;
+    name: string;
+    description: string;
+    picture: string;
+    created_by: string;
+    leader_id: string;
+    last_message_time: string;
+    created_at: Date;
+    users: GroupUser[];
+    messages: GroupMessage[];
+}
 
 export class ContactInvitation {
     id: string 
