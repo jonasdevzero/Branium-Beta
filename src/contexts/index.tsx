@@ -5,15 +5,15 @@ import { CallProvider } from "./CallContext"
 import store from "../store"
 
 export default function Contexts({ children }: { children: React.ReactChild }) {
-    return (
-        <ReduxProvider store={store}>
-            <WarnProvider>
-                <AuthProvider>
-                    <CallProvider>
-                        {children}
-                    </CallProvider>
-                </AuthProvider>
-            </WarnProvider>
-        </ReduxProvider>
-    )
+  return (
+    <ReduxProvider store={store}>
+      <WarnProvider>
+        <AuthProvider>
+          <CallProvider>
+            {children}
+          </CallProvider>
+        </AuthProvider>
+      </WarnProvider>
+    </ReduxProvider>
+  )
 }

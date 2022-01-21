@@ -1,5 +1,5 @@
-import api from ".";
-import { GroupMessage } from "../../types/user";
+import api from '.';
+import { GroupMessage } from '../../types/user';
 
 interface CreateGroupI {
   name: string;
@@ -24,7 +24,7 @@ const groupService = {
   async create(data: CreateGroupI) {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await api.post("/group", data);
+        const response = await api.post('/group', data);
 
         resolve(response.data.group);
       } catch (error: any) {

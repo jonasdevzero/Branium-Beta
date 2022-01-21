@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
@@ -48,10 +48,10 @@ export const Content = styled.div`
 
 export const Inner = styled.div`
   padding: 0.5rem;
-  margin-bottom: .1rem;
+  margin-bottom: 0.1rem;
 
   &.no__text {
-    margin-bottom: .5rem;
+    margin-bottom: 0.5rem;
   }
 `;
 
@@ -62,7 +62,7 @@ export const Medias = styled.div`
   &.audio {
     margin-bottom: 0;
   }
-  
+
   video {
     max-width: 50rem;
   }
@@ -80,7 +80,7 @@ export const ImageContainer = styled.button`
   height: 100%;
 
   cursor: pointer;
-  transition: opacity .2s ease;
+  transition: opacity 0.2s ease;
 
   div {
     position: unset !important;
@@ -93,7 +93,7 @@ export const ImageContainer = styled.button`
   }
 
   :hover {
-    opacity: .8;
+    opacity: 0.8;
   }
 `;
 

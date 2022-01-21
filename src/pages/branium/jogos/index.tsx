@@ -1,26 +1,26 @@
 import Head from "next/head"
 
-import { Sidebar } from "../../../components"
+import { Sidebar } from "~/components"
 
 import {
-    Container,
-    Center,
-    Title,
-} from "../../../styles/pages/app"
+  Container,
+  Center,
+  Title,
+} from "~/styles/pages/app"
 
 export default function Games() {
 
-    return (
-        <Container>
-            <Head>
-                <title></title>
-            </Head>
+  return (
+    <Container>
+      <Head>
+        <title></title>
+      </Head>
 
-            <Sidebar />
+      <Sidebar />
 
-            <Center>
-                <Title>Em Desenvolvimento :)</Title>
-            </Center>
-        </Container>
-    )
+      <Center>
+        <Title>Em Desenvolvimento :)</Title>
+      </Center>
+    </Container>
+  )
 }
