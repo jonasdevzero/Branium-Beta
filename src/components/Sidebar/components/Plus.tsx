@@ -39,7 +39,7 @@ import {
     FiCheck,
 } from "react-icons/fi"
 
-type AddContactProps = {
+type PlusProps = {
     close: () => void
 }
 
@@ -49,7 +49,7 @@ const title = {
     create_group: "Criar Grupo",
 }
 
-export default function Plus({ close }: AddContactProps) {
+export default function Plus({ close }: PlusProps) {
     const invites = useAppSelector(state => state.user.contact_invitations)
     const [option, setOption] = useState<"search" | "invites" | "create_group">(invites.length ? "invites" : "search")
 

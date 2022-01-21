@@ -43,9 +43,10 @@ export class Group {
     name: string;
     description: string;
     picture: string;
-    created_by: string;
     leader_id: string;
     last_message_time: string;
+    role: number;
+    unread_messages: number;
     created_at: Date;
     users: GroupUser[];
     messages: GroupMessage[];

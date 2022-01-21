@@ -48,7 +48,7 @@ export default function Sidebar() {
     const [searchResult, setSearchResult] = useState<Contact[]>()
     const pending = {
         contacts: user.contacts.reduce((acc, crr) => acc += crr.unread_messages, 0),
-        groups: 0,
+        groups: user.groups.reduce((acc, crr) => acc += crr.unread_messages, 0),
         invitations: user.contact_invitations.length
     }
 
@@ -87,12 +87,14 @@ export default function Sidebar() {
     }
 
     function renderGroups() {
-        return (
-            <>
-                <br />
-                <h1>Em Desenvolvimento :)</h1>
-            </>
-        )
+        return user.groups.map((group) => (
+            <Room key={group.id}>
+                <Avatar src={group.picture} size="5rem" />
+                <h3>{group.name}</h3>
+
+                {group.unread_messages > 0 ? (<UnreadMessages>{group.unread_messages}</UnreadMessages>) : null}
+            </Room>
+        ))
     }
 
     return (
