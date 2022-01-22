@@ -1,15 +1,14 @@
+<<<<<<< Updated upstream
 import api from ".";
 import { GroupMessage } from "../../types/user";
-
-interface CreateGroupI {
-  name: string;
-  description: string;
-  picture: File;
-  members?: string[];
-}
+=======
+import { Services } from '~/types/services';
+import api from '.';
+import { GroupMessage } from '../../types/user';
+>>>>>>> Stashed changes
 
 const groupService = {
-  show(id: string) {
+  show(id) {
     return new Promise(async (resolve, reject) => {
       try {
         const { data } = await api.get(`/group/${id}`);
@@ -21,7 +20,7 @@ const groupService = {
     });
   },
 
-  async create(data: CreateGroupI) {
+  create(data) {
     return new Promise(async (resolve, reject) => {
       try {
         const response = await api.post("/group", data);
@@ -33,7 +32,7 @@ const groupService = {
     });
   },
 
-  async update() {
+  update() {
     return new Promise(async (resolve, reject) => {
       try {
       } catch (error: any) {
@@ -42,7 +41,7 @@ const groupService = {
     });
   },
 
-  async update_picture() {
+  update_picture() {
     return new Promise(async (resolve, reject) => {
       try {
       } catch (error: any) {
@@ -51,7 +50,7 @@ const groupService = {
     });
   },
 
-  async leave() {
+  leave(id) {
     return new Promise(async (resolve, reject) => {
       try {
       } catch (error: any) {
@@ -60,7 +59,7 @@ const groupService = {
     });
   },
 
-  async delete() {
+  delete(id) {
     return new Promise(async (resolve, reject) => {
       try {
       } catch (error: any) {
@@ -74,6 +73,6 @@ const groupService = {
   },
 
   async viewMessages() {},
-};
+} as Services.GroupService;
 
 export default groupService;
