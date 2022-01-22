@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 import api from ".";
 import { GroupMessage } from "../../types/user";
@@ -6,6 +7,17 @@ import { Services } from '~/types/services';
 import api from '.';
 import { GroupMessage } from '../../types/user';
 >>>>>>> Stashed changes
+=======
+import api from '.';
+import { GroupMessage } from '../../types/user';
+
+interface CreateGroupI {
+  name: string;
+  description: string;
+  picture: File;
+  members?: string[];
+}
+>>>>>>> develop
 
 const groupService = {
   show(id) {
@@ -23,7 +35,7 @@ const groupService = {
   create(data) {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await api.post("/group", data);
+        const response = await api.post('/group', data);
 
         resolve(response.data.group);
       } catch (error: any) {

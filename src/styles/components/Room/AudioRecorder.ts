@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   position: fixed;
@@ -76,7 +76,7 @@ export const AnimationContainer = styled.div`
 export const Time = styled.span`
   font-size: 1.7rem;
   margin: 1rem 0;
-`
+`;
 
 export const StopButton = styled.button`
   display: flex;
@@ -91,17 +91,17 @@ export const StopButton = styled.button`
   border-radius: 50%;
   outline: none;
   cursor: pointer;
-  transition: opacity .2s ease;
+  transition: opacity 0.2s ease;
 
   svg {
     font-size: 3.5rem !important;
   }
 
   :hover {
-      opacity: .85;
+    opacity: 0.85;
   }
 `;
 
 export const Error = styled.strong`
-    font-size: 2.2rem;
-`
+  font-size: 2.2rem;
+`;

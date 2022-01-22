@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
@@ -6,7 +6,7 @@ export const Container = styled.div`
   width: 30rem;
 
   padding: 1rem;
-  border-radius: .3rem;
+  border-radius: 0.3rem;
   font-size: 100%;
 `;
 
@@ -82,7 +82,7 @@ export const ProgressBar = styled.input`
 
   /* progress bar - chrome and safari */
   :before {
-    content: "";
+    content: '';
     height: 7px;
     width: var(--seek-before-width);
     background-color: var(--seek-before-color);
@@ -145,11 +145,11 @@ export const ProgressBar = styled.input`
 `;
 
 export const Time = styled.span`
-    position: absolute;
-    bottom: -1.8rem;
-    left: 0;
-    font-size: 1.1rem;
-`
+  position: absolute;
+  bottom: -1.8rem;
+  left: 0;
+  font-size: 1.1rem;
+`;
 
 export const SpeedButton = styled.button`
   display: flex;
