@@ -1,170 +1,205 @@
-import { ContactMessage, User, UserRooms } from "../../types/user"
-import { Actions } from "../../types/store"
-import { constant } from "../../constant"
+import { ContactMessage, User, UserRooms } from '../../types/user';
+import { Actions } from '../../types/store';
+import { constant } from '../../constant';
 
-const { reducer: { user: userReducers } } = constant
+const {
+  reducer: { user: userReducers },
+} = constant;
 
 const INITIAL_STATE = {
-    id: "",
-    name: "",
-    email: "",
-    username: "",
-    picture: undefined,
-    contacts: [],
-    contact_invitations: [],
-    groups: []
-} as User
+  id: '',
+  name: '',
+  email: '',
+  username: '',
+  picture: undefined,
+  contacts: [],
+  contact_invitations: [],
+  groups: [],
+} as User;
 
 export default function userReducer(state = INITIAL_STATE, action: any) {
-    const reducer = reducers[action.type]
-    if (!reducer) return state;
+  const reducer = reducers[action.type];
+  if (!reducer) return state;
 
-    return reducer(state, action)
+  return reducer(state, action);
 }
 
 const reducers = {
-    [userReducers.SET_USER](_state, action: { set: { user: User } }) {
-        const { set: { user } } = action
-    
-        // init all extra data
-        user.contacts.map(c => {
-            c.extra = {
-                last_scroll_position: -1,
-                pushed_messages: 0,
-                fetch_messages_count: 0,
-                full_loaded: false,
-            }
-            return c
-        })
+  [userReducers.SET_USER](_state, action: { set: { user: User } }) {
+    const {
+      set: { user },
+    } = action;
 
-        return user
-    },
+    // init all extra data
+    user.contacts.map((c) => {
+      c.extra = {
+        last_scroll_position: -1,
+        pushed_messages: 0,
+        fetch_messages_count: 0,
+        full_loaded: false,
+      };
+      return c;
+    });
 
-    [userReducers.UPDATE_USER](state, action) {
-        const { set } = action
+    return user;
+  },
 
-        const allowed = Object.keys(new Actions.UpdateUserSet())
+  [userReducers.UPDATE_USER](state, action) {
+    const { set } = action;
 
-        const setKeys = Object.keys(set)
-        setKeys.filter(key => allowed.includes(key))
+    const allowed = Object.keys(new Actions.UpdateUserSet());
 
-        const data: { [key: string]: any } = {}
-        for (const key of setKeys) data[key] = set[key]
+    const setKeys = Object.keys(set);
+    setKeys.filter((key) => allowed.includes(key));
 
-        return { ...state, ...data }
-    },
+    const data: { [key: string]: any } = {};
+    for (const key of setKeys) data[key] = set[key];
 
-    // Push contact or contact_invitation
-    [userReducers.USER_PUSH_DATA](state, action: { set: { data: any }, field: Actions.PushDataKey }) {
-        const { field, set } = action
+    return { ...state, ...data };
+  },
 
-        const items: any[] = state[field]
-        if (!items || !Array.isArray(items)) return state;
+  // Push contact or contact_invitation
+  [userReducers.USER_PUSH_DATA](
+    state,
+    action: { set: { data: any }; field: Actions.PushDataKey }
+  ) {
+    const { field, set } = action;
 
-        return { ...state, [field]: [set.data, ...state[field]] }
-    },
+    const items: any[] = state[field];
+    if (!items || !Array.isArray(items)) return state;
 
-    // Remove contact or contact_invitation
-    [userReducers.USER_REMOVE_DATA](state, action: { where: Actions.Where, field: Actions.RemoveDataKey }) {
-        const { field, where } = action
+    return { ...state, [field]: [set.data, ...state[field]] };
+  },
 
-        const items: any[] = state[field]
-        if (!items || !Array.isArray(items)) return state;
+  // Remove contact or contact_invitation
+  [userReducers.USER_REMOVE_DATA](
+    state,
+    action: { where: Actions.Where; field: Actions.RemoveDataKey }
+  ) {
+    const { field, where } = action;
 
-        state[field] = items.filter((d: any) => d.id !== where.id)
+    const items: any[] = state[field];
+    if (!items || !Array.isArray(items)) return state;
 
-        return state
-    },
+    state[field] = items.filter((d: any) => d.id !== where.id);
 
-    [userReducers.PUSH_CONTACT_MESSAGE](state, action: { set: { message: ContactMessage }, where: Actions.Where }) {
-        const { where, set: { message } } = action
+    return state;
+  },
 
-        state.contacts = state.contacts.map(contact => {
-            if (where.id === contact.id) {
-                contact.messages.push(message)
-                contact.extra.pushed_messages += 1 
-                contact.last_message_time = message.created_at
+  [userReducers.PUSH_CONTACT_MESSAGE](
+    state,
+    action: { set: { message: ContactMessage }; where: Actions.Where }
+  ) {
+    const {
+      where,
+      set: { message },
+    } = action;
 
-                if (state.id !== message?.sender_id) {
-                    contact.unread_messages += 1
-                }
-            }
+    state.contacts = state.contacts.map((contact) => {
+      if (where.id === contact.id) {
+        contact.messages.push(message);
+        contact.extra.pushed_messages += 1;
+        contact.last_message_time = message.created_at;
 
-            return contact
-        })
+        if (state.id !== message?.sender_id) {
+          contact.unread_messages += 1;
+        }
+      }
 
-        return state
-    },
+      return contact;
+    });
 
-    "UNSHIFT_CONTACT_MESSAGES"(state, action: { set: { messages: ContactMessage[] }, where: Actions.Where }) {
-        const { where, set: { messages } } = action
+    return state;
+  },
 
-        const contacts = state.contacts.map(contact => {
-            if (where.id === contact.id) {
-                contact.extra.fetch_messages_count += 1
-                for (let i = messages.length - 1; i >= 0; i--) {
-                    contact.messages.unshift(messages[i])
-                }
-            }
+  UNSHIFT_CONTACT_MESSAGES(
+    state,
+    action: { set: { messages: ContactMessage[] }; where: Actions.Where }
+  ) {
+    const {
+      where,
+      set: { messages },
+    } = action;
 
-            return contact
-        })
+    const contacts = state.contacts.map((contact) => {
+      if (where.id === contact.id) {
+        contact.extra.fetch_messages_count += 1;
+        for (let i = messages.length - 1; i >= 0; i--) {
+          contact.messages.unshift(messages[i]);
+        }
+      }
 
-        return { ...state, contacts }
-    },
+      return contact;
+    });
 
-    [userReducers.UPDATE_ROOM](state, action: Actions.UpdateRoomData) {
-        const { field, where, set } = action
-        if (!where || !set || !field) return state;
+    return { ...state, contacts };
+  },
 
-        const rooms = state[field]
-        if (!rooms) return state;
+  [userReducers.UPDATE_ROOM](state, action: Actions.UpdateRoomData) {
+    const { field, where, set } = action;
+    if (!where || !set || !field) return state;
 
-        const allowed = Object.keys(new Actions.UpdateRoomSet())
+    const rooms = state[field];
+    if (!rooms) return state;
 
-        const setKeys = Object.keys(set) as Actions.UpdateRoomSetKeys
-        setKeys.filter(key => allowed.includes(key))
+    const allowed = Object.keys(new Actions.UpdateRoomSet());
 
-        rooms.map((room: any) => {
-            if (where.id === room.id) for (const key of setKeys) room[key] = set[key];
-            return room
-        })
+    const setKeys = Object.keys(set) as Actions.UpdateRoomSetKeys;
+    setKeys.filter((key) => allowed.includes(key));
 
-        return { ...state, [field]: rooms }
-    },
+    rooms.map((room: any) => {
+      if (where.id === room.id) for (const key of setKeys) room[key] = set[key];
+      return room;
+    });
 
-    "UPDATE_EXTRA_CONTACT_DATA"(state, action: { field: UserRooms, where: Actions.Where, set: Actions.UpdateExtraData }) {
-        const { field, where, set } = action
-        if (!where || !set || !field) return state;
+    return { ...state, [field]: rooms };
+  },
 
-        const rooms = state[field]
-        if (!rooms) return state;
+  UPDATE_EXTRA_CONTACT_DATA(
+    state,
+    action: {
+      field: UserRooms;
+      where: Actions.Where;
+      set: Actions.UpdateExtraData;
+    }
+  ) {
+    const { field, where, set } = action;
+    if (!where || !set || !field) return state;
 
-        const allowed = Object.keys(new Actions.UpdateExtraData())
+    const rooms = state[field];
+    if (!rooms) return state;
 
-        const setKeys = Object.keys(set) as Actions.UpdateExtraDataKeys
-        setKeys.filter(key => allowed.includes(key))
+    const allowed = Object.keys(new Actions.UpdateExtraData());
 
-        rooms.map((room: any) => {
-            if (room.id === where.id) for(const key of setKeys) room.extra[key] = set[key];
-            return room
-        })
+    const setKeys = Object.keys(set) as Actions.UpdateExtraDataKeys;
+    setKeys.filter((key) => allowed.includes(key));
 
-        return { ...state, [field]: rooms }
-    },
+    rooms.map((room: any) => {
+      if (room.id === where.id)
+        for (const key of setKeys) room.extra[key] = set[key];
+      return room;
+    });
 
-    [constant.reducer.user.SET_CONTACTS_ONLINE](state, action: { set: { contacts: string[] } }) {
-        const { set: { contacts } } = action
+    return { ...state, [field]: rooms };
+  },
 
-        state.contacts.map(c => {
-            contacts.includes(c.id) ? c.online = true : null
-            return c
-        })
+  [constant.reducer.user.SET_CONTACTS_ONLINE](
+    state,
+    action: { set: { contacts: string[] } }
+  ) {
+    const {
+      set: { contacts },
+    } = action;
 
-        return state
-    },
+    state.contacts.map((c) => {
+      contacts.includes(c.id) ? (c.online = true) : null;
+      return c;
+    });
 
-    "RESET"(_state, _action) {
-        return INITIAL_STATE
-    },
-} as { [key: string]: (state: User, action: any) => User }
+    return state;
+  },
+
+  RESET(_state, _action) {
+    return INITIAL_STATE;
+  },
+} as { [key: string]: (state: User, action: any) => User };

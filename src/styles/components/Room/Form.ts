@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Container = styled.form`
   display: flex;
@@ -168,7 +168,7 @@ export const PreviewMediasInner = styled.div`
     cursor: pointer;
 
     svg:hover {
-      opacity: .7;
+      opacity: 0.7;
     }
   }
   button.remove__media {
@@ -199,7 +199,7 @@ export const PreviewMediasInner = styled.div`
 
   svg {
     font-size: 3.5rem;
-    transition: opacity .2s ease, color .2s ease-in-out;
+    transition: opacity 0.2s ease, color 0.2s ease-in-out;
   }
 `;
 
@@ -265,7 +265,7 @@ export const FileBox = styled.div`
   margin: 0.5rem;
   border-radius: 0.5rem;
 
-  background-color: #222;  
+  background-color: #222;
 
   span {
     border-radius: 0.5rem;

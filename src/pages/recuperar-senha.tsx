@@ -8,71 +8,71 @@ import { constant } from "../constant"
 
 import { Header, Footer } from "../components"
 import {
-    Container,
-    Content,
-    FitForm,
-    Title,
-    ErrorMessage,
-    InputWrapper,
-    Label,
-    Input,
-    Submit,
-    Links,
-    RedirectLink
+  Container,
+  Content,
+  FitForm,
+  Title,
+  ErrorMessage,
+  InputWrapper,
+  Label,
+  Input,
+  Submit,
+  Links,
+  RedirectLink
 } from "../styles/utils/FormPage"
 
 export default function FinalizarCadastro() {
-    const [email, setEmail] = useState("")
+  const [email, setEmail] = useState("")
 
-    const [error, setError] = useState<string>()
-    const [loadingRequest, setLoadingRequest] = useState(false)
+  const [error, setError] = useState<string>()
+  const [loadingRequest, setLoadingRequest] = useState(false)
 
-    const warn = useWarn()
+  const warn = useWarn()
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault()
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
 
-        setError(undefined)
-        setLoadingRequest(true)
-        userService.forgotPassword(email)
-            .then(message => warn.show(message))
-            .catch(message => setError(message))
-            .then(() => setLoadingRequest(false))
-            .then(() => setEmail(""))
-    }
+    setError(undefined)
+    setLoadingRequest(true)
+    userService.forgotPassword(email)
+      .then(message => warn.show(message))
+      .catch(message => setError(message))
+      .then(() => setLoadingRequest(false))
+      .then(() => setEmail(""))
+  }
 
-    return (
-        <Container>
-            <Head>
-                <title>Branium | Recuperar Senha</title>
-            </Head>
-            
-            <Header links={false} />
+  return (
+    <Container>
+      <Head>
+        <title>Branium | Recuperar Senha</title>
+      </Head>
 
-            <Content alignCenter>
-                <FitForm onSubmit={handleSubmit}>
-                    <Title>Recuperar Senha</Title>
-                    
-                    {error ? (<ErrorMessage>{error}</ErrorMessage>) : null}
+      <Header links={false} />
 
-                    <InputWrapper>
-                        <Label htmlFor="email">E-mail</Label>
-                        <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} />
-                    </InputWrapper>
+      <Content alignCenter>
+        <FitForm onSubmit={handleSubmit}>
+          <Title>Recuperar Senha</Title>
 
-                    <Submit type="submit">
-                        {!loadingRequest ? "Enviar" : (<Image src="/images/loading-light.svg" width={30} height={30} alt="loading" />)}
-                    </Submit>
+          {error ? (<ErrorMessage>{error}</ErrorMessage>) : null}
 
-                    <Links>
-                        <Link href={constant.routes.SIGN_IN} passHref>
-                            <RedirectLink>Lembrou a senha?</RedirectLink>
-                        </Link>
-                    </Links>
-                </FitForm>
-            </Content>
+          <InputWrapper>
+            <Label htmlFor="email">E-mail</Label>
+            <Input id="email" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+          </InputWrapper>
 
-            <Footer />
-        </Container>
-    )
+          <Submit type="submit">
+            {!loadingRequest ? "Enviar" : (<Image src="/images/loading-light.svg" width={30} height={30} alt="loading" />)}
+          </Submit>
+
+          <Links>
+            <Link href={constant.routes.SIGN_IN} passHref>
+              <RedirectLink>Lembrou a senha?</RedirectLink>
+            </Link>
+          </Links>
+        </FitForm>
+      </Content>
+
+      <Footer />
+    </Container>
+  )
 }

@@ -1,35 +1,35 @@
 import Head from "next/head"
 import Link from "next/link"
-import { authPage } from "../../hooks"
-import { constant } from "../../constant"
+import { authPage } from "~/hooks"
+import { constant } from "~/constant"
 
-import { Sidebar } from "../../components"
+import { Sidebar } from "~/components"
 
 import {
-    Container,
-    Center,
-    Title,
-    Text
-} from "../../styles/pages/app"
+  Container,
+  Center,
+  Title,
+  Text
+} from "~/styles/pages/app"
 
 export default function App() {
-    return (
-        <Container>
-            <Head>
-                <title>Branium</title>
-            </Head>
+  return (
+    <Container>
+      <Head>
+        <title>Branium</title>
+      </Head>
 
-            <Sidebar />
+      <Sidebar />
 
-            <Center>
-                <Title>Branium</Title>
+      <Center>
+        <Title>Branium</Title>
 
-                <Text>
-                    Tá de bobeira? <Link href={constant.routes.chat.GAMES}>Que tal um jogo?</Link>
-                </Text>
-            </Center>
-        </Container>
-    )
+        <Text>
+          Tá de bobeira? <Link href={constant.routes.chat.GAMES}>Que tal um jogo?</Link>
+        </Text>
+      </Center>
+    </Container>
+  )
 }
 
 export const getServerSideProps = authPage

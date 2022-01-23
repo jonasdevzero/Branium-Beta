@@ -1,8 +1,8 @@
-import socket from "./"
-import store from "../../store"
+import socket from './';
+import store from '../../store';
 
-const dispatch = store.dispatch
+const dispatch = store.dispatch;
 
 export function attachEvents() {
-    socket.on("update", action => dispatch(action))
+  socket.on('update', (action) => dispatch(action));
 }
