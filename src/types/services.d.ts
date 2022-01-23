@@ -6,7 +6,14 @@ export namespace Services {
 
     login(data: { login: string; password: string }): Promise<void>;
 
+    block(id: string): Promise<void>
+
+    auth(before: () => void): Promise<void>;
+
+    login(data: { login: string; password: string }): Promise<void>;
+
     block(id: string): Promise<void>;
+
 
     preRegistration(data: { name: string; email: string }): Promise<string>;
 

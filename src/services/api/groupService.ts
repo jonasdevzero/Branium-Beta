@@ -2,6 +2,13 @@ import api from '.';
 import { Services } from '~/types/services';
 import { GroupMessage } from '../../types/user';
 
+interface CreateGroupI {
+  name: string;
+  description: string;
+  picture: File;
+  members?: string[];
+}
+
 const groupService = {
   show(id) {
     return new Promise(async (resolve, reject) => {
