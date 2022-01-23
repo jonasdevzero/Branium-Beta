@@ -52,7 +52,7 @@ export default function Messages({ contact }: { contact: Contact }) {
   useEffect(() => {
     if (!contact.extra?.fetch_messages_count) {
       setLoadingMessages(true)
-      contactService.getMessages(contact).then(messages => {
+      contactService.messages.index(contact).then(messages => {
         dispatch({ type: "UNSHIFT_CONTACT_MESSAGES", where: { id: contact.id }, set: { messages } })
         dispatch(UserActions.updateExtraRoomData({
           field: "contacts",
@@ -71,7 +71,7 @@ export default function Messages({ contact }: { contact: Contact }) {
 
   useEffect(() => {
     if (contact.messages.length && contact.unread_messages > 0) {
-      contactService.viewMessages(contact.id)
+      contactService.messages.view(contact.id)
         .then(() => dispatch(UserActions.updateRoom({ field: "contacts", where: { id: contact.id }, set: { unread_messages: 0 } })))
     }
 
@@ -87,7 +87,7 @@ export default function Messages({ contact }: { contact: Contact }) {
     if (scrollTop < 200 && !loadingMessages && fetch_messages_count > 0 && !full_loaded) {
       setLoadingMessages(true)
 
-      contactService.getMessages(contact).then(messages => {
+      contactService.messages.index(contact).then(messages => {
         if (!messages.length) {
           setLoadingMessages(false)
           dispatch(UserActions.updateExtraRoomData({ field: "contacts", where: { id: contact.id }, set: { full_loaded: true } }))

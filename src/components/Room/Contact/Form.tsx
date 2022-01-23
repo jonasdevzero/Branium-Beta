@@ -63,7 +63,7 @@ export default function Form({ contact_id }: { contact_id: string }) {
     if (loading) return;
     setLoading(true)
 
-    contactService.createMessage({ to: contact_id, text: message, medias })
+    contactService.messages.create({ to: contact_id, text: message, medias })
       .then(() => {
         setMessage("")
         clearMedias()

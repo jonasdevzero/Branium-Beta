@@ -1,19 +1,12 @@
-import { SearchUser, Contact, ContactMessage } from './user';
+import { SearchUser, Contact, ContactMessage, GroupUser, GroupMessage } from './user';
 
 export namespace Services {
   export interface UserService {
-    auth(before: () => void): Promise<void>;
+    hasJwt(): boolean;
 
-    login(data: { login: string; password: string }): Promise<void>;
+    search(username: string): Promise<SearchUser[]>;
 
-    block(id: string): Promise<void>
-
-    auth(before: () => void): Promise<void>;
-
-    login(data: { login: string; password: string }): Promise<void>;
-
-    block(id: string): Promise<void>;
-
+    getPreRegistration(id: string): Promise<{ pending: boolean }>;
 
     preRegistration(data: { name: string; email: string }): Promise<string>;
 
@@ -26,7 +19,18 @@ export namespace Services {
       }
     ): Promise<void>;
 
-    hasJwt(): boolean;
+    login(data: { login: string; password: string }): Promise<void>;
+
+    auth(before: () => void): Promise<void>;
+
+    update(data: {
+      name: string;
+      username: string;
+    }): Promise<{ name: string; username: string }>;
+
+    update_email(data: { email: string; password: string }): Promise<string>;
+
+    update_picture(picture: any): Promise<string>;
 
     forgotPassword(email: string): Promise<string>;
 
@@ -36,7 +40,9 @@ export namespace Services {
       confirm_password: string;
     }): Promise<string>;
 
-    search(username: string): Promise<SearchUser[]>;
+    delete(): Promise<void>;
+
+    restore(): Promise<void>;
   }
 
   export interface ContactService {
@@ -46,17 +52,22 @@ export namespace Services {
 
     refuseInvite(invite_id: string): Promise<void>;
 
-    getMessages(contact: Contact): Promise<ContactMessage[]>;
-
-    createMessage(data: {
-      to: string;
-      text: string;
-      medias: File[];
-    }): Promise<void>;
-
-    viewMessages(contact_id: string): Promise<void>;
-
     block(id: string): Promise<void>;
+
+    messages: {
+      index(contact: Contact): Promise<ContactMessage[]>;
+
+      create(data: { to: string; text: string; medias: File[] }): Promise<void>;
+
+      view(contact_id: string): Promise<void>;
+
+      deleteOne(
+        message_id: string,
+        target?: 'me' | 'bidirectional'
+      ): Promise<void>;
+
+      clear(contact_id: string): Promise<void>;
+    };
   }
 
   export interface GroupService {
@@ -69,8 +80,40 @@ export namespace Services {
       members?: string[];
     }): Promise<Group>;
 
+    update(data: {
+      group_id: string;
+      name: string;
+      description: string;
+    }): Promise<{ name: string; description: string }>;
+
+    update_picture(group_id: string, picture: any): Promise<string>;
+
     leave(id: string): Promise<void>;
 
     delete(id: string): Promise<void>;
+
+    users: {
+      index(group_id: string): Promise<GroupUser[]>;
+
+      add(group_id: string, user_id: string): Promise<GroupUser>;
+
+      role(data: {
+        group_id: string;
+        member_id: string;
+        role: string;
+      }): Promise<void>;
+
+      remove(data: { group_id: string; member_id: string }): Promise<void>;
+    };
+
+    messages: {
+      index(group_id: string): Promise<GroupMessage[]>
+
+      create(data: { to: string; text: string; medias: File[] }): Promise<void>;
+
+      view(group_id: string): Promise<void>;
+
+      delete(message_id: string): Promise<void>;
+    };
   }
 }

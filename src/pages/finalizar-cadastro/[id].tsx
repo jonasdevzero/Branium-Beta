@@ -3,7 +3,6 @@ import Head from "next/head"
 import Router from "next/router"
 import Image from "next/image"
 import { AxiosError } from "axios"
-import api from "~/services/api"
 import userService from "~/services/api/userService"
 import { constant } from "~/constant"
 
@@ -98,12 +97,11 @@ export default function FinalizarCadastro({ }: FinishSubscribeProps) {
 
 export async function getServerSideProps(ctx: NextPageContext) {
   try {
-    const id = ctx.query.id?.toString()
+    const id = ctx.query.id as string;
 
-    const { data } = await api.get(`/user/pre_registration/${id}`)
-    const { preRegistration } = data
+    const { pending } = await userService.getPreRegistration(id);
 
-    return !preRegistration.pending ? {
+    return !pending ? {
       redirect: {
         destination: constant.routes.SIGN_IN,
         permanent: false
