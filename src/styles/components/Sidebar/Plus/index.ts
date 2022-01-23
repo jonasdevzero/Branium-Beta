@@ -20,11 +20,11 @@ export const Container = styled.div`
   display: flex;
   width: 50rem;
   height: 40rem;
-  border: solid 0.1rem #151515;
+  border: solid 0.2rem #151515;
 
   background-color: #131313;
   font-family: 'Noto Sans', sans-serif;
-  z-index: 2;
+  z-index: 2;  
 `;
 
 export const Aside = styled.aside`
@@ -163,6 +163,7 @@ export const Content = styled.div`
   height: 100%;
 
   padding: 1.5rem;
+  overflow: hidden;
 `;
 
 export const Search = styled.input`

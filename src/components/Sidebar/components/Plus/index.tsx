@@ -6,8 +6,8 @@ import { userService, contactService } from "~/services/api"
 import UserActions from "~/store/actions/user"
 import socket from "~/services/socket"
 
-import { Avatar } from "../.."
-
+import CreateGroup from './components/CreateGroup'
+import { Avatar } from "~/components"
 import {
   Overlay,
   Container,
@@ -177,15 +177,9 @@ export default function Plus({ close }: PlusProps) {
       )
   }
 
-  function renderCreateGroup() {
-    return (
-      <h2>Em deselvonvimento :)</h2>
-    )
-  }
-
   return (
     <>
-      <Overlay onClick={() => close()}></Overlay>
+      <Overlay onClick={close}></Overlay>
 
       <Container>
         <Aside>
@@ -226,7 +220,7 @@ export default function Plus({ close }: PlusProps) {
           <Header>
             <h3>{title[option]}</h3>
 
-            <Close onClick={() => close()}>
+            <Close onClick={close}>
               <FiX />
             </Close>
           </Header>
@@ -239,7 +233,7 @@ export default function Plus({ close }: PlusProps) {
                 case "invites":
                   return renderInvites()
                 case "create_group":
-                  return renderCreateGroup()
+                  return (<CreateGroup />)
               }
             }()}
           </Content>
