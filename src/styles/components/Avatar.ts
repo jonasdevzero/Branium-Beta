@@ -13,14 +13,10 @@ export const AvatarWrapper = styled.div<AvatarWrapperProps>`
   position: relative;
 
   div {
-    position: unset !important;
     border-radius: 50%;
   }
 
   img {
-    object-fit: contain;
-    width: 100% !important;
-    position: relative !important;
-    height: unset !important;
+    object-fit: cover;
   }
 `;
