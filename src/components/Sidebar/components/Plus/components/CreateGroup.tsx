@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import Image from "next/image";
 import { groupService } from '~/services/api';
-import { useAppSelector } from '~/hooks';
+import { useAppDispatch, useAppSelector, useWarn } from '~/hooks';
 import { Contact } from '~/types/user';
+import UserActions from "~/store/actions/user"
 
 import { Avatar } from '~/components';
 import {
@@ -34,11 +36,19 @@ export default function CreateGroup() {
   const [picturePreview, setPicturePreview] = useState('');
   const [members, setMembers] = useState<Contact[]>([]);
 
+  const [loading, setLoading] = useState(false);
+
   const contacts = useAppSelector(state => state.user.contacts);
   const [selectContacts, setSelectContacts] = useState(false);
 
+  const dispatch = useAppDispatch();
+  const warn = useWarn();
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (loading) return;
+    setLoading(true);
 
     const formData = new FormData();
     formData.append('name', name);
@@ -48,8 +58,12 @@ export default function CreateGroup() {
     members.forEach(m => formData.append('memerbs', m.id))
 
     groupService.create(formData)
-      .then(group => {})
-      .catch(error => { })
+      .then(group => {
+        dispatch(UserActions.pushData("groups", { data: group }))
+        warn.success("Grupo criado com sucesso!")
+      })
+      .catch((error: string) => warn.error(error))
+      .then(() => setLoading(false))
   }
 
   function handlePicture(e: React.ChangeEvent<HTMLInputElement>) {
@@ -67,7 +81,7 @@ export default function CreateGroup() {
   }
 
   function toggleMember(member: Contact) {
-    !!members.find(m => m.id === member.id) ? 
+    !!members.find(m => m.id === member.id) ?
       removeMember(member.id) : setMembers([...members, member])
   }
 
@@ -110,7 +124,11 @@ export default function CreateGroup() {
           </div>
         </div>
 
-        <Submit type="submit">Criar</Submit>
+        <Submit type="submit">
+          {loading ? (
+            <Image src="/images/loading-light.svg" alt="loading" width="25" height="25" />
+          ) : "Criar"}
+        </Submit>
 
         <MembersContainer>
           <h4>Membros</h4>

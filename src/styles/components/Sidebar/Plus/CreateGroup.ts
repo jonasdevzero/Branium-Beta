@@ -115,7 +115,8 @@ export const Submit = styled.button`
   color: #ffffff;
   background-color: #198754;
   margin: 2rem 0 1rem 0.7rem;
-  padding: 0.7rem 2rem;
+  min-height: 3.5rem;
+  width: 7rem;
   border: none;
   border-radius: 0.2rem;
   outline: none;

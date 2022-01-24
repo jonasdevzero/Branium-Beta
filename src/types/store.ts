@@ -2,6 +2,7 @@ import {
   Contact,
   ContactInvitation,
   ContactMessage,
+  Group,
   User,
   UserRooms,
 } from './user';
@@ -68,11 +69,11 @@ export namespace Actions {
 
     pushData(
       field: PushDataKey,
-      set: { data: Contact | ContactInvitation }
+      set: { data: Contact | ContactInvitation | Group }
     ): {
       type: string;
       field: PushDataKey;
-      set: { data: Contact | ContactInvitation };
+      set: { data: Contact | ContactInvitation | Group };
     };
 
     removeData(
