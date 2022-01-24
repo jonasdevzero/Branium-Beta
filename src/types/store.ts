@@ -45,7 +45,7 @@ export namespace Actions {
   }
   export type UpdateExtraDataKeys = Array<keyof UpdateExtraData>;
 
-  export type PushDataKey = 'contacts' | 'contact_invitations';
+  export type PushDataKey = 'contacts' | 'contact_invitations' | 'groups';
   export type RemoveDataKey = PushDataKey;
   export type UpdateRoomData = {
     field: UserRooms;

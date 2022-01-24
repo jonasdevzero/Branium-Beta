@@ -115,4 +115,4 @@ export class SearchUser {
   picture: string | undefined;
 }
 
-export type UserRooms = 'contacts';
+export type UserRooms = 'contacts' | 'groups';

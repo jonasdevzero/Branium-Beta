@@ -73,12 +73,7 @@ export namespace Services {
   export interface GroupService {
     show(id: string): Promise<Group>;
 
-    create(data: {
-      name: string;
-      description: string;
-      picture: File;
-      members?: string[];
-    }): Promise<Group>;
+    create(data: FormData): Promise<Group>;
 
     update(data: {
       group_id: string;

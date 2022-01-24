@@ -60,6 +60,12 @@ export default function Plus({ close }: PlusProps) {
   const warn = useWarn()
   const dispatch = useAppDispatch()
 
+  const components = {
+    search: renderSearch(),
+    invites: renderInvites(),
+    create_group: CreateGroup(),
+  }
+
   useDebounce(() => {
     search.length && search.length > 2 ?
       userService.search(search)
@@ -226,16 +232,7 @@ export default function Plus({ close }: PlusProps) {
           </Header>
 
           <Content>
-            {function () {
-              switch (option) {
-                case "search":
-                  return renderSearch()
-                case "invites":
-                  return renderInvites()
-                case "create_group":
-                  return (<CreateGroup />)
-              }
-            }()}
+            {components[option]}
           </Content>
         </Inner>
       </Container>
