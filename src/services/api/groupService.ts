@@ -141,7 +141,14 @@ const groupService = {
     create(data) {
       return new Promise(async (resolve, reject) => {
         try {
-          await api.post('/group/messages', data);
+          const { to, text, medias } = data;
+
+          const formData = new FormData();
+          formData.append("to", to);
+          formData.append("text", text);
+          medias.forEach(m => formData.append("medias", m));
+
+          await api.post('/group/messages', formData);
 
           resolve();
         } catch (error: any) {

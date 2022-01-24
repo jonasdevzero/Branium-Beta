@@ -26,7 +26,7 @@ export default function Header({ contact, toggleInfo }: HeaderProps) {
   return (
     <Container>
       <Room onClick={() => toggleInfo()}>
-        <Avatar />
+        <Avatar src={contact.picture} />
         <h2>{contact.username}</h2>
       </Room>
 
