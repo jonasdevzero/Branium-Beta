@@ -88,7 +88,7 @@ export default function Sidebar() {
 
   function renderGroups() {
     return user.groups.map((group) => (
-      <Room key={group.id}>
+      <Room key={group.id} onClick={() => Router.push(constant.routes.chat.GROUP(group.id))}>
         <Avatar src={group.picture} size="5rem" />
         <h3>{group.name}</h3>
 

@@ -9,6 +9,7 @@ export const constant = {
     chat: {
       HOME: '/branium',
       CONTACT: (id: string) => `/branium/contato/${id}`,
+      GROUP: (id: string) => `/branium/grupo/${id}`,
       GAMES: '/branium/jogos',
     },
     FAQ: '/faq',
