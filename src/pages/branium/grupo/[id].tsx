@@ -5,6 +5,7 @@ import { authPage, useAuth, useAppSelector } from "~/hooks"
 import { constant } from "~/constant"
 
 import { Sidebar } from "~/components"
+import { Header, Messages, Form } from "~/components/Room/Group"
 import { Container, Inner } from "~/styles/pages/app"
 
 export default function Contact() {
@@ -29,7 +30,9 @@ export default function Contact() {
       {group ? (
         <>
           <Inner>
-            <h1>{group.name}</h1>
+            <Header group={group} />
+            <Messages group={group} />
+            <Form  group_id={group.id} />
           </Inner>
         </>
       ) : null}
