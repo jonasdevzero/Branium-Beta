@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Router from "next/router";
 import Image from "next/image";
 import { groupService } from '~/services/api';
 import { useAppDispatch, useAppSelector, useWarn } from '~/hooks';
@@ -28,8 +29,9 @@ import {
   FiPlus,
   FiCheck
 } from 'react-icons/fi';
+import { constant } from '~/constant';
 
-export default function CreateGroup() {
+export default function CreateGroup({ close }: { close: () => void }) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [picture, setPicture] = useState<File>();
@@ -55,12 +57,13 @@ export default function CreateGroup() {
     formData.append('description', description);
     picture ? formData.append('picture', picture) : null;
 
-    members.forEach(m => formData.append('memerbs', m.id))
+    members.forEach(m => formData.append('members', m.id))
 
     groupService.create(formData)
       .then(group => {
         dispatch(UserActions.pushData("groups", { data: group }))
-        warn.success("Grupo criado com sucesso!")
+        close();
+        Router.push(constant.routes.chat.GROUP(group.id))
       })
       .catch((error: string) => warn.error(error))
       .then(() => setLoading(false))

@@ -6,7 +6,7 @@ import { useAppSelector, useAppDispatch } from "~/hooks"
 import socket from "~/services/socket"
 import { constant } from "~/constant"
 import { setOption } from "~/store/actions/sidebar"
-import { Contact } from "~/types/user"
+import { Contact, Group } from "~/types/user"
 
 import { Avatar } from "../"
 import { Plus, Notifications } from "./components"
@@ -45,7 +45,9 @@ import {
 export default function Sidebar() {
   const { user, config } = useAppSelector(state => ({ user: state.user, config: state.sidebar }))
 
-  const [searchResult, setSearchResult] = useState<Contact[]>()
+  const [searchContactResult, setSearchContactResult] = useState<Contact[]>()
+  const [groupSearchResult, setSearchGroupResult] = useState<Group[]>()
+
   const pending = {
     contacts: user.contacts.reduce((acc, crr) => acc += crr.unread_messages, 0),
     groups: user.groups.reduce((acc, crr) => acc += crr.unread_messages, 0),
@@ -68,29 +70,32 @@ export default function Sidebar() {
 
     if (config.currentOption === "contacts") {
       const fuse = new Fuse(user.contacts, { keys: ["username"] })
-      query.length ? setSearchResult(fuse.search(query).map(({ item }) => item)) : setSearchResult(undefined)
+      query.length ?
+        setSearchContactResult(fuse.search(query).map(({ item }) => item)) : setSearchContactResult(undefined)
+    } else {
+      const fuse = new Fuse(user.groups, { keys: ["name"] })
+      query.length ?
+        setSearchGroupResult(fuse.search(query).map(({ item }) => item)) : setSearchGroupResult(undefined)
     }
   }, [config.currentOption, user.contacts])
 
-  function renderContacts() {
-    return (searchResult || user.contacts)
-      .sort((a, b) => a.last_message_time > b.last_message_time ? -1 : 1)
+  const renderContacts = useCallback(() => {
+    return (searchContactResult || user.contacts.sort((a, b) => a.last_message_time > b.last_message_time ? -1 : 1))
       .map(contact => {
-      return (
-        <Room key={contact.id} onClick={() => Router.push(constant.routes.chat.CONTACT(contact.id))}>
-          <Avatar src={contact.picture} size="5rem" />
-          <h3>{contact.username}</h3>
+        return (
+          <Room key={contact.id} onClick={() => Router.push(constant.routes.chat.CONTACT(contact.id))}>
+            <Avatar src={contact.picture} size="5rem" />
+            <h3>{contact.username}</h3>
 
-          <Status className={contact.online ? "online" : "offline"} />
-          {contact.unread_messages > 0 ? (<UnreadMessages>{contact.unread_messages}</UnreadMessages>) : null}
-        </Room>
-      )
-    })
-  }
+            <Status className={contact.online ? "online" : "offline"} />
+            {contact.unread_messages > 0 ? (<UnreadMessages>{contact.unread_messages}</UnreadMessages>) : null}
+          </Room>
+        )
+      })
+  }, [user.contacts, searchContactResult])
 
   const renderGroups = useCallback(() => {
-    return user.groups
-      .sort((a, b) => a.last_message_time > b.last_message_time ? -1 : 1)
+    return (groupSearchResult || user.groups.sort((a, b) => a.last_message_time > b.last_message_time ? -1 : 1))
       .map((group) => (
         <Room key={group.id} onClick={() => Router.push(constant.routes.chat.GROUP(group.id))}>
           <Avatar src={group.picture} size="5rem" />
@@ -99,7 +104,7 @@ export default function Sidebar() {
           {group.unread_messages > 0 ? (<UnreadMessages>{group.unread_messages}</UnreadMessages>) : null}
         </Room>
       ))
-  }, [user.groups])
+  }, [user.groups, groupSearchResult])
 
   return (
     <>

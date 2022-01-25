@@ -39,7 +39,7 @@ export default function Plus({ close }: PlusProps) {
   const components = {
     search: SearchUsers(),
     invites: <ContactInvites setOption={setOption} />,
-    create_group: CreateGroup(),
+    create_group: CreateGroup({ close }),
   }
 
   return (

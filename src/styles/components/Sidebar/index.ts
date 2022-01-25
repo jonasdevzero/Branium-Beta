@@ -14,7 +14,6 @@ export const Inner = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 0 1.5rem;
   background-color: #131313;
 `;
 
@@ -83,6 +82,7 @@ export const Option = styled.button`
 `;
 
 type OptionSelectedProps = {
+  pending: boolean;
   selected: boolean;
 };
 export const OptionSelected = styled.span<OptionSelectedProps>`
@@ -92,7 +92,8 @@ export const OptionSelected = styled.span<OptionSelectedProps>`
   transform: translateY(-50%);
 
   width: 0.2rem;
-  height: ${({ selected }) => (selected ? '3.5rem' : 0)};
+  height: ${({ pending, selected }) =>
+    selected ? '3.5rem' : pending ? '1.2rem' : 0};
   background-color: #fff;
 
   transition: height 0.3s ease-in-out;
@@ -118,7 +119,7 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   min-height: 7.2rem;
-  padding: 0.5rem 0;
+  padding: 0.5rem 1.5rem;
   margin-bottom: 1.5rem;
   border-bottom: solid 0.2rem #202020;
 `;
@@ -152,7 +153,7 @@ export const Search = styled.form`
 
   width: 100%;
   border-bottom: solid 0.2rem #202020;
-  padding-bottom: 1.5rem;
+  padding: 0 1.5rem 1.5rem 1.5rem;
 `;
 
 export const SearchInputWrapper = styled.div`
@@ -196,6 +197,18 @@ export const RoomsContainer = styled.div`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
+  padding: 0 1rem;
+
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #303030;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #252525;
+    cursor: pointer;
+  }
 `;
 
 export const Room = styled.div`
@@ -208,7 +221,7 @@ export const Room = styled.div`
   border-bottom: solid 0.1rem #202020;
   padding: 0 1rem;
 
-  transition: background-color 0.2s ease;
+  transition: opacity 0.2s ease;
   cursor: pointer;
 
   h3 {
@@ -217,9 +230,8 @@ export const Room = styled.div`
     margin-left: 1rem;
   }
 
-  .MuiAvatar-root {
-    width: 4.5rem;
-    height: 4.5rem;
+  :hover {
+    opacity: 0.85;
   }
 `;
 
