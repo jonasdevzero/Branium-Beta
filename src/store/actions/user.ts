@@ -49,7 +49,7 @@ export default {
 
   updateExtraRoomData({ field, where, set }) {
     return {
-      type: 'UPDATE_EXTRA_CONTACT_DATA',
+      type: 'UPDATE_EXTRA_ROOM_DATA',
       field,
       where,
       set,

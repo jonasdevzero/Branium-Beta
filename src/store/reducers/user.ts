@@ -1,6 +1,12 @@
-import { ContactMessage, User, UserRooms } from '../../types/user';
+import {
+  Contact,
+  ContactMessage,
+  GroupMessage,
+  User,
+  UserRooms,
+} from '../../types/user';
 import { Actions } from '../../types/store';
-import { constant } from '../../constant';
+import { constant } from '~/constant';
 
 const {
   reducer: { user: userReducers },
@@ -29,18 +35,7 @@ const reducers = {
     const {
       set: { user },
     } = action;
-
-    // init all extra data
-    user.contacts.map((c) => {
-      c.extra = {
-        last_scroll_position: -1,
-        pushed_messages: 0,
-        fetch_messages_count: 0,
-        full_loaded: false,
-      };
-      return c;
-    });
-
+    
     return user;
   },
 
@@ -112,27 +107,33 @@ const reducers = {
     return state;
   },
 
-  UNSHIFT_CONTACT_MESSAGES(
+  UNSHIFT_ROOM_MESSAGES(
     state,
-    action: { set: { messages: ContactMessage[] }; where: Actions.Where }
+    action: {
+      set: { messages: any[] };
+      where: Actions.Where;
+      field: 'contacts' | 'groups';
+    }
   ) {
     const {
+      field,
       where,
       set: { messages },
     } = action;
 
-    const contacts = state.contacts.map((contact) => {
-      if (where.id === contact.id) {
-        contact.extra.fetch_messages_count += 1;
+    const rooms = state[field].map((room) => {
+      if (where.id === room.id) {
+        room instanceof Contact ? (room.extra.fetch_messages_count += 1) : null;
+
         for (let i = messages.length - 1; i >= 0; i--) {
-          contact.messages.unshift(messages[i]);
+          room.messages.unshift(messages[i]);
         }
       }
 
-      return contact;
+      return room;
     });
 
-    return { ...state, contacts };
+    return { ...state, [field]: rooms };
   },
 
   [userReducers.UPDATE_ROOM](state, action: Actions.UpdateRoomData) {
@@ -155,7 +156,7 @@ const reducers = {
     return { ...state, [field]: rooms };
   },
 
-  UPDATE_EXTRA_CONTACT_DATA(
+  UPDATE_EXTRA_ROOM_DATA(
     state,
     action: {
       field: UserRooms;
@@ -166,7 +167,7 @@ const reducers = {
     const { field, where, set } = action;
     if (!where || !set || !field) return state;
 
-    const rooms = state[field];
+    let rooms = state[field];
     if (!rooms) return state;
 
     const allowed = Object.keys(new Actions.UpdateExtraData());
@@ -174,16 +175,17 @@ const reducers = {
     const setKeys = Object.keys(set) as Actions.UpdateExtraDataKeys;
     setKeys.filter((key) => allowed.includes(key));
 
-    rooms.map((room: any) => {
+    rooms = rooms.map((room: any) => {
       if (room.id === where.id)
         for (const key of setKeys) room.extra[key] = set[key];
+
       return room;
     });
 
     return { ...state, [field]: rooms };
   },
 
-  [constant.reducer.user.SET_CONTACTS_ONLINE](
+  [userReducers.SET_CONTACTS_ONLINE](
     state,
     action: { set: { contacts: string[] } }
   ) {
@@ -194,6 +196,85 @@ const reducers = {
     state.contacts.map((c) => {
       contacts.includes(c.id) ? (c.online = true) : null;
       return c;
+    });
+
+    return state;
+  },
+
+  // User Group Reducers
+
+  [userReducers.PUSH_GROUP_MESSAGE](
+    state,
+    action: { set: { message: GroupMessage }; where: Actions.Where }
+  ) {
+    const {
+      where,
+      set: { message },
+    } = action;
+
+    state.groups = state.groups.map((g) => {
+      if (where.id === g.id) {
+        g.messages.push(message);
+        g.extra.pushed_messages += 1;
+        g.last_message_time = message.created_at;
+
+        state.id !== message.sender_id ? (g.unread_messages += 1) : null;
+      }
+
+      return g;
+    });
+
+    return state;
+  },
+
+  [userReducers.VIEW_GROUP_MESSAGES](state, action) {
+    //...
+    return state;
+  },
+
+  [userReducers.PUSH_GROUP_USER](state, action) {
+    const {
+      where,
+      set: { member },
+    } = action;
+
+    state.groups = state.groups.map((g) => {
+      where.id === g.id ? g.users.push(member) : null;
+      return g;
+    });
+
+    return state;
+  },
+
+  [userReducers.UPDATE_GROUP_USER](state, action) {
+    const { where, set } = action;
+
+    const keys = Object.keys(set);
+
+    state.groups = state.groups.map((g) => {
+      if (where.id === g.id) {
+        g.users = g.users.map((gU: any) => {
+          if (gU.id !== where.member_id)
+            for (const key of keys) gU[key] = set[key];
+
+          return gU;
+        });
+      }
+
+      return g;
+    });
+
+    return state;
+  },
+
+  [userReducers.REMOVE_GROUP_USER](state, action) {
+    const { where } = action;
+
+    state.groups = state.groups.map((g) => {
+      if (where.id === g.id) {
+        g.users = g.users.filter((gU) => gU.id !== where.member_id);
+      }
+      return g;
     });
 
     return state;
