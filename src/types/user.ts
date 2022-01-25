@@ -10,7 +10,7 @@ export class GroupMessageView {
   };
 }
 
-export class GroupMessageMedia {
+export class GroupMediaMessage {
   id: string;
   message_id: string;
   url: string;
@@ -26,7 +26,7 @@ export class GroupMessage {
     username: string;
     picture: string;
   };
-  medias: GroupMessageMedia[];
+  medias: GroupMediaMessage[];
   views: GroupMessageView[];
   created_at: Date;
 }
@@ -44,12 +44,19 @@ export class Group {
   description: string;
   picture: string;
   leader_id: string;
-  last_message_time: string;
+  last_message_time: Date;
   role: number;
   unread_messages: number;
   created_at: Date;
   users: GroupUser[];
   messages: GroupMessage[];
+
+  extra: {
+    last_scroll_position: number;
+    pushed_messages: number;
+    fetch_messages_count: number;
+    full_loaded: boolean;
+  };
 }
 
 export class ContactInvitation {
@@ -90,6 +97,7 @@ export class Contact {
   blocked: boolean;
   you_blocked: boolean;
   online: boolean;
+
   extra: {
     last_scroll_position: number;
     pushed_messages: number;

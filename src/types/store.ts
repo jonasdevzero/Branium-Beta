@@ -34,6 +34,7 @@ export namespace Actions {
     blocked?: boolean;
     you_blocked?: boolean;
     online?: boolean;
+    role?: number;
   }
   export type UpdateRoomSetKeys = Array<keyof UpdateRoomSet>;
 
