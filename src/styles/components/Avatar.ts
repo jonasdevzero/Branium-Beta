@@ -11,10 +11,8 @@ export const AvatarWrapper = styled.div<AvatarWrapperProps>`
   background-color: lightgray;
   transition: width 0.3s ease, height 0.3s ease;
   position: relative;
-
-  div {
-    border-radius: 50%;
-  }
+  border-radius: 50%;
+  overflow: hidden;
 
   img {
     object-fit: cover;
