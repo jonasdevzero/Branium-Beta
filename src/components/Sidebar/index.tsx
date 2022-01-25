@@ -73,7 +73,9 @@ export default function Sidebar() {
   }, [config.currentOption, user.contacts])
 
   function renderContacts() {
-    return (searchResult || user.contacts).map(contact => {
+    return (searchResult || user.contacts)
+      .sort((a, b) => a.last_message_time > b.last_message_time ? -1 : 1)
+      .map(contact => {
       return (
         <Room key={contact.id} onClick={() => Router.push(constant.routes.chat.CONTACT(contact.id))}>
           <Avatar src={contact.picture} size="5rem" />
@@ -86,16 +88,18 @@ export default function Sidebar() {
     })
   }
 
-  function renderGroups() {
-    return user.groups.map((group) => (
-      <Room key={group.id} onClick={() => Router.push(constant.routes.chat.GROUP(group.id))}>
-        <Avatar src={group.picture} size="5rem" />
-        <h3>{group.name}</h3>
+  const renderGroups = useCallback(() => {
+    return user.groups
+      .sort((a, b) => a.last_message_time > b.last_message_time ? -1 : 1)
+      .map((group) => (
+        <Room key={group.id} onClick={() => Router.push(constant.routes.chat.GROUP(group.id))}>
+          <Avatar src={group.picture} size="5rem" />
+          <h3>{group.name}</h3>
 
-        {group.unread_messages > 0 ? (<UnreadMessages>{group.unread_messages}</UnreadMessages>) : null}
-      </Room>
-    ))
-  }
+          {group.unread_messages > 0 ? (<UnreadMessages>{group.unread_messages}</UnreadMessages>) : null}
+        </Room>
+      ))
+  }, [user.groups])
 
   return (
     <>
@@ -108,12 +112,12 @@ export default function Sidebar() {
           <OptionsInner>
             <Option onClick={() => dispatch(setOption("contacts"))}>
               <FiUser />
-              <OptionSelected selected={config.currentOption === "contacts"} />
+              <OptionSelected pending={!!pending.contacts} selected={config.currentOption === "contacts"} />
             </Option>
 
             <Option onClick={() => dispatch(setOption("groups"))}>
               <FiUsers />
-              <OptionSelected selected={config.currentOption === "groups"} />
+              <OptionSelected pending={!!pending.groups} selected={config.currentOption === "groups"} />
             </Option>
 
             <Option onClick={() => setShowScreen("plus")}>
