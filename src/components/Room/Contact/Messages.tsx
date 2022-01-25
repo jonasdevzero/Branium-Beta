@@ -53,7 +53,7 @@ export default function Messages({ contact }: { contact: Contact }) {
     if (!contact.extra?.fetch_messages_count) {
       setLoadingMessages(true)
       contactService.messages.index(contact).then(messages => {
-        dispatch({ type: "UNSHIFT_CONTACT_MESSAGES", where: { id: contact.id }, set: { messages } })
+        dispatch({ type: "UNSHIFT_ROOM_MESSAGES", field: "contacts", where: { id: contact.id }, set: { messages } })
         dispatch(UserActions.updateExtraRoomData({
           field: "contacts",
           where: { id: contact.id },
