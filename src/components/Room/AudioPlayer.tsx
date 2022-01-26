@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react"
-import { convertSeconds } from "~/utils/time"
+import { convertSeconds } from "~/helpers/time"
 
 import {
   Container,

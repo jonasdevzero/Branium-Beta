@@ -15,6 +15,7 @@ export const Section = styled.section`
 
   &.info {
     height: 45rem;
+    padding: 2rem 0;
   }
 `;
 
@@ -40,18 +41,19 @@ export const CallToAction = styled.a`
   width: 28rem;
   height: 7rem;
 
-  background-color: #0c0c0c;
+  background-color: #121212;
   margin-top: 3rem;
+  border: solid .1rem #141414;
   border-radius: 1.5rem;
   font-size: 2.4rem;
-  transition: background-color 0.2s ease;
+  transition: opacity 0.2s ease;
 
   &:hover {
-    background-color: #0a0a0a;
+    opacity: .7;
   }
 `;
 export const SectionInner = styled.div`
-  width: 80%;
+  max-width: 80%;
   height: fit-content;
   display: flex;
   align-items: center;
@@ -85,7 +87,7 @@ export const Info = styled.div`
 export const SectionImage = styled.div`
   width: 45%;
 
-  div {
+  span {
     position: unset !important;
   }
 
@@ -94,6 +96,19 @@ export const SectionImage = styled.div`
     width: 100% !important;
     position: relative !important;
     height: unset !important;
+  }
+
+  &.scroll__animation {
+    position: relative;
+    left: 12rem;
+    opacity: .3;
+
+    transition: left 1s ease-in-out, opacity 1s ease;
+
+    &.in-view {
+      opacity: 1;
+      left: 0;
+    }
   }
 `;
 
@@ -108,6 +123,19 @@ export const Features = styled.div`
     justify-content: space-between;
     width: 100%;
     margin-top: 3rem;
+  }
+
+  &.scroll__animation {
+    position: relative;
+    right: 5rem;
+    opacity: .3;
+
+    transition: right 1s ease-in-out, opacity 1s ease;
+
+    &.in-view {
+      opacity: 1;
+      right: 0;
+    }
   }
 `;
 

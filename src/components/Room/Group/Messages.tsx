@@ -3,7 +3,7 @@ import Image from "next/image";
 import moment from "moment";
 import { useAppDispatch, useAppSelector, useMsgContainer } from "~/hooks";
 import { Group, GroupMediaMessage } from "~/types/user";
-import { orderMessages } from "~/utils/roomUtil";
+import { orderMessages } from "~/helpers/roomUtil";
 import { groupService } from "~/services/api";
 import UserActions from "~/store/actions/user";
 

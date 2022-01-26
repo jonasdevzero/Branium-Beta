@@ -1,7 +1,9 @@
+import { useEffect } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import Image from "next/image"
 import { constant } from "../constant"
+import { inViewAddClass } from "~/helpers/dom"
 
 import { Header, Footer } from "../components"
 import {
@@ -28,6 +30,15 @@ import {
 } from "react-icons/fi"
 
 export default function Home() {
+  useEffect(() => {
+    const elements = document.getElementsByClassName('scroll__animation')
+    const iterableElements: Element[] = []
+
+    for (let i = 0; i < elements.length; i++) iterableElements.push(elements[i]);
+
+    window.addEventListener('scroll', () => inViewAddClass(iterableElements, 'in-view'))
+  }, [])
+
   return (
     <Container>
       <Head>
@@ -53,7 +64,7 @@ export default function Home() {
             <p>Converse com seus amigos num espaço confortável e brasileiro.</p>
           </Info>
 
-          <SectionImage>
+          <SectionImage className="scroll__animation">
             <Image src="/images/chat-baloons.svg" alt="" layout="fill" className="image" />
           </SectionImage>
         </SectionInner>
@@ -61,7 +72,7 @@ export default function Home() {
 
       <Section className="info">
         <SectionInner>
-          <Features>
+          <Features className="scroll__animation">
             <div className='row'>
               <Feature>
                 <FeatureIcon> <FiUser /> </FeatureIcon>

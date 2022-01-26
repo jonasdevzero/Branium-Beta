@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react"
 import { useAppSelector } from "~/hooks"
-import { convertSeconds } from "~/utils/time"
+import { convertSeconds } from "~/helpers/time"
 
 import {
   Container,

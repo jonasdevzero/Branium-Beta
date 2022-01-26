@@ -33,7 +33,10 @@ export default function Entrar() {
 
   useEffect(() => {
     const { ["branium.jwt"]: jwt } = parseCookies(null)
-    if (jwt) Router.replace(constant.routes.chat.HOME);
+    if (jwt) {
+      setSuccess(true)
+      Router.replace(constant.routes.chat.HOME)
+    };
 
     Router.query?.error ? setError(Router.query.error.toString()) : null
     return () => { }
