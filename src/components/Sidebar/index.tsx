@@ -110,7 +110,7 @@ export default function Sidebar() {
     <>
       <Container>
         <Options>
-          <User onClick={() => { }}>
+          <User onClick={() => Router.push(constant.routes.chat.ACCOUNT)}>
             <Avatar user />
           </User>
 

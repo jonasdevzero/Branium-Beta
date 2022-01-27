@@ -8,6 +8,7 @@ export const constant = {
     RESET_PASSWORD: (token: string) => `/resetar-senha/${token}`,
     chat: {
       HOME: '/branium',
+      ACCOUNT: '/branium/conta',
       CONTACT: (id: string) => `/branium/contato/${id}`,
       GROUP: (id: string) => `/branium/grupo/${id}`,
       GAMES: '/branium/jogos',
