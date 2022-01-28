@@ -15,7 +15,7 @@ This project is a super web chat made with ReactJs and NodeJs, from a brazilian 
 
 - [x] Authentication <br />
 - [x] Private chat <br />
-- [ ] Group chat <br />
+- [x] Group chat <br />
 - [x] File upload <br />
 - [ ] Call feature <br />
 - [ ] Status feature <br />
