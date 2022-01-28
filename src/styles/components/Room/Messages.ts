@@ -74,15 +74,16 @@ export const ImageContainer = styled.button`
   border: none;
   outline: none;
 
-  max-width: 20rem;
+  max-width: 25vw;
   max-height: 20rem;
   width: 100%;
   height: 100%;
 
   cursor: pointer;
   transition: opacity 0.2s ease;
+  overflow: hidden;
 
-  div {
+  span {
     position: unset !important;
   }
 
@@ -90,6 +91,7 @@ export const ImageContainer = styled.button`
     width: 100% !important;
     position: relative !important;
     height: unset !important;
+    object-fit: contain;
   }
 
   :hover {
