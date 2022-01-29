@@ -6,7 +6,7 @@ import {
   Container,
   Center,
   Title,
-} from "~/styles/pages/app"
+} from "~/styles/pages/branium"
 
 export default function Games() {
 

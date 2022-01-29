@@ -6,7 +6,7 @@ import { constant } from "~/constant"
 
 import { Sidebar } from "~/components"
 import { Header, Messages, Form, Info } from "~/components/Room/Contact"
-import { Container, Inner } from "~/styles/pages/app"
+import { Container, Inner } from "~/styles/pages/branium"
 
 export default function Contact() {
   const router = useRouter()

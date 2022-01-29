@@ -10,7 +10,7 @@ import {
   Center,
   Title,
   Text
-} from "~/styles/pages/app"
+} from "~/styles/pages/branium"
 
 export default function App() {
   return (

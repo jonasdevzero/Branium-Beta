@@ -149,7 +149,43 @@ const reducers = {
     setKeys.filter((key) => allowed.includes(key));
 
     rooms.map((room: any) => {
-      if (where.id === room.id) for (const key of setKeys) room[key] = set[key];
+      if (where.id === room.id) {
+        if (setKeys.includes("username") && set.username?.length) {
+          state.groups = state.groups.map(g => {
+            g.messages = g.messages.map(m => {
+              if (m.sender_id === where.id) {
+                m.sender = {
+                  ...m.sender,
+                  username: set.username || ""
+                }
+              }
+
+              return m;
+            })
+
+            return g;
+          })
+        }
+        if (setKeys.includes("picture")) {
+          state.groups = state.groups.map(g => {
+            g.messages = g.messages.map(m => {
+              if (m.sender_id === where.id) {
+                m.sender = {
+                  ...m.sender,
+                  picture: set.picture || ""
+                }
+              }
+
+              return m;
+            })
+
+            return g;
+          })
+        }
+
+        for (const key of setKeys) room[key] = set[key];
+      }
+
       return room;
     });
 
