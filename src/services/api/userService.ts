@@ -2,7 +2,7 @@ import api from './';
 import { Services } from '../../types/services';
 import socket, { attachEvents } from '../socket';
 import store from '../../store';
-import UserActions from '../../store/actions/user';
+import UserActions from '../../store/actions/UserActions';
 import { setCookie, parseCookies, destroyCookie } from 'nookies';
 
 const userService = {

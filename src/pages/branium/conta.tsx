@@ -2,7 +2,7 @@ import { useState } from "react";
 import Head from "next/head";
 import { authPage, useAppDispatch, useAppSelector, useWarn } from "~/hooks";
 import { userService } from "~/services/api";
-import UserActions from "~/store/actions/user";
+import UserActions from "~/store/actions/UserActions";
 
 import { Sidebar } from "~/components";
 import { Container, Inner } from "~/styles/pages/branium";

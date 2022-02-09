@@ -4,7 +4,7 @@ import Image from "next/image";
 import { groupService } from '~/services/api';
 import { useAppDispatch, useAppSelector, useWarn } from '~/hooks';
 import { Contact } from '~/types/user';
-import UserActions from "~/store/actions/user"
+import UserActions from "~/store/actions/UserActions"
 
 import { Avatar } from '~/components';
 import {

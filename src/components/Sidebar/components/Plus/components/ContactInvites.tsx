@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector, useWarn } from "~/hooks"
 import { contactService } from "~/services/api"
 import socket from "~/services/socket"
 import { ContactInvitation } from "~/types/user"
-import UserActions from "~/store/actions/user"
+import UserActions from "~/store/actions/UserActions"
 
 import { Avatar } from "~/components"
 import { 
