@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from "react"
 import Image from "next/image"
 import moment from "moment"
 import { useAppDispatch, useAppSelector, useMsgContainer } from "~/hooks"
-import UserActions from "~/store/actions/user"
+import UserActions from "~/store/actions/UserActions"
 import { orderMessages } from "~/helpers/roomUtil"
 import { Contact, ContactMediaMessage } from "~/types/user"
 import { contactService } from "~/services/api"
@@ -46,7 +46,7 @@ export default function Messages({ contact }: { contact: Contact }) {
   useEffect(() => {
     // use the saved position
     scrollToBottom()
-    setTimeout(() => scrollToBottom(), 500)
+    setTimeout(() => scrollToBottom(), 200)
   }, [contact.id, scrollToBottom])
 
   useEffect(() => {
@@ -132,7 +132,7 @@ export default function Messages({ contact }: { contact: Contact }) {
               <Medias className={message?.medias[0]?.type}>
                 {message.medias.map((m, index) => m.type === "image" ? (
                   <ImageContainer key={m.id} onClick={() => selectMediasToView(message.medias, index)}>
-                    <Image src={m.url} alt="" layout="fill" />
+                    <Image src={m.url} alt="" layout="fill" priority />
                   </ImageContainer>
                 ) : m.type === "video" ? (
                   <video key={m.id} src={m.url} controls />

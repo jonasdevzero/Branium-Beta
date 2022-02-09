@@ -9,6 +9,21 @@ export const Container = styled.div`
   padding: 2rem 5rem;
 
   overflow-y: scroll;
+
+  &.group {
+    padding: 2rem 8rem;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0.7rem;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #303030;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #252525;
+    cursor: pointer;
+  }
 `;
 
 export const LoadingMessages = styled.div`
@@ -36,6 +51,30 @@ export const Message = styled.div`
 
   &.sender {
     align-items: flex-end;
+  }
+`;
+
+export const Sender = styled.div`
+  display: flex;
+  position: relative;
+  left: -5.5rem;
+  bottom: -2rem;
+  margin-bottom: 0.5rem;
+
+  span {
+    color: lightgray;
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }
+
+  &.reverse {
+    flex-direction: row-reverse;
+    left: 5.5rem;
+
+    span {
+      margin-left: 0;
+      margin-right: 1rem;
+    }
   }
 `;
 
@@ -145,20 +184,20 @@ export const ScrollToBottom = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 5rem;
+  height: 5rem;
   position: absolute;
   bottom: 7rem;
-  right: 1.4rem;
+  right: 1rem;
 
   background-color: #090909;
   color: #fff;
-  border: none;
+  border: solid .2rem #000;
   outline: none;
   border-radius: 50%;
   cursor: pointer;
 
   svg {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 `;

@@ -5,13 +5,14 @@ import { useAppDispatch, useAppSelector, useMsgContainer } from "~/hooks";
 import { Group, GroupMediaMessage } from "~/types/user";
 import { orderMessages } from "~/helpers/roomUtil";
 import { groupService } from "~/services/api";
-import UserActions from "~/store/actions/user";
+import UserActions from "~/store/actions/UserActions";
 
-import { AudioPlayer, MediasViewer } from "../../"
+import { AudioPlayer, Avatar, MediasViewer } from "../../"
 import {
   Container,
   LoadingMessages,
   Message,
+  Sender,
   Inner,
   Content,
   Medias,
@@ -48,7 +49,7 @@ export default function Messages({ group }: MessagesI) {
 
   useEffect(() => {
     scrollToBottom()
-    setTimeout(() => scrollToBottom(), 500)
+    setTimeout(() => scrollToBottom(), 200)
   }, [group.id, scrollToBottom])
 
   useEffect(() => {
@@ -100,17 +101,27 @@ export default function Messages({ group }: MessagesI) {
     return orderMessages(group.messages || []).map((message, i, arr) => {
       if (message.date) return (<Date key={message.id}>{message.date}</Date>);
 
+      const sent_last = message?.sender_id === arr[i - 1]?.sender_id;
+      const sender = message.sender_id === user.id
+
       return (
         <Message
           key={message.id}
-          className={`${message?.sender_id === arr[i - 1]?.sender_id ? "concat" : ""} ${message.sender_id === user.id ? "sender" : ""}`}
+          className={`${sent_last ? "concat" : ""} ${sender ? "sender" : ""}`}
         >
+          {!sent_last ? (
+            <Sender className={sender ? "reverse" : ""}>
+              <Avatar size="5rem" src={message.sender.picture} />
+              <span style={{ fontSize: "1.4rem" }}>{message.sender.username}</span>
+            </Sender>
+          ) : null}
+
           <Content>
             {message?.medias?.length ? (
               <Medias className={message?.medias[0]?.type}>
                 {message.medias.map((m, index) => m.type === "image" ? (
                   <ImageContainer key={m.id} onClick={() => selectMediasToView(message.medias, index)}>
-                    <Image src={m.url} alt="" layout="fill" />
+                    <Image src={m.url} alt="" layout="fill" priority />
                   </ImageContainer>
                 ) : m.type === "video" ? (
                   <video key={m.id} src={m.url} controls />
@@ -142,7 +153,7 @@ export default function Messages({ group }: MessagesI) {
   }, [user, group, conatinerScroll, viewMedias, viewMediaIndex])
 
   return (
-    <Container ref={containerRef} onScroll={() => handleScroll(handleScrollCallback)}>
+    <Container ref={containerRef} onScroll={() => handleScroll(handleScrollCallback)} className="group">
       {loadingMessages ? (
         <LoadingMessages>
           <Image src="/images/loading-light.svg" alt="loading" width="35" height="35" />
