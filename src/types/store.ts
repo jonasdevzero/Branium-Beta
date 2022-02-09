@@ -3,6 +3,7 @@ import {
   ContactInvitation,
   ContactMessage,
   Group,
+  GroupUser,
   User,
   UserRooms,
 } from './user';
@@ -35,6 +36,8 @@ export namespace Actions {
     you_blocked?: boolean;
     online?: boolean;
     role?: number;
+    
+    users?: GroupUser[];
   }
   export type UpdateRoomSetKeys = Array<keyof UpdateRoomSet>;
 
