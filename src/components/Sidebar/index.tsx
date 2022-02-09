@@ -159,7 +159,7 @@ export default function Sidebar() {
             <SearchInputWrapper>
               <SearchInput
                 type="text"
-                placeholder={`Encontre um contato`}
+                placeholder={`Encontre um ${config.currentOption === "contacts" ? "contato" : "grupo"}`}
                 onChange={search}
               />
 
