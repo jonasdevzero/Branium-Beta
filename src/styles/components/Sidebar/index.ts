@@ -4,7 +4,7 @@ export const Container = styled.aside`
   display: flex;
   flex: 0.25;
   height: 100vh;
-  min-width: 35rem;
+  min-width: 32rem;
 
   position: relative;
 `;
