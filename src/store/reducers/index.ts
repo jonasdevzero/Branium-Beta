@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import user from './user';
-import sidebar from './sidebar';
+import settings from './settings';
 
 export default combineReducers({
   user,
-  sidebar,
+  settings,
 });

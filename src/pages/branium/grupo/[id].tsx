@@ -13,6 +13,8 @@ export default function Contact() {
   const groups = useAppSelector(state => state.user.groups)
   const group = useMemo(() => groups.find(c => c.id === router.query.id), [router, groups])
 
+  const showMembers = useAppSelector(state => state.settings.room.showMembers);
+
   const { isAuthenticated } = useAuth()
 
   useEffect(() => {
@@ -35,7 +37,9 @@ export default function Contact() {
             <Form group_id={group.id} />
           </Inner>
 
-          <Members group={group} />
+          {showMembers ? (
+            <Members group={group} />
+          ) : null}
         </>
       ) : null}
     </Container>

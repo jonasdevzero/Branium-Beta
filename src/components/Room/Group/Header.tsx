@@ -1,5 +1,7 @@
 import { useContext } from "react";
+import { useAppDispatch } from "~/hooks";
 import { CallContext } from "~/contexts/CallContext";
+import SettingsActions from "~/store/actions/SettingsActions";
 import { Group } from "~/types/user";
 
 import { Avatar } from "../../"
@@ -9,7 +11,12 @@ import {
   Room,
   Icon,
 } from "~/styles/components/Room/Header"
-import { FiMoreVertical, FiPhone, FiVideo } from "react-icons/fi";
+import {
+  FiMoreVertical,
+  FiPhone,
+  FiVideo,
+  FiUsers,
+} from "react-icons/fi";
 
 interface HeaderI {
   group: Group
@@ -18,9 +25,11 @@ interface HeaderI {
 export default function Header({ group }: HeaderI) {
   const { callTo } = useContext(CallContext)
 
+  const dispatch = useAppDispatch();
+
   return (
     <Container>
-      <Room onClick={() => {}}>
+      <Room onClick={() => { }}>
         <Avatar src={group.picture} />
         <h2>{group.name}</h2>
       </Room>
@@ -28,10 +37,16 @@ export default function Header({ group }: HeaderI) {
       <Icon onClick={() => callTo()}>
         <FiPhone />
       </Icon>
+
       <Icon onClick={() => callTo()}>
         <FiVideo />
       </Icon>
-      <Icon onClick={() => { }}>
+
+      <Icon onClick={() => dispatch(SettingsActions.room.toggleShowMembers())}>
+        <FiUsers />
+      </Icon>
+
+      <Icon onClick={() => {}}>
         <FiMoreVertical />
       </Icon>
     </Container>

@@ -62,12 +62,12 @@ export default function Members({ group }: MembersI) {
       {group.users.length ? (
         <>
           <Users>
-            <h4>Admins -- {admins.length}</h4>
+            <h4>Admins: {admins.length}</h4>
             {renderUsers(admins)}
           </Users>
 
           <Users>
-            <h4>Membros -- {users.length}</h4>
+            <h4>Membros: {users.length}</h4>
             {renderUsers(users)}
           </Users>
         </>

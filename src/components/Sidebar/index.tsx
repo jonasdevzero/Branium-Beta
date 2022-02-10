@@ -5,7 +5,7 @@ import { destroyCookie } from "nookies"
 import { useAppSelector, useAppDispatch } from "~/hooks"
 import socket from "~/services/socket"
 import { constant } from "~/constant"
-import { setOption } from "~/store/actions/sidebar"
+import SettingsActions from "~/store/actions/SettingsActions"
 import { Contact, Group } from "~/types/user"
 
 import { Avatar } from "../"
@@ -43,7 +43,7 @@ import {
 } from "react-icons/fi"
 
 export default function Sidebar() {
-  const { user, config } = useAppSelector(state => ({ user: state.user, config: state.sidebar }))
+  const { user, config } = useAppSelector(state => ({ user: state.user, config: state.settings.sidebar }))
 
   const [searchContactResult, setSearchContactResult] = useState<Contact[]>()
   const [groupSearchResult, setSearchGroupResult] = useState<Group[]>()
@@ -115,12 +115,12 @@ export default function Sidebar() {
           </User>
 
           <OptionsInner>
-            <Option onClick={() => dispatch(setOption("contacts"))}>
+            <Option onClick={() => dispatch(SettingsActions.sidebar.setOption("contacts"))}>
               <FiUser />
               <OptionSelected pending={!!pending.contacts} selected={config.currentOption === "contacts"} />
             </Option>
 
-            <Option onClick={() => dispatch(setOption("groups"))}>
+            <Option onClick={() => dispatch(SettingsActions.sidebar.setOption("groups"))}>
               <FiUsers />
               <OptionSelected pending={!!pending.groups} selected={config.currentOption === "groups"} />
             </Option>
