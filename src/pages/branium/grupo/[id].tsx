@@ -7,8 +7,6 @@ import { constant } from "~/constant"
 import { Sidebar } from "~/components"
 import { Header, Messages, Form, Members } from "~/components/Room/Group"
 import { Container, Inner } from "~/styles/pages/branium"
-import { groupService } from "~/services/api"
-import UserActions from "~/store/actions/UserActions"
 
 export default function Contact() {
   const router = useRouter()
@@ -16,23 +14,10 @@ export default function Contact() {
   const group = useMemo(() => groups.find(c => c.id === router.query.id), [router, groups])
 
   const { isAuthenticated } = useAuth()
-  const dispatch = useAppDispatch()
 
   useEffect(() => {
-    isAuthenticated && !group ? router.replace(constant.routes.chat.HOME) :
-      group && !group.users.length ?
-        groupService.users.index(group.id).then(users => {
-          dispatch(UserActions.updateRoom({
-            field: "groups",
-            where: { id: group.id },
-            set: { users }
-          }))
-        }) : null
+    isAuthenticated && !group ? router.replace(constant.routes.chat.HOME) : null
   }, [group, router, isAuthenticated])
-
-  useEffect(() => {
-
-  }, [router, group, groups])
 
   return (
     <Container>

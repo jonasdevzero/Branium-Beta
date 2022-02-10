@@ -36,6 +36,7 @@ export class GroupUser {
   username: string;
   picture: string;
   role: number;
+  online: boolean;
 }
 
 export class Group {

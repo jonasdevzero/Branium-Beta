@@ -140,7 +140,7 @@ const reducers = {
     const { field, where, set } = action;
     if (!where || !set || !field) return state;
 
-    const rooms = state[field];
+    let rooms = state[field];
     if (!rooms) return state;
 
     const allowed = Object.keys(new Actions.UpdateRoomSet());
@@ -148,7 +148,7 @@ const reducers = {
     const setKeys = Object.keys(set) as Actions.UpdateRoomSetKeys;
     setKeys.filter((key) => allowed.includes(key));
 
-    rooms.map((room: any) => {
+    rooms = rooms.map((room: any) => {
       if (where.id === room.id) {
         if (setKeys.includes("username") && set.username?.length) {
           state.groups = state.groups.map(g => {
@@ -183,7 +183,8 @@ const reducers = {
           })
         }
 
-        for (const key of setKeys) room[key] = set[key];
+        for (const key of setKeys) 
+          room[key] = set[key];
       }
 
       return room;
