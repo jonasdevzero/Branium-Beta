@@ -35,7 +35,7 @@ const reducers = {
     const {
       set: { user },
     } = action;
-    
+
     return user;
   },
 
@@ -150,41 +150,40 @@ const reducers = {
 
     rooms = rooms.map((room: any) => {
       if (where.id === room.id) {
-        if (setKeys.includes("username") && set.username?.length) {
-          state.groups = state.groups.map(g => {
-            g.messages = g.messages.map(m => {
+        if (setKeys.includes('username') && set.username?.length) {
+          state.groups = state.groups.map((g) => {
+            g.messages = g.messages.map((m) => {
               if (m.sender_id === where.id) {
                 m.sender = {
                   ...m.sender,
-                  username: set.username || ""
-                }
+                  username: set.username || '',
+                };
               }
 
               return m;
-            })
+            });
 
             return g;
-          })
+          });
         }
-        if (setKeys.includes("picture")) {
-          state.groups = state.groups.map(g => {
-            g.messages = g.messages.map(m => {
+        if (setKeys.includes('picture')) {
+          state.groups = state.groups.map((g) => {
+            g.messages = g.messages.map((m) => {
               if (m.sender_id === where.id) {
                 m.sender = {
                   ...m.sender,
-                  picture: set.picture || ""
-                }
+                  picture: set.picture || '',
+                };
               }
 
               return m;
-            })
+            });
 
             return g;
-          })
+          });
         }
 
-        for (const key of setKeys) 
-          room[key] = set[key];
+        for (const key of setKeys) room[key] = set[key];
       }
 
       return room;
@@ -291,7 +290,7 @@ const reducers = {
     state.groups = state.groups.map((g) => {
       if (where.id === g.id) {
         g.users = g.users.map((gU: any) => {
-          if (gU.id !== where.member_id)
+          if (gU.id === where.member_id)
             for (const key of keys) gU[key] = set[key];
 
           return gU;

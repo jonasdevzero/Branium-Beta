@@ -3,3 +3,4 @@ export { default as useDebounce } from './useDebounce';
 export * from './useAuth';
 export * from './useRedux';
 export { default as useMsgContainer } from './useMsgContainer';
+export { default as useOutsideClick } from './useOutsideClick';

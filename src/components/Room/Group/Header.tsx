@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { useAppDispatch } from "~/hooks";
+import { useContext, useRef, useState } from "react";
+import { useAppDispatch, useOutsideClick } from "~/hooks";
 import { CallContext } from "~/contexts/CallContext";
 import SettingsActions from "~/store/actions/SettingsActions";
 import { Group } from "~/types/user";
@@ -12,6 +12,10 @@ import {
   Icon,
 } from "~/styles/components/Room/Header"
 import {
+  Dropdown,
+  DropdownItem,
+} from "~/styles/components/Dropdown"
+import {
   FiMoreVertical,
   FiPhone,
   FiVideo,
@@ -23,9 +27,14 @@ interface HeaderI {
 }
 
 export default function Header({ group }: HeaderI) {
-  const { callTo } = useContext(CallContext)
+  const { callTo } = useContext(CallContext);
+
+  const dropdownRef = useRef(null)
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const dispatch = useAppDispatch();
+
+  useOutsideClick(dropdownRef, () => setShowDropdown(false))
 
   return (
     <Container>
@@ -46,8 +55,15 @@ export default function Header({ group }: HeaderI) {
         <FiUsers />
       </Icon>
 
-      <Icon onClick={() => {}}>
+      <Icon ref={dropdownRef} onClick={() => setShowDropdown(!showDropdown)}>
         <FiMoreVertical />
+
+        {showDropdown ? (
+          <Dropdown>
+            <DropdownItem>Dados do grupo</DropdownItem>
+            <DropdownItem>Sair do grupo</DropdownItem>
+          </Dropdown>
+        ) : null}
       </Icon>
     </Container>
   )
