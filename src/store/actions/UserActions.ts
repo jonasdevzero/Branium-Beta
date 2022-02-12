@@ -49,10 +49,19 @@ export default {
 
   updateExtraRoomData({ field, where, set }) {
     return {
-      type: 'UPDATE_EXTRA_ROOM_DATA',
+      type: userReducers.UPDATE_EXTRA_ROOM_DATA,
       field,
       where,
       set,
     };
   },
+
+  unshiftRoomMessages({ field, where, set }) {
+    return {
+      type: userReducers.UNSHIFT_ROOM_MESSAGES,
+      field,
+      where,
+      set,
+    }
+  }
 } as Actions.UserActions;

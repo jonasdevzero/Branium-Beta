@@ -53,7 +53,6 @@ const reducers = {
     return { ...state, ...data };
   },
 
-  // Push contact or contact_invitation
   [userReducers.USER_PUSH_DATA](
     state,
     action: { set: { data: any }; field: Actions.PushDataKey }
@@ -66,7 +65,6 @@ const reducers = {
     return { ...state, [field]: [set.data, ...state[field]] };
   },
 
-  // Remove contact or contact_invitation
   [userReducers.USER_REMOVE_DATA](
     state,
     action: { where: Actions.Where; field: Actions.RemoveDataKey }
@@ -107,7 +105,7 @@ const reducers = {
     return state;
   },
 
-  UNSHIFT_ROOM_MESSAGES(
+  [userReducers.UNSHIFT_ROOM_MESSAGES](
     state,
     action: {
       set: { messages: any[] };
@@ -192,7 +190,7 @@ const reducers = {
     return { ...state, [field]: rooms };
   },
 
-  UPDATE_EXTRA_ROOM_DATA(
+  [userReducers.UPDATE_EXTRA_ROOM_DATA](
     state,
     action: {
       field: UserRooms;
@@ -316,7 +314,7 @@ const reducers = {
     return state;
   },
 
-  RESET(_state, _action) {
+  [userReducers.RESET](_state, _action) {
     return INITIAL_STATE;
   },
 } as { [key: string]: (state: User, action: any) => User };

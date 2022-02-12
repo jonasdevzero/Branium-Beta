@@ -3,6 +3,7 @@ import {
   ContactInvitation,
   ContactMessage,
   Group,
+  GroupMessage,
   GroupUser,
   User,
   UserRooms,
@@ -109,6 +110,25 @@ export namespace Actions {
       field: UserRooms;
       where: Where;
       set: UpdateExtraData;
+    };
+
+    unshiftRoomMessages({
+      field,
+      where,
+      set,
+    }: {
+      field: UserRooms;
+      where: Where;
+      set: {
+        messages: ContactMessage[] | GroupMessage[]
+      };
+    }): {
+      type: string;
+      field: UserRooms;
+      where: Where;
+      set: {
+        messages: ContactMessage[] | GroupMessage[]
+      };
     };
   }
 }
