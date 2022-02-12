@@ -1,5 +1,6 @@
 import api from '.';
 import { Services } from '~/types/services';
+import { Group } from '~/types/user';
 
 const groupService = {
   show(id) {
@@ -90,7 +91,10 @@ const groupService = {
     add(group_id, user_id) {
       return new Promise(async (resolve, reject) => {
         try {
-          const { data } = await api.post('/group/users', { group_id, user_id });
+          const { data } = await api.post('/group/users', {
+            group_id,
+            user_id,
+          });
 
           resolve(data.member);
         } catch (error: any) {
@@ -103,7 +107,6 @@ const groupService = {
       return new Promise(async (resolve, reject) => {
         try {
           await api.patch('/group/users/role', data);
-
 
           resolve();
         } catch (error: any) {
@@ -126,10 +129,13 @@ const groupService = {
   },
 
   messages: {
-    index(group_id) {
+    index(group: Group) {
       return new Promise(async (resolve, reject) => {
         try {
-          const { data } = await api.get(`/group/messages/${group_id}`)
+          const { fetch_messages_count, pushed_messages } = group.extra;
+          const { data } = await api.get(
+            `/group/messages/${group.id}?limit=30&skip=${fetch_messages_count}&skip_u=${pushed_messages}`
+          );
 
           resolve(data.messages);
         } catch (error: any) {
@@ -144,9 +150,9 @@ const groupService = {
           const { to, text, medias } = data;
 
           const formData = new FormData();
-          formData.append("to", to);
-          formData.append("text", text);
-          medias.forEach(m => formData.append("medias", m));
+          formData.append('to', to);
+          formData.append('text', text);
+          medias.forEach((m) => formData.append('medias', m));
 
           await api.post('/group/messages', formData);
 

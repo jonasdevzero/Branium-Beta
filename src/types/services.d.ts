@@ -1,4 +1,4 @@
-import { SearchUser, Contact, ContactMessage, GroupUser, GroupMessage } from './user';
+import { SearchUser, Contact, ContactMessage, GroupUser, GroupMessage, Group } from './user';
 
 export namespace Services {
   export interface UserService {
@@ -102,7 +102,7 @@ export namespace Services {
     };
 
     messages: {
-      index(group_id: string): Promise<GroupMessage[]>
+      index(group: Group): Promise<GroupMessage[]>
 
       create(data: { to: string; text: string; medias: File[] }): Promise<void>;
 
