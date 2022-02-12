@@ -37,9 +37,7 @@ export default function Contact() {
             <Form group_id={group.id} />
           </Inner>
 
-          {showMembers ? (
-            <Members group={group} />
-          ) : null}
+          {showMembers ? (<Members group={group} />) : null}
         </>
       ) : null}
     </Container>

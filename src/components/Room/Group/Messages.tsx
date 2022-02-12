@@ -55,7 +55,7 @@ export default function Messages({ group }: MessagesI) {
   useEffect(() => {
     if (!group.extra?.fetch_messages_count) {
       setLoadingMessages(true)
-      groupService.messages.index(group.id).then(messages => {
+      groupService.messages.index(group).then(messages => {
         dispatch({ type: "UNSHIFT_ROOM_MESSAGES", field: "groups", where: { id: group.id }, set: { messages } })
         dispatch(UserActions.updateExtraRoomData({
           field: "groups",
@@ -82,7 +82,52 @@ export default function Messages({ group }: MessagesI) {
     scrollToBottom(group.messages[group.messages.length - 1]?.sender_id === group.id)
   }, [group, group.messages.length, scrollToBottom])
 
-  function handleScrollCallback() { }
+  function handleScrollCallback() {
+    if (!containerRef.current) return;
+
+    const { scrollTop, scrollHeight } = containerRef.current;
+    const { fetch_messages_count, full_loaded } = group.extra;
+
+    dispatch(UserActions.updateExtraRoomData({
+      field: "groups",
+      where: { id: group.id },
+      set: { last_scroll_position: scrollTop }
+    }));
+
+    if (scrollTop < 200 && !loadingMessages && fetch_messages_count > 0 && !full_loaded) {
+      setLoadingMessages(true);
+
+      groupService.messages.index(group).then(messages => {
+        if (!messages.length) {
+          setLoadingMessages(false);
+          dispatch(UserActions.updateExtraRoomData({
+            field: "groups",
+            where: { id: group.id },
+            set: { full_loaded: true }
+          }));
+
+          return;
+        }
+
+        if (messages.length < limit) {
+          dispatch(UserActions.updateExtraRoomData({
+            field: "groups",
+            where: { id: group.id },
+            set: { full_loaded: true }
+          }));
+        }
+
+        dispatch(UserActions.unshiftRoomMessages({
+          field: "groups",
+          where: { id: group.id },
+          set: { messages }
+        }));
+
+        setContainerScroll({ lastHeight: scrollHeight, lastTop: scrollTop });
+        setLoadingMessages(false);
+      })
+    }
+  }
 
   function selectMediasToView(medias: GroupMediaMessage[], initialIndex: number) {
     setViewMedias(medias)

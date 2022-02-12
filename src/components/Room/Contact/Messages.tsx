@@ -80,9 +80,15 @@ export default function Messages({ contact }: { contact: Contact }) {
 
   function handleScrollCallback() {
     if (!containerRef.current) return
+
     const { scrollTop, scrollHeight } = containerRef.current
     const { fetch_messages_count, full_loaded } = contact.extra
-    dispatch(UserActions.updateExtraRoomData({ field: "contacts", where: { id: contact.id }, set: { last_scroll_position: scrollTop } }))
+
+    dispatch(UserActions.updateExtraRoomData({
+      field: "contacts",
+      where: { id: contact.id },
+      set: { last_scroll_position: scrollTop }
+    }))
 
     if (scrollTop < 200 && !loadingMessages && fetch_messages_count > 0 && !full_loaded) {
       setLoadingMessages(true)
@@ -90,15 +96,29 @@ export default function Messages({ contact }: { contact: Contact }) {
       contactService.messages.index(contact).then(messages => {
         if (!messages.length) {
           setLoadingMessages(false)
-          dispatch(UserActions.updateExtraRoomData({ field: "contacts", where: { id: contact.id }, set: { full_loaded: true } }))
-          return
+          dispatch(UserActions.updateExtraRoomData({
+            field: "contacts",
+            where: { id: contact.id },
+            set: { full_loaded: true }
+          }))
+
+          return;
         }
 
         if (messages.length < limit) {
-          dispatch(UserActions.updateExtraRoomData({ field: "contacts", where: { id: contact.id }, set: { full_loaded: true } }))
+          dispatch(UserActions.updateExtraRoomData({
+            field: "contacts",
+            where: { id: contact.id },
+            set: { full_loaded: true }
+          }))
         }
 
-        dispatch({ type: "UNSHIFT_CONTACT_MESSAGES", where: { id: contact.id }, set: { messages } })
+        dispatch(UserActions.unshiftRoomMessages({
+          field: "contacts",
+          where: { id: contact.id },
+          set: { messages }
+        }));
+
         setContainerScroll({ lastHeight: scrollHeight, lastTop: scrollTop })
         setLoadingMessages(false)
       })
