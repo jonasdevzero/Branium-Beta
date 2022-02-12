@@ -43,5 +43,3 @@ export default function Contact() {
     </Container>
   )
 }
-
-export const getServerSideProps = authPage

@@ -21,7 +21,7 @@ export namespace Services {
 
     login(data: { login: string; password: string }): Promise<void>;
 
-    auth(before: () => void): Promise<void>;
+    auth(): Promise<void>;
 
     update(data: {
       name: string;

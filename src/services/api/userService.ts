@@ -81,8 +81,7 @@ const userService = {
     });
   },
 
-  auth(before) {
-    before();
+  auth() {
     return new Promise(async (resolve, reject) => {
       try {
         const { ['branium.jwt']: jwt } = parseCookies(undefined);

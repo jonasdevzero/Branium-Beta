@@ -200,5 +200,3 @@ export default function Conta() {
     </Container>
   )
 }
-
-export const getServerSideProps = authPage;
