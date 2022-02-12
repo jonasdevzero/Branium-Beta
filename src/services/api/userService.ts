@@ -100,7 +100,7 @@ const userService = {
         socket.io.opts.query = { jwt };
         socket.connect();
 
-        socket.once('auth', (error, action) => {
+        socket.once('auth', (error) => {
           if (error) {
             destroyCookie(undefined, 'branium.jwt', { path: '/' });
             return reject(error);
@@ -108,7 +108,6 @@ const userService = {
 
           attachEvents();
           store.dispatch(UserActions.setUser(user));
-          store.dispatch(action);
           resolve();
         });
       } catch (error: any) {

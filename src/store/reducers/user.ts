@@ -286,7 +286,7 @@ const reducers = {
     const keys = Object.keys(set);
 
     state.groups = state.groups.map((g) => {
-      if (where.id === g.id) {
+      if (g.users.find((u) => u.id === where.member_id)) {
         g.users = g.users.map((gU: any) => {
           if (gU.id === where.member_id)
             for (const key of keys) gU[key] = set[key];
