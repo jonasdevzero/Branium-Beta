@@ -88,27 +88,27 @@ const userService = {
 
         if (!jwt) return reject('Sessão inválida!');
 
-        const response = await api.post(
-          '/user/auth',
-          {},
-          { headers: { Authorization: jwt } }
-        );
-        const user = response.data.user;
-
         api.defaults.headers['Authorization'] = jwt;
         socket.io.opts.query = { jwt };
         socket.connect();
 
-        socket.once('auth', (error) => {
-          if (error) {
-            destroyCookie(undefined, 'branium.jwt', { path: '/' });
-            return reject(error);
-          }
+        const [{ data }] = await Promise.all([
+          api.post('/user/auth', {}, { headers: { Authorization: jwt } }),
+          new Promise((resolve, reject) => {
+            socket.once('auth', (error) => {
+              if (error) {
+                destroyCookie(undefined, 'branium.jwt', { path: '/' });
+                return reject(error);
+              }
+    
+              attachEvents();
+              resolve(true);
+            });
+          })
+        ]);
 
-          attachEvents();
-          store.dispatch(UserActions.setUser(user));
-          resolve();
-        });
+        store.dispatch(UserActions.setUser(data.user));
+        resolve();
       } catch (error: any) {
         destroyCookie(undefined, 'branium.jwt', { path: '/' });
         reject(error.response?.data.message);
