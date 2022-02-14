@@ -7,7 +7,7 @@ import { orderMessages } from "~/helpers/roomUtil";
 import { groupService } from "~/services/api";
 import UserActions from "~/store/actions/UserActions";
 
-import { AudioPlayer, Avatar, MediasViewer } from "../../"
+import { AudioPlayer, Avatar, ImagesViewer, MediasRender } from "../../"
 import {
   Container,
   LoadingMessages,
@@ -162,31 +162,17 @@ export default function Messages({ group }: MessagesI) {
           ) : null}
 
           <Content>
-            {message?.medias?.length ? (
-              <Medias className={message?.medias[0]?.type}>
-                {message.medias.map((m, index) => m.type === "image" ? (
-                  <ImageContainer key={m.id} onClick={() => selectMediasToView(message.medias, index)}>
-                    <Image src={m.url} alt="" layout="fill" priority />
-                  </ImageContainer>
-                ) : m.type === "video" ? (
-                  <video key={m.id} src={m.url} controls />
-                ) : m.type === "audio" ? (
-                  <AudioPlayer key={m.id} src={m.url} />
-                ) : null)}
-              </Medias>
-            ) : null}
+            <MediasRender medias={message.medias} viewFullScreen={selectMediasToView} />
 
             <Inner className={!message.text ? "no__text" : ""}>
-              {message.text ? (
-                <Text>{message.text}</Text>
-              ) : null}
+              {message.text ? (<Text>{message.text}</Text>) : null}
             </Inner>
 
             <Time>{moment(message.created_at).format("HH:mm A")}</Time>
           </Content>
 
           {viewMedias ? (
-            <MediasViewer
+            <ImagesViewer
               medias={viewMedias}
               initialIndex={viewMediaIndex}
               close={() => setViewMedias(undefined)}

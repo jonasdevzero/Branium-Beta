@@ -7,15 +7,13 @@ import { orderMessages } from "~/helpers/roomUtil"
 import { Contact, ContactMediaMessage } from "~/types/user"
 import { contactService } from "~/services/api"
 
-import { AudioPlayer, MediasViewer } from "../../"
+import { ImagesViewer, MediasRender } from "../../"
 import {
   Container,
   LoadingMessages,
   Message,
   Inner,
   Content,
-  Medias,
-  ImageContainer,
   Text,
   Time,
   Date,
@@ -142,37 +140,26 @@ export default function Messages({ contact }: { contact: Contact }) {
     return orderMessages(contact.messages || []).map((message, i, arr) => {
       if (message.date) return (<Date key={message.id}>{message.date}</Date>);
 
+      const sent_last = message?.sender_id === arr[i - 1]?.sender_id;
+      const sender = message.sender_id === user.id;
+
       return (
         <Message
           key={message.id}
-          className={`${message?.sender_id === arr[i - 1]?.sender_id ? "concat" : ""} ${message.sender_id === user.id ? "sender" : ""}`}
+          className={`${sent_last ? "concat" : ""} ${sender ? "sender" : ""}`}
         >
           <Content>
-            {message?.medias?.length ? (
-              <Medias className={message?.medias[0]?.type}>
-                {message.medias.map((m, index) => m.type === "image" ? (
-                  <ImageContainer key={m.id} onClick={() => selectMediasToView(message.medias, index)}>
-                    <Image src={m.url} alt="" layout="fill" priority />
-                  </ImageContainer>
-                ) : m.type === "video" ? (
-                  <video key={m.id} src={m.url} controls />
-                ) : m.type === "audio" ? (
-                  <AudioPlayer key={m.id} src={m.url} />
-                ) : null)}
-              </Medias>
-            ) : null}
+            <MediasRender medias={message.medias} viewFullScreen={selectMediasToView} />
 
             <Inner className={!message.text ? "no__text" : ""}>
-              {message.text ? (
-                <Text>{message.text}</Text>
-              ) : null}
+              {message.text ? (<Text>{message.text}</Text>) : null}
             </Inner>
 
             <Time>{moment(message.created_at).format("HH:mm A")}</Time>
           </Content>
 
           {viewMedias ? (
-            <MediasViewer
+            <ImagesViewer
               medias={viewMedias}
               initialIndex={viewMediaIndex}
               close={() => setViewMedias(undefined)}
