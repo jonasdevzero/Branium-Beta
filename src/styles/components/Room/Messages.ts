@@ -42,8 +42,13 @@ export const Message = styled.div`
   flex-direction: column;
   align-items: flex-start;
 
-  padding: 0 3rem;
+  
+  padding: .25rem 3rem;
   margin-top: 1.5rem;
+  
+  :hover {
+    background-color: #131313;
+  }
 
   &.concat {
     margin-top: 0.4rem;

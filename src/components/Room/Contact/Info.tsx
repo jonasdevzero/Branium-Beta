@@ -6,7 +6,6 @@ import { Contact } from "~/types/user"
 import { Avatar } from "~/components"
 
 import {
-  Overlay,
   Container,
   Close,
   User,
@@ -44,7 +43,7 @@ export default function Info({ contact, close }: InfoProps) {
 
   return (
     <>
-      <Overlay onClick={() => close()} />
+      <div className="overlay" onClick={() => close()} />
 
       <Container>
         <User>

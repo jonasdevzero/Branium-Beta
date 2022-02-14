@@ -1,6 +1,5 @@
 
 import {
-  Overlay,
   Container,
   Close
 } from "../../../styles/components/Sidebar/Notifications"
@@ -10,7 +9,7 @@ export default function Notifications({ close }: { close: () => void }) {
 
   return (
     <>
-      <Overlay onClick={() => close()} />
+      <div className="overlay" onClick={() => close()} />
 
       <Container>
         <h1>Notificações</h1>

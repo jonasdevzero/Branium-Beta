@@ -3,7 +3,6 @@ import { useAppSelector } from "~/hooks"
 
 import { SearchUsers, ContactInvites, CreateGroup } from './components'
 import {
-  Overlay,
   Container,
   Aside,
   OptionWrapper,
@@ -44,7 +43,7 @@ export default function Plus({ close }: PlusProps) {
 
   return (
     <>
-      <Overlay onClick={close}></Overlay>
+      <div className="overlay" onClick={close}></div>
 
       <Container>
         <Aside>
