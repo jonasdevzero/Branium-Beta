@@ -1,9 +1,9 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Image from "next/image"
 import { Picker, BaseEmoji } from "emoji-mart"
 import "emoji-mart/css/emoji-mart.css"
 import { contactService } from "~/services/api"
-import { useWarn } from "~/hooks"
+import { useOutsideClick, useWarn } from "~/hooks"
 
 import AudioPlayer from "../AudioPlayer"
 import AudioRecorder from "../AudioRecorder"
@@ -51,12 +51,18 @@ export default function Form({ contact_id }: { contact_id: string }) {
   const [mediasPreview, setMediasPreview] = useState<string[]>([])
   const [previewIndex, setPreviewIndex] = useState(0)
 
+  const uploadRef = useRef(null)
   const [uploadOptions, setUploadOptions] = useState(false)
+
+  const emojiButtonRef = useRef(null)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const [loading, setLoading] = useState(false)
 
   const warn = useWarn()
+
+  useOutsideClick(uploadRef, () => setUploadOptions(false))
+  useOutsideClick(emojiButtonRef, () => setShowEmojiPicker(false))
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -189,11 +195,7 @@ export default function Form({ contact_id }: { contact_id: string }) {
               />
 
               <Submit type="submit">
-                {!loading ? (
-                  <FiSend />
-                ) : (
-                  <Image src="/images/loading-light.svg" width="15px" height="15px" alt="loading" />
-                )}
+                <FiSend />
               </Submit>
             </div>
 
@@ -218,17 +220,20 @@ export default function Form({ contact_id }: { contact_id: string }) {
 
       {mediasPreview.length ? renderMediasPreview() : null}
 
-      {showEmojiPicker ? (
-        <EmojiPickerContainer>
-          <Picker theme="dark" onSelect={(emoji: BaseEmoji) => setMessage(message.concat(emoji.native))} />
-        </EmojiPickerContainer>
-      ) : null}
 
-      <Icon type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
-        <FiSmile />
+      <Icon ref={emojiButtonRef} type="button">
+        <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+          <FiSmile />
+        </button>
+
+        {showEmojiPicker ? (
+          <EmojiPickerContainer onClick={() => setShowEmojiPicker(true)}>
+            <Picker theme="dark" onSelect={(emoji: BaseEmoji) => setMessage(message.concat(emoji.native))} />
+          </EmojiPickerContainer>
+        ) : null}
       </Icon>
 
-      <Icon type="button">
+      <Icon ref={uploadRef} type="button">
         <span onClick={() => setUploadOptions(!uploadOptions)}>
           <FiPaperclip />
         </span>
@@ -264,10 +269,6 @@ export default function Form({ contact_id }: { contact_id: string }) {
           value={message}
           onChange={e => setMessage(e.target.value)}
           autoComplete="off"
-          onFocus={() => {
-            setShowEmojiPicker(false)
-            setUploadOptions(false)
-          }}
           placeholder="Digite alguma coisa..."
         />
 

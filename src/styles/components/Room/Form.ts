@@ -86,6 +86,12 @@ export const Icon = styled.button`
   border: none;
   outline: none;
 
+  button {
+    border: none;
+    outline: none;
+    background-color: transparent;
+  }
+
   & + & {
     margin-left: 1.5rem;
   }
@@ -94,7 +100,7 @@ export const Icon = styled.button`
 export const EmojiPickerContainer = styled.div`
   position: absolute;
   bottom: 6rem;
-  left: 1rem;
+  left: 0rem;
 `;
 
 export const UploadOptions = styled.div`

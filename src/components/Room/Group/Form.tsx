@@ -1,9 +1,9 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Image from "next/image"
 import { Picker, BaseEmoji } from "emoji-mart"
 import "emoji-mart/css/emoji-mart.css"
 import { groupService } from "~/services/api"
-import { useWarn } from "~/hooks"
+import { useOutsideClick, useWarn } from "~/hooks"
 
 import AudioPlayer from "../AudioPlayer"
 import AudioRecorder from "../AudioRecorder"
@@ -55,12 +55,18 @@ export default function Form({ group_id }: FormI) {
   const [mediasPreview, setMediasPreview] = useState<string[]>([])
   const [previewIndex, setPreviewIndex] = useState(0)
 
+  const uploadRef = useRef(null)
   const [uploadOptions, setUploadOptions] = useState(false)
+
+  const emojiButtonRef = useRef(null)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const [loading, setLoading] = useState(false)
 
   const warn = useWarn()
+
+  useOutsideClick(emojiButtonRef, () => setShowEmojiPicker(false))
+  useOutsideClick(uploadRef, () => setUploadOptions(false))
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -222,17 +228,20 @@ export default function Form({ group_id }: FormI) {
 
       {mediasPreview.length ? renderMediasPreview() : null}
 
-      {showEmojiPicker ? (
-        <EmojiPickerContainer>
-          <Picker theme="dark" onSelect={(emoji: BaseEmoji) => setMessage(message.concat(emoji.native))} />
-        </EmojiPickerContainer>
-      ) : null}
 
       <Icon type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
-        <FiSmile />
+        <button ref={emojiButtonRef} type="button">
+          <FiSmile />
+        </button>
+
+        {showEmojiPicker ? (
+          <EmojiPickerContainer>
+            <Picker theme="dark" onSelect={(emoji: BaseEmoji) => setMessage(message.concat(emoji.native))} />
+          </EmojiPickerContainer>
+        ) : null}
       </Icon>
 
-      <Icon type="button">
+      <Icon ref={uploadRef} type="button">
         <span onClick={() => setUploadOptions(!uploadOptions)}>
           <FiPaperclip />
         </span>
