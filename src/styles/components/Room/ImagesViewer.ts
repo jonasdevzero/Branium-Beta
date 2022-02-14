@@ -10,7 +10,7 @@ export const Container = styled.div`
   left: 0;
   right: 0;
 
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.04);
   z-index: 2;
 `;
 
@@ -59,6 +59,10 @@ export const ImageContainer = styled.div`
   height: 100%;
 
   transition: opacity 0.2s ease;
+
+  span {
+    position: unset !important;
+  }
 
   img {
     width: 100%;

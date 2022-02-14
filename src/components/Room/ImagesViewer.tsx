@@ -7,19 +7,19 @@ import {
   Close,
   Button,
   ImageContainer,
-} from "~/styles/components/Room/MediasViewer"
+} from "~/styles/components/Room/ImagesViewer"
 import {
   FiX,
   FiChevronLeft,
   FiChevronRight
 } from "react-icons/fi"
 
-interface MediasViewerI {
+interface ImagesViewerI {
   medias: ContactMediaMessage[]
   initialIndex: number
   close(): void
 }
-export default function MediaViewer({ medias, initialIndex, close }: MediasViewerI) {
+export default function ImagesViewer({ medias, initialIndex, close }: ImagesViewerI) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
 
   const prev = () => currentIndex === 0 ? setCurrentIndex(medias.length - 1) : setCurrentIndex(currentIndex - 1)
@@ -31,17 +31,21 @@ export default function MediaViewer({ medias, initialIndex, close }: MediasViewe
         <FiX />
       </Close>
 
-      <Button className="prev" onClick={prev}>
-        <FiChevronLeft />
-      </Button>
+      {initialIndex > 0 || medias.length > 1 ? (
+        <Button className="prev" onClick={prev}>
+          <FiChevronLeft />
+        </Button>
+      ) : null}
 
       <ImageContainer>
         <Image src={medias[currentIndex].url} alt="" layout="fill" />
       </ImageContainer>
 
-      <Button className="next" onClick={next}>
-        <FiChevronRight />
-      </Button>
+      {medias.length > 1 ? (
+        <Button className="next" onClick={next}>
+          <FiChevronRight />
+        </Button>
+      ) : null}
     </Container>
   )
 }
