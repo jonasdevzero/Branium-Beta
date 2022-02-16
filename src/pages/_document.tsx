@@ -46,6 +46,10 @@ export default class MyDocument extends Document {
           <link
             href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Raleway:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap&family=Red+Hat+Text:wght@400;500;700"
             rel="stylesheet" />
+            <link
+            rel="icon" type="image/png"
+            href="/images/b.png"
+          />
         </Head>
         <body>
           <Main />
