@@ -39,13 +39,15 @@ export default function Messages({ contact }: { contact: Contact }) {
   const [conatinerScroll, setContainerScroll] = useState<ContainerScroll>()
   const { showScrollBtn, handleScroll, scrollToBottom } = useMsgContainer(containerRef)
 
-  const [viewMedias, setViewMedias] = useState<ContactMediaMessage[]>()
-  const [viewMediaIndex, setViewMediaIndex] = useState(0)
+  const [viewImg, setViewImg] = useState<ContactMediaMessage[]>()
+  const [viewImgIndex, setViewImgIndex] = useState(0)
+
   const [loadingMessages, setLoadingMessages] = useState(false)
 
   const [showActionBtn, setShowActionBtn] = useState("");
   const [showAction, setShowAction] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+
+  const [msgLength, setMsgLength] = useState(contact.messages.length)
 
   const user = useAppSelector(state => state.user)
 
@@ -61,6 +63,8 @@ export default function Messages({ contact }: { contact: Contact }) {
     if (!contact.extra?.fetch_messages_count) {
       setLoadingMessages(true)
       contactService.messages.index(contact).then(messages => {
+        setMsgLength(msgLength + messages.length)
+
         dispatch({ type: "UNSHIFT_ROOM_MESSAGES", field: "contacts", where: { id: contact.id }, set: { messages } })
         dispatch(UserActions.updateExtraRoomData({
           field: "contacts",
@@ -87,9 +91,14 @@ export default function Messages({ contact }: { contact: Contact }) {
         })))
     }
 
-    const sent_last = contact.messages[contact.messages.length - 1]?.sender_id === contact.id
-    scrollToBottom(sent_last || isDeleting)
-    isDeleting ? setIsDeleting(false) : null;
+    if (msgLength !== contact.messages.length) {
+      const isNewMessage = msgLength < contact.messages.length;
+      const isDeleting = msgLength > contact.messages.length;
+      const sentLast = contact.messages[contact.messages.length - 1]?.sender_id === contact.id
+
+      scrollToBottom({ isNewMessage, sentLast, isDeleting })
+      isNewMessage ? setMsgLength(msgLength + 1) : isDeleting ? setMsgLength(msgLength - 1) : null;
+    }
   }, [contact, contact.messages.length, dispatch, scrollToBottom])
 
   function handleScrollCallback() {
@@ -108,6 +117,8 @@ export default function Messages({ contact }: { contact: Contact }) {
       setLoadingMessages(true)
 
       contactService.messages.index(contact).then(messages => {
+        setMsgLength(msgLength + messages.length)
+
         if (!messages.length) {
           setLoadingMessages(false)
           dispatch(UserActions.updateExtraRoomData({
@@ -119,13 +130,12 @@ export default function Messages({ contact }: { contact: Contact }) {
           return;
         }
 
-        if (messages.length < limit) {
+        messages.length < limit ?
           dispatch(UserActions.updateExtraRoomData({
             field: "contacts",
             where: { id: contact.id },
             set: { full_loaded: true }
-          }))
-        }
+          })) : null
 
         dispatch(UserActions.unshiftRoomMessages({
           field: "contacts",
@@ -139,38 +149,34 @@ export default function Messages({ contact }: { contact: Contact }) {
     }
   }
 
-  function selectMediasToView(medias: ContactMediaMessage[], initialIndex: number) {
-    setViewMedias(medias)
-    setViewMediaIndex(initialIndex)
+  function viewImages(medias: ContactMediaMessage[], initialIndex: number) {
+    setViewImg(medias)
+    setViewImgIndex(initialIndex)
   }
 
-  function onMouseOver(message_id: string) {
-    !showAction ? setTimeout(() => setShowActionBtn(message_id), 50) : null
-  }
-
-  function onMouseLeave() {
-    if (!showAction) {
-      setShowActionBtn("")
-      setShowAction(false)
-    }
-  }
-
-  function deleteMessage(message_id: string, target: "me" | "bidirectional") {
+  function closeActions() {
     setShowActionBtn("")
     setShowAction(false)
-    setIsDeleting(true)
+  }
+
+  const onMouseOver = (message_id: string) => !showAction ? setTimeout(() => setShowActionBtn(message_id), 50) : null
+
+  const onMouseLeave = () => !showAction ? closeActions() : null;
+
+  function deleteMessage(message_id: string, target: "me" | "bidirectional") {
+    closeActions()
 
     contactService.messages.deleteOne(message_id, target)
       .then(() => {
         const action = target === "me" ? "removeRoomMessage" : "removeBidirectionalMessage"
-        const messageDirection = target === "me" ? "message_id" : "bidirectional_id"
+        const field_id = target === "me" ? "message_id" : "bidirectional_id"
 
         dispatch(UserActions[action]({
           field: "contacts",
-          where: { id: contact.id, [messageDirection]: message_id }
+          where: { id: contact.id, [field_id]: message_id }
         }))
       })
-      .catch(error => warn.error(error))
+      .catch(warn.error)
   }
 
   const renderMessages = useCallback(() => {
@@ -183,20 +189,24 @@ export default function Messages({ contact }: { contact: Contact }) {
     }
 
     return orderMessages(contact.messages || []).map((message, i, arr) => {
-      if (message.date) return (<Date key={message.id}>{message.date}</Date>);
+      if (message.date) return (
+        <Date key={message.id}>
+          <span>{message.date}</span>
+        </Date>
+      );
 
       const sent_last = message?.sender_id === arr[i - 1]?.sender_id;
-      const sender = message.sender_id === user.id;
+      const sender = message.sender_id === user.id ? "sender" : "receiver";
 
       return (
         <Message
           key={message.id}
-          className={`${sent_last ? "concat" : ""} ${sender ? "sender" : ""}`}
+          className={`${sent_last ? "concat" : ""} ${sender}`}
           onMouseOver={() => onMouseOver(message.id)}
-          onMouseLeave={() => onMouseLeave()}
+          onMouseLeave={onMouseLeave}
         >
           <Content>
-            <MediasRender medias={message.medias} viewFullScreen={selectMediasToView} />
+            <MediasRender medias={message.medias} viewFullScreen={viewImages} />
 
             <Inner className={!message.text ? "no__text" : ""}>
               {message.text ? (<Text>{message.text}</Text>) : null}
@@ -205,41 +215,32 @@ export default function Messages({ contact }: { contact: Contact }) {
             <Time>{moment(message.created_at).format("HH:mm A")}</Time>
           </Content>
 
-          <Actions className={`${sender ? "sender" : "receiver"} ${showActionBtn !== message.id ? "hidden" : ""}`}>
+          <Actions className={`${sender} ${showActionBtn !== message.id ? "hidden" : ""}`}>
             <span onClick={() => setShowAction(!showAction)}>
               <FiMoreHorizontal />
             </span>
 
-            {showAction ? (
+            {showAction && (
               <ActionsBox
-                className={sender ? "sender" : "receiver"}
-                onMouseLeave={() => {
-                  setShowActionBtn("")
-                  setShowAction(false)
-                }}
+                className={sender}
+                onMouseLeave={closeActions}
               >
-                <Action
-                  type="button"
-                  onClick={() => deleteMessage(message.id, "me")}
-                >
+                <Action type="button" onClick={() => deleteMessage(message.id, "me")}>
                   Apagar para mim
                 </Action>
 
-                {sender ? (
-                  <Action
-                    type="button"
-                    onClick={() => deleteMessage(message.bidirectional_id, "bidirectional")}
-                  >
+                {sender === "sender" ? (
+                  <Action type="button" onClick={() => deleteMessage(message.bidirectional_id, "bidirectional")}>
                     Apagar para todos
                   </Action>
                 ) : null}
               </ActionsBox>
-            ) : null}
+            )}
           </Actions>
         </Message>
       )
     })
-  }, [user, contact, conatinerScroll, viewMedias, viewMediaIndex, showActionBtn, showAction])
+  }, [user, contact, conatinerScroll, viewImg, viewImgIndex, showActionBtn, showAction])
 
   return (
     <Container ref={containerRef} onScroll={() => handleScroll(handleScrollCallback)}>
@@ -251,11 +252,11 @@ export default function Messages({ contact }: { contact: Contact }) {
 
       {renderMessages()}
 
-      {viewMedias ? (
+      {viewImg ? (
         <ImagesViewer
-          medias={viewMedias}
-          initialIndex={viewMediaIndex}
-          close={() => setViewMedias(undefined)}
+          medias={viewImg}
+          initialIndex={viewImgIndex}
+          close={() => setViewImg(undefined)}
         />
       ) : null}
 

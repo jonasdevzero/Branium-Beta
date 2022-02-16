@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import moment from "moment";
-import { useAppDispatch, useAppSelector, useMsgContainer } from "~/hooks";
+import { useAppDispatch, useAppSelector, useMsgContainer, useWarn } from "~/hooks";
 import { Group, GroupMediaMessage } from "~/types/user";
 import { orderMessages } from "~/helpers/roomUtil";
 import { groupService } from "~/services/api";
 import UserActions from "~/store/actions/UserActions";
 
-import { AudioPlayer, Avatar, ImagesViewer, MediasRender } from "../../"
+import { Avatar, ImagesViewer, MediasRender } from "../../"
 import {
   Container,
   LoadingMessages,
@@ -15,14 +15,15 @@ import {
   Sender,
   Inner,
   Content,
-  Medias,
-  ImageContainer,
   Text,
   Time,
   Date,
   ScrollToBottom,
+  Actions,
+  ActionsBox,
+  Action,
 } from "~/styles/components/Room/Messages"
-import { FiChevronDown } from "react-icons/fi"
+import { FiChevronDown, FiMoreHorizontal } from "react-icons/fi"
 
 interface MessagesI {
   group: Group
@@ -40,11 +41,19 @@ export default function Messages({ group }: MessagesI) {
   const [conatinerScroll, setContainerScroll] = useState<ContainerScroll>()
   const { showScrollBtn, handleScroll, scrollToBottom } = useMsgContainer(containerRef)
 
-  const [viewMedias, setViewMedias] = useState<GroupMediaMessage[]>()
-  const [viewMediaIndex, setViewMediaIndex] = useState(0)
+  const [viewImg, setViewImg] = useState<GroupMediaMessage[]>()
+  const [viewImgIndex, setViewImgIndex] = useState(0)
+
   const [loadingMessages, setLoadingMessages] = useState(false)
 
+  const [showActionBtn, setShowActionBtn] = useState("");
+  const [showAction, setShowAction] = useState(false);
+
+  const [msgLength, setMsgLength] = useState(group.messages.length);
+
   const user = useAppSelector(state => state.user)
+
+  const warn = useWarn();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -56,6 +65,8 @@ export default function Messages({ group }: MessagesI) {
     if (!group.extra?.fetch_messages_count) {
       setLoadingMessages(true)
       groupService.messages.index(group).then(messages => {
+        setMsgLength(msgLength + messages.length)
+
         dispatch({ type: "UNSHIFT_ROOM_MESSAGES", field: "groups", where: { id: group.id }, set: { messages } })
         dispatch(UserActions.updateExtraRoomData({
           field: "groups",
@@ -79,8 +90,15 @@ export default function Messages({ group }: MessagesI) {
       );
     }
 
-    scrollToBottom(group.messages[group.messages.length - 1]?.sender_id === group.id)
-  }, [group, group.messages.length, scrollToBottom])
+    if (msgLength !== group.messages.length) { 
+      const isNewMessage = msgLength < group.messages.length;
+      const isDeleting = msgLength > group.messages.length;
+      const sentLast = group.messages[group.messages.length - 1]?.sender_id === user.id;
+      
+      scrollToBottom({ isNewMessage, sentLast, isDeleting });
+      isNewMessage ? setMsgLength(msgLength + 1) : isDeleting ? setMsgLength(msgLength - 1) : null;
+    }
+  }, [group, group.messages.length, scrollToBottom, msgLength])
 
   function handleScrollCallback() {
     if (!containerRef.current) return;
@@ -98,6 +116,8 @@ export default function Messages({ group }: MessagesI) {
       setLoadingMessages(true);
 
       groupService.messages.index(group).then(messages => {
+        setMsgLength(msgLength + messages.length);
+        
         if (!messages.length) {
           setLoadingMessages(false);
           dispatch(UserActions.updateExtraRoomData({
@@ -109,13 +129,12 @@ export default function Messages({ group }: MessagesI) {
           return;
         }
 
-        if (messages.length < limit) {
+        messages.length < limit ?
           dispatch(UserActions.updateExtraRoomData({
             field: "groups",
             where: { id: group.id },
             set: { full_loaded: true }
-          }));
-        }
+          })) : null;
 
         dispatch(UserActions.unshiftRoomMessages({
           field: "groups",
@@ -129,9 +148,25 @@ export default function Messages({ group }: MessagesI) {
     }
   }
 
-  function selectMediasToView(medias: GroupMediaMessage[], initialIndex: number) {
-    setViewMedias(medias)
-    setViewMediaIndex(initialIndex)
+  function viewImages(medias: GroupMediaMessage[], initialIndex: number) {
+    setViewImg(medias)
+    setViewImgIndex(initialIndex)
+  }
+
+  function closeActions() {
+    setShowActionBtn("")
+    setShowAction(false)
+  }
+
+  const onMouseOver = (message_id: string) => !showAction ? setTimeout(() => setShowActionBtn(message_id), 50) : null
+
+  const onMouseLeave = () => !showAction ? closeActions() : null;
+
+  function deleteMessage(message_id: string) {
+    closeActions()
+
+    groupService.messages.delete(message_id)
+      .catch(warn.error);
   }
 
   const renderMessages = useCallback(() => {
@@ -144,25 +179,31 @@ export default function Messages({ group }: MessagesI) {
     }
 
     return orderMessages(group.messages || []).map((message, i, arr) => {
-      if (message.date) return (<Date key={message.id}>{message.date}</Date>);
+      if (message.date) return (
+        <Date key={message.id}>
+          <span>{message.date}</span>
+        </Date>
+      );
 
       const sent_last = message?.sender_id === arr[i - 1]?.sender_id;
-      const sender = message.sender_id === user.id
+      const sender = message.sender_id === user.id ? "sender" : "receiver";
 
       return (
         <Message
           key={message.id}
-          className={`${sent_last ? "concat" : ""} ${sender ? "sender" : ""}`}
+          className={`${sent_last ? "concat" : ""} ${sender}`}
+          onMouseOver={() => onMouseOver(message.id)}
+          onMouseLeave={onMouseLeave}
         >
           {!sent_last ? (
-            <Sender className={sender ? "reverse" : ""}>
+            <Sender className={sender === "sender" ? "reverse" : ""}>
               <Avatar size="5rem" src={message.sender.picture} />
               <span style={{ fontSize: "1.4rem" }}>{message.sender.username}</span>
             </Sender>
           ) : null}
 
           <Content>
-            <MediasRender medias={message.medias} viewFullScreen={selectMediasToView} />
+            <MediasRender medias={message.medias} viewFullScreen={viewImages} />
 
             <Inner className={!message.text ? "no__text" : ""}>
               {message.text ? (<Text>{message.text}</Text>) : null}
@@ -171,17 +212,26 @@ export default function Messages({ group }: MessagesI) {
             <Time>{moment(message.created_at).format("HH:mm A")}</Time>
           </Content>
 
-          {viewMedias ? (
-            <ImagesViewer
-              medias={viewMedias}
-              initialIndex={viewMediaIndex}
-              close={() => setViewMedias(undefined)}
-            />
-          ) : null}
+          <Actions className={`${sender} ${showActionBtn !== message.id || message.sender_id !== user.id ? "hidden" : ""}`}>
+            <span onClick={() => setShowAction(!showAction)}>
+              <FiMoreHorizontal />
+            </span>
+
+            {showAction && (
+              <ActionsBox
+                className={sender}
+                onMouseLeave={closeActions}
+              >
+                <Action type="button" onClick={() => deleteMessage(message.id)}>
+                  Apagar mensagem
+                </Action>
+              </ActionsBox>
+            )}
+          </Actions>
         </Message>
       )
     })
-  }, [user, group, conatinerScroll, viewMedias, viewMediaIndex])
+  }, [user, group, conatinerScroll, viewImg, viewImgIndex, showActionBtn, showAction])
 
   return (
     <Container ref={containerRef} onScroll={() => handleScroll(handleScrollCallback)} className="group">
@@ -192,6 +242,14 @@ export default function Messages({ group }: MessagesI) {
       ) : null}
 
       {renderMessages()}
+
+      {viewImg ? (
+        <ImagesViewer
+          medias={viewImg}
+          initialIndex={viewImgIndex}
+          close={() => setViewImg(undefined)}
+        />
+      ) : null}
 
       {showScrollBtn ? (
         <ScrollToBottom onClick={() => scrollToBottom()}>

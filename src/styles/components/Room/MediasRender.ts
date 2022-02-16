@@ -75,15 +75,15 @@ export const Document = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      min-width: 5rem;
-      min-height: 5rem;
+      min-width: 4.5rem;
+      min-height: 4.5rem;
 
       border: solid 0.1rem #777;
       border-radius: 50%;
       transition: opacity 0.3s ease;
 
       svg {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
       }
 
       :hover {

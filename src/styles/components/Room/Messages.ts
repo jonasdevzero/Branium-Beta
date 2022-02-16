@@ -123,13 +123,25 @@ export const Username = styled.span`
   margin-left: 1.5rem;
 `;
 
-export const Date = styled.span`
-  font-size: 1.6rem;
+export const Date = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  left: 0;
+  right: 0;
 
-  margin: 1.5rem auto 0 auto;
-  padding: 1rem 2rem;
-  background-color: #222;
-  border-radius: 1rem;
+  height: 0;
+  margin: 3rem 0;
+  border-top: thin solid #272727;
+
+  span {
+    color: #777;
+    font-size: 1.2rem;
+    background-color: #151515;
+    padding: 0 .5rem;
+    z-index: 1;
+  }
 `;
 
 export const Time = styled.span`
@@ -211,8 +223,8 @@ export const ActionsBox = styled.div`
   top: 0;
 
   background-color: #090909;
-  border-radius: .5rem;
-  padding: .8rem 1rem;
+  border-radius: 0.5rem;
+  padding: 0.8rem 1rem;
   z-index: 1;
 
   &.sender {
@@ -231,10 +243,10 @@ export const Action = styled.button`
   font-size: 1.4rem;
   color: #ccc;
   padding: 1rem 0;
-  border-radius: .3rem;
+  border-radius: 0.3rem;
 
   cursor: pointer;
-  transition: background-color .2s ease;
+  transition: background-color 0.2s ease;
 
   :hover {
     background-color: #151515;
