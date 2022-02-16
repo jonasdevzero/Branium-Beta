@@ -18,7 +18,6 @@ import {
   UpdateEmailWrapper,
   EmailInput,
   EditEmail,
-  Overlay,
   UpdateEmailForm,
 } from "~/styles/pages/branium/conta";
 import {
@@ -169,7 +168,7 @@ export default function Conta() {
 
       {showUpdateEmail ? (
         <>
-          <Overlay onClick={() => setShowUpdateEmail(false)} />
+          <div className="overlay" onClick={() => setShowUpdateEmail(false)} />
 
           <UpdateEmailForm onSubmit={handleEmail}>
             <div>

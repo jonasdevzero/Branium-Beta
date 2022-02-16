@@ -176,17 +176,6 @@ export const EditEmail = styled.button`
   }
 `;
 
-export const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 1;
-`;
-
 export const UpdateEmailForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -198,10 +187,10 @@ export const UpdateEmailForm = styled.form`
   left: 50%;
   transform: translateY(-50%) translateX(-50%);
 
-  width: 34rem;
+  width: 32rem;
 
   background-color: #191818;
-  border: solid 0.2rem #222;
+  border: solid 0.1rem #222;
   padding: 4rem 0;
   z-index: 2;
 
@@ -233,7 +222,7 @@ export const UpdateEmailForm = styled.form`
     right: 1.2rem;
 
     svg {
-      font-size: 2.5rem;
+      font-size: 2.3rem;
       cursor: pointer;
     }
   }
