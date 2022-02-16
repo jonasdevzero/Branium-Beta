@@ -61,6 +61,12 @@ export default function Header({ contact, toggleInfo }: HeaderProps) {
       .catch(() => warn.error("Não foi possível deletar as menssagens!"));
   }
 
+  function toggleBlock() {
+    contactService.block(contact.id).then(() => {
+      warn.info(`${contact.username} foi ${contact.you_blocked ? "" : "des"}bloqueado!`)
+    })
+  }
+
   return (
     <Container>
       <Room onClick={toggleInfo}>
@@ -83,6 +89,9 @@ export default function Header({ contact, toggleInfo }: HeaderProps) {
           <Dropdown>
             <DropdownItem onClick={toggleInfo}>Dados do contato</DropdownItem>
             <DropdownItem onClick={clearMessages}>Limpar mensagens</DropdownItem>
+            <DropdownItem className={!contact.you_blocked ? "danger" : ""} onClick={() => toggleBlock()}>
+              {contact.you_blocked ? "Desbloquear" : "Bloquear"}
+            </DropdownItem>
           </Dropdown>
         ) : null}
       </Icon>

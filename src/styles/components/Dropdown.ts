@@ -22,4 +22,8 @@ export const DropdownItem = styled.span`
   :hover {
     background-color: #202020;
   }
+
+  &.danger {
+    color: #dc3545;
+  }
 `;

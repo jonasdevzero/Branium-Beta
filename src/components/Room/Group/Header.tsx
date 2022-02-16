@@ -61,7 +61,7 @@ export default function Header({ group }: HeaderI) {
         {showDropdown ? (
           <Dropdown>
             <DropdownItem>Dados do grupo</DropdownItem>
-            <DropdownItem>Sair do grupo</DropdownItem>
+            <DropdownItem className="danger">Sair do grupo</DropdownItem>
           </Dropdown>
         ) : null}
       </Icon>
