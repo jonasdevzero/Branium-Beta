@@ -229,10 +229,10 @@ export default function Form({ group_id }: FormI) {
       {mediasPreview.length ? renderMediasPreview() : null}
 
 
-      <Icon type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
-        <button ref={emojiButtonRef} type="button">
+      <Icon ref={emojiButtonRef} type="button">
+        <span onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
           <FiSmile />
-        </button>
+        </span>
 
         {showEmojiPicker ? (
           <EmojiPickerContainer>

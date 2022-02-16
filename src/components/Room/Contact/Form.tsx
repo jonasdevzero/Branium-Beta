@@ -222,9 +222,9 @@ export default function Form({ contact_id }: { contact_id: string }) {
 
 
       <Icon ref={emojiButtonRef} type="button">
-        <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+        <span onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
           <FiSmile />
-        </button>
+        </span>
 
         {showEmojiPicker ? (
           <EmojiPickerContainer onClick={() => setShowEmojiPicker(true)}>

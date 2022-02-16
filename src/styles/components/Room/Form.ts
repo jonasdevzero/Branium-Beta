@@ -86,7 +86,7 @@ export const Icon = styled.button`
   border: none;
   outline: none;
 
-  button {
+  span {
     border: none;
     outline: none;
     background-color: transparent;

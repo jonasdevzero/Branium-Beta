@@ -95,7 +95,7 @@ const contactService = {
       return new Promise(async (resolve, reject) => {
         try {
           target = target || 'me';
-          await api.delete(`/contact/message/${message_id}?target=${target}`);
+          await api.delete(`/contact/messages/${message_id}?target=${target}`);
 
           resolve();
         } catch (error: any) {
