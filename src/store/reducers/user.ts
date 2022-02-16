@@ -8,9 +8,7 @@ import {
 import { Actions } from '../../types/store';
 import { constant } from '~/constant';
 
-const {
-  reducer: { user: userReducers },
-} = constant;
+const userReducers = constant.reducer.user;
 
 const INITIAL_STATE = {
   id: '',
@@ -229,6 +227,49 @@ const reducers = {
 
     state.contacts.map((c) => {
       contacts.includes(c.id) ? (c.online = true) : null;
+      return c;
+    });
+
+    return state;
+  },
+
+  [userReducers.REMOVE_ROOM_MESSAGE](
+    state,
+    action: { field: UserRooms; where: Actions.Where }
+  ) {
+    const { field, where } = action;
+
+    let rooms = state[field];
+    if (!rooms) return state;
+
+    const { id: room_id, message_id } = where;
+
+    rooms = rooms.map((room: any) => {
+      room.id === room_id
+        ? (room.messages = room.messages.filter(
+            (m: any) => m.id !== message_id
+          ))
+        : null;
+
+      return room;
+    });
+
+    return { ...state, [field]: rooms };
+  },
+
+  [userReducers.REMOVE_BIDIRECTIONAL_MESSAGE](
+    state,
+    action: { where: Actions.Where }
+  ) {
+    const { id, bidirectional_id } = action.where;
+
+    state.contacts = state.contacts.map((c) => {
+      if (c.id === id) {
+        c.messages = c.messages.filter(
+          (m) => m.bidirectional_id !== bidirectional_id
+        );
+      }
+
       return c;
     });
 

@@ -14,6 +14,7 @@ export declare module Reducers {}
 export namespace Actions {
   export type Where = {
     id: string | string[];
+    [key: string]: any;
   };
 
   /* ------------ UserActions ----------------  */
@@ -37,7 +38,7 @@ export namespace Actions {
     you_blocked?: boolean;
     online?: boolean;
     role?: number;
-    
+
     users?: GroupUser[];
   }
   export type UpdateRoomSetKeys = Array<keyof UpdateRoomSet>;
@@ -120,15 +121,37 @@ export namespace Actions {
       field: UserRooms;
       where: Where;
       set: {
-        messages: ContactMessage[] | GroupMessage[]
+        messages: ContactMessage[] | GroupMessage[];
       };
     }): {
       type: string;
       field: UserRooms;
       where: Where;
       set: {
-        messages: ContactMessage[] | GroupMessage[]
+        messages: ContactMessage[] | GroupMessage[];
       };
     };
-  }
+
+    removeRoomMessage({
+      field,
+      where,
+    }: {
+      field: UserRooms;
+      where: Actions.Where;
+    }): {
+      type: string;
+      field: UserRooms;
+      where: Actions.Where;
+    };
+    
+    removeBidirectionalMessage({
+      where,
+    }: {
+      where: Actions.Where;
+    }): {
+      type: string;
+      where: Actions.Where;
+    }
+  };
+
 }

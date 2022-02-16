@@ -63,5 +63,20 @@ export default {
       where,
       set,
     }
+  },
+
+  removeRoomMessage({ field, where }) {
+    return {
+      type: userReducers.REMOVE_ROOM_MESSAGE,
+      field,
+      where
+    }
+  },
+
+  removeBidirectionalMessage({ where }) {
+    return {
+      type: userReducers.REMOVE_BIDIRECTIONAL_MESSAGE,
+      where,
+    }
   }
 } as Actions.UserActions;
