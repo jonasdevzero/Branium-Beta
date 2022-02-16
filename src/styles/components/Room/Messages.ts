@@ -41,11 +41,11 @@ export const Message = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  position: relative;
 
-  
-  padding: .25rem 3rem;
+  padding: 0.25rem 3rem;
   margin-top: 1.5rem;
-  
+
   :hover {
     background-color: #131313;
   }
@@ -96,50 +96,6 @@ export const Inner = styled.div`
 
   &.no__text {
     margin-bottom: 0.5rem;
-  }
-`;
-
-export const Medias = styled.div`
-  display: flex;
-  margin-bottom: 0.7rem;
-
-  &.audio {
-    margin-bottom: 0;
-  }
-
-  video {
-    max-width: 50rem;
-  }
-`;
-
-export const ImageContainer = styled.button`
-  position: relative;
-  background-color: transparent;
-  border: none;
-  outline: none;
-
-  max-width: 25vw;
-  max-height: 20rem;
-  width: 100%;
-  height: 100%;
-
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-  overflow: hidden;
-
-  span {
-    position: unset !important;
-  }
-
-  img {
-    width: 100% !important;
-    position: relative !important;
-    height: unset !important;
-    object-fit: contain;
-  }
-
-  :hover {
-    opacity: 0.8;
   }
 `;
 
@@ -197,12 +153,90 @@ export const ScrollToBottom = styled.button`
 
   background-color: #090909;
   color: #fff;
-  border: solid .2rem #000;
+  border: solid 0.2rem #000;
   outline: none;
   border-radius: 50%;
   cursor: pointer;
 
   svg {
     font-size: 2.5rem;
+  }
+`;
+
+export const Actions = styled.div`
+  position: absolute;
+  cursor: pointer;
+
+  &.sender {
+    left: 1rem;
+    top: -1.5rem;
+  }
+  &.receiver {
+    right: 1rem;
+    top: -1.5rem;
+  }
+  &.hidden {
+    display: none;
+  }
+
+  & > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 3rem;
+    background-color: #181818;
+
+    border: solid 0.1rem #121212;
+    border-radius: 0.5rem;
+
+    transition: opacity 0.3s ease, box-shadow 0.1s ease-in;
+
+    :hover {
+      opacity: 0.6;
+      box-shadow: 0px 0.2rem rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  svg {
+    font-size: 1.8rem;
+  }
+`;
+
+export const ActionsBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 20rem;
+  position: absolute;
+  top: 0;
+
+  background-color: #090909;
+  border-radius: .5rem;
+  padding: .8rem 1rem;
+  z-index: 1;
+
+  &.sender {
+    right: -21rem;
+  }
+  &.receiver {
+    left: -21rem;
+  }
+`;
+
+export const Action = styled.button`
+  background-color: transparent;
+  border: none;
+  outline: none;
+
+  font-size: 1.4rem;
+  color: #ccc;
+  padding: 1rem 0;
+  border-radius: .3rem;
+
+  cursor: pointer;
+  transition: background-color .2s ease;
+
+  :hover {
+    background-color: #151515;
   }
 `;

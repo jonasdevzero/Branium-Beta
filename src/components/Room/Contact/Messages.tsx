@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 import Image from "next/image"
 import moment from "moment"
-import { useAppDispatch, useAppSelector, useMsgContainer } from "~/hooks"
+import { useAppDispatch, useAppSelector, useMsgContainer, useWarn } from "~/hooks"
 import UserActions from "~/store/actions/UserActions"
 import { orderMessages } from "~/helpers/roomUtil"
 import { Contact, ContactMediaMessage } from "~/types/user"
@@ -18,8 +18,14 @@ import {
   Time,
   Date,
   ScrollToBottom,
+  Actions,
+  ActionsBox,
+  Action,
 } from "~/styles/components/Room/Messages"
-import { FiChevronDown } from "react-icons/fi"
+import {
+  FiChevronDown,
+  FiMoreHorizontal,
+} from "react-icons/fi"
 
 type ContainerScroll = {
   lastHeight: number
@@ -37,12 +43,16 @@ export default function Messages({ contact }: { contact: Contact }) {
   const [viewMediaIndex, setViewMediaIndex] = useState(0)
   const [loadingMessages, setLoadingMessages] = useState(false)
 
+  const [showActionBtn, setShowActionBtn] = useState("");
+  const [showAction, setShowAction] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const user = useAppSelector(state => state.user)
 
+  const warn = useWarn()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    // use the saved position
     scrollToBottom()
     setTimeout(() => scrollToBottom(), 200)
   }, [contact.id, scrollToBottom])
@@ -70,10 +80,16 @@ export default function Messages({ contact }: { contact: Contact }) {
   useEffect(() => {
     if (contact.messages.length && contact.unread_messages > 0) {
       contactService.messages.view(contact.id)
-        .then(() => dispatch(UserActions.updateRoom({ field: "contacts", where: { id: contact.id }, set: { unread_messages: 0 } })))
+        .then(() => dispatch(UserActions.updateRoom({
+          field: "contacts",
+          where: { id: contact.id },
+          set: { unread_messages: 0 }
+        })))
     }
 
-    scrollToBottom(contact.messages[contact.messages.length - 1]?.sender_id === contact.id)
+    const sent_last = contact.messages[contact.messages.length - 1]?.sender_id === contact.id
+    scrollToBottom(sent_last || isDeleting)
+    isDeleting ? setIsDeleting(false) : null;
   }, [contact, contact.messages.length, dispatch, scrollToBottom])
 
   function handleScrollCallback() {
@@ -128,6 +144,35 @@ export default function Messages({ contact }: { contact: Contact }) {
     setViewMediaIndex(initialIndex)
   }
 
+  function onMouseOver(message_id: string) {
+    !showAction ? setTimeout(() => setShowActionBtn(message_id), 50) : null
+  }
+
+  function onMouseLeave() {
+    if (!showAction) {
+      setShowActionBtn("")
+      setShowAction(false)
+    }
+  }
+
+  function deleteMessage(message_id: string, target: "me" | "bidirectional") {
+    setShowActionBtn("")
+    setShowAction(false)
+    setIsDeleting(true)
+
+    contactService.messages.deleteOne(message_id, target)
+      .then(() => {
+        const action = target === "me" ? "removeRoomMessage" : "removeBidirectionalMessage"
+        const messageDirection = target === "me" ? "message_id" : "bidirectional_id"
+
+        dispatch(UserActions[action]({
+          field: "contacts",
+          where: { id: contact.id, [messageDirection]: message_id }
+        }))
+      })
+      .catch(error => warn.error(error))
+  }
+
   const renderMessages = useCallback(() => {
     if (conatinerScroll && containerRef.current) {
       const { scrollHeight, scrollTop } = containerRef.current
@@ -147,6 +192,8 @@ export default function Messages({ contact }: { contact: Contact }) {
         <Message
           key={message.id}
           className={`${sent_last ? "concat" : ""} ${sender ? "sender" : ""}`}
+          onMouseOver={() => onMouseOver(message.id)}
+          onMouseLeave={() => onMouseLeave()}
         >
           <Content>
             <MediasRender medias={message.medias} viewFullScreen={selectMediasToView} />
@@ -158,17 +205,41 @@ export default function Messages({ contact }: { contact: Contact }) {
             <Time>{moment(message.created_at).format("HH:mm A")}</Time>
           </Content>
 
-          {viewMedias ? (
-            <ImagesViewer
-              medias={viewMedias}
-              initialIndex={viewMediaIndex}
-              close={() => setViewMedias(undefined)}
-            />
-          ) : null}
+          <Actions className={`${sender ? "sender" : "receiver"} ${showActionBtn !== message.id ? "hidden" : ""}`}>
+            <span onClick={() => setShowAction(!showAction)}>
+              <FiMoreHorizontal />
+            </span>
+
+            {showAction ? (
+              <ActionsBox
+                className={sender ? "sender" : "receiver"}
+                onMouseLeave={() => {
+                  setShowActionBtn("")
+                  setShowAction(false)
+                }}
+              >
+                <Action
+                  type="button"
+                  onClick={() => deleteMessage(message.id, "me")}
+                >
+                  Apagar para mim
+                </Action>
+
+                {sender ? (
+                  <Action
+                    type="button"
+                    onClick={() => deleteMessage(message.bidirectional_id, "bidirectional")}
+                  >
+                    Apagar para todos
+                  </Action>
+                ) : null}
+              </ActionsBox>
+            ) : null}
+          </Actions>
         </Message>
       )
     })
-  }, [user, contact, conatinerScroll, viewMedias, viewMediaIndex])
+  }, [user, contact, conatinerScroll, viewMedias, viewMediaIndex, showActionBtn, showAction])
 
   return (
     <Container ref={containerRef} onScroll={() => handleScroll(handleScrollCallback)}>
@@ -179,6 +250,14 @@ export default function Messages({ contact }: { contact: Contact }) {
       ) : null}
 
       {renderMessages()}
+
+      {viewMedias ? (
+        <ImagesViewer
+          medias={viewMedias}
+          initialIndex={viewMediaIndex}
+          close={() => setViewMedias(undefined)}
+        />
+      ) : null}
 
       {showScrollBtn ? (
         <ScrollToBottom onClick={() => scrollToBottom()}>
