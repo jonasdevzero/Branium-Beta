@@ -17,6 +17,8 @@ export const Container = styled.div`
   background-color: #131313;
   font-family: 'Noto Sans', sans-serif;
   z-index: 2;
+
+  animation: fade-in .25s;
 `;
 
 export const Close = styled.button`

@@ -10,11 +10,9 @@ import {
   Container,
   Room,
   Icon,
-} from "~/styles/components/Room/Header"
-import {
   Dropdown,
   DropdownItem,
-} from "~/styles/components/Dropdown"
+} from "~/styles/components/Room/Header"
 import {
   FiPhone,
   FiVideo,

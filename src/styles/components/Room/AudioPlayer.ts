@@ -5,7 +5,7 @@ export const Container = styled.div`
   align-items: center;
   width: 30rem;
 
-  padding: 1rem;
+  padding: .5rem 1rem;
   border-radius: 0.3rem;
   font-size: 100%;
 `;
@@ -17,7 +17,7 @@ export const PlayPauseButton = styled.button`
   min-width: 4rem;
   height: 4rem;
 
-  background-color: #151515 !important;
+  background-color: #191919 !important;
   border: none;
   outline: none;
   border-radius: 50%;
@@ -30,7 +30,7 @@ export const PlayPauseButton = styled.button`
   }
 
   :hover {
-    background-color: #070707 !important;
+    background-color: #131313 !important;
   }
 `;
 

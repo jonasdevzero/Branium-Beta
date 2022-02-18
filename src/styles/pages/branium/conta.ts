@@ -194,6 +194,8 @@ export const UpdateEmailForm = styled.form`
   padding: 4rem 0;
   z-index: 2;
 
+  animation: fade-in .25s;
+
   h3 {
     font-size: 3rem;
     margin-bottom: 4rem;

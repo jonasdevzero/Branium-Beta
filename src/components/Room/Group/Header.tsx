@@ -10,11 +10,9 @@ import {
   Container,
   Room,
   Icon,
-} from "~/styles/components/Room/Header"
-import {
   Dropdown,
   DropdownItem,
-} from "~/styles/components/Dropdown"
+} from "~/styles/components/Room/Header"
 import {
   FiMoreVertical,
   FiPhone,
@@ -24,9 +22,10 @@ import {
 
 interface HeaderI {
   group: Group
+  toggleInfo(): void
 }
 
-export default function Header({ group }: HeaderI) {
+export default function Header({ group, toggleInfo }: HeaderI) {
   const { callTo } = useContext(CallContext);
 
   const dropdownRef = useRef(null)
@@ -38,7 +37,7 @@ export default function Header({ group }: HeaderI) {
 
   return (
     <Container>
-      <Room onClick={() => { }}>
+      <Room onClick={toggleInfo}>
         <Avatar src={group.picture} />
         <h2>{group.name}</h2>
       </Room>
@@ -60,7 +59,7 @@ export default function Header({ group }: HeaderI) {
 
         {showDropdown ? (
           <Dropdown>
-            <DropdownItem>Dados do grupo</DropdownItem>
+            <DropdownItem onClick={toggleInfo}>Dados do grupo</DropdownItem>
             <DropdownItem className="danger">Sair do grupo</DropdownItem>
           </Dropdown>
         ) : null}

@@ -37,7 +37,7 @@ export const Input = styled.input`
 
   font-size: 1.6rem;
   color: #fff;
-  background-color: #202020;
+  background-color: #181818;
   margin: 0 1rem;
   padding: 0 5rem 0 1.5rem;
   border-radius: 10rem;
@@ -85,15 +85,14 @@ export const Icon = styled.button`
   background-color: transparent;
   border: none;
   outline: none;
-
-  span {
-    border: none;
-    outline: none;
-    background-color: transparent;
-  }
+  transition: opacity .2s ease;
 
   & + & {
     margin-left: 1.5rem;
+  }
+
+  :hover {
+    opacity: .8;
   }
 `;
 

@@ -1,11 +1,11 @@
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { authPage, useAuth, useAppSelector, useAppDispatch } from "~/hooks"
 import { constant } from "~/constant"
 
 import { Sidebar } from "~/components"
-import { Header, Messages, Form, Members } from "~/components/Room/Group"
+import { Header, Messages, Form, Members, Info } from "~/components/Room/Group"
 import { Container, Inner } from "~/styles/pages/branium"
 
 export default function Contact() {
@@ -14,6 +14,7 @@ export default function Contact() {
   const group = useMemo(() => groups.find(c => c.id === router.query.id), [router, groups])
 
   const showMembers = useAppSelector(state => state.settings.room.showMembers);
+  const [showInfo, setShowInfo] = useState(false)
 
   const { isAuthenticated } = useAuth()
 
@@ -32,12 +33,13 @@ export default function Contact() {
       {group ? (
         <>
           <Inner>
-            <Header group={group} />
+            <Header group={group} toggleInfo={() => setShowInfo(!showInfo)} />
             <Messages group={group} />
             <Form group_id={group.id} />
           </Inner>
 
           {showMembers ? (<Members group={group} />) : null}
+          {showInfo ? (<Info close={() => setShowInfo(false)} />) : null}
         </>
       ) : null}
     </Container>

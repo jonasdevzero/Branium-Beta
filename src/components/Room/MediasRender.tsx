@@ -80,6 +80,6 @@ export default function MediasRender({ medias, viewFullScreen }: MediasRenderI) 
   }
 
   return (
-    medias?.length ? <Container>{renderMedias(medias)}</Container> : null
+    medias?.length ? <Container className={medias[0].type}>{renderMedias(medias)}</Container> : null
   )
 }

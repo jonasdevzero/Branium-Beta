@@ -18,11 +18,10 @@ export const Container = styled.div`
     width: 0.7rem;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: #303030;
+    background-color: #272727;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background-color: #252525;
-    cursor: pointer;
+    background-color: #303030;
   }
 `;
 

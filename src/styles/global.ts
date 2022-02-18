@@ -44,5 +44,26 @@ export default createGlobalStyle`
 
       background-color: rgba(0, 0, 0, 0.7);
       z-index: 1;
+
+      @keyframes overlay-fade-in {
+        from {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+        to {
+          background-color: rgba(0, 0, 0, 0.7);
+        }
+      }
+
+      animation-name: overlay-fade-in;
+      animation-duration: .25s;      
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: .1;
+      }
+      to {
+        opacity: 1;
+      }
     }
 `;

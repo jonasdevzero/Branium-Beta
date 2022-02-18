@@ -68,8 +68,9 @@ export const Option = styled.button`
   outline: none;
   border-radius: 50%;
 
-  background-color: #202020;
+  background-color: #181818;
   cursor: pointer;
+  transition: background-color .2s ease-in-out;
 
   svg {
     color: #eee;
@@ -78,6 +79,10 @@ export const Option = styled.button`
 
   & + & {
     margin-top: 2rem;
+  }
+
+  :hover {
+    background-color: #222;
   }
 `;
 
@@ -203,11 +208,11 @@ export const RoomsContainer = styled.div`
     width: 0.5rem;
   }
   ::-webkit-scrollbar-thumb {
-    background-color: #303030;
+    background-color: #202020;
+    border-left: none;
   }
   ::-webkit-scrollbar-thumb:hover {
     background-color: #252525;
-    cursor: pointer;
   }
 `;
 

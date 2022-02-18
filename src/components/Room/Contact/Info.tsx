@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { contactService } from "~/services/api"
-import { useWarn } from "~/hooks"
+import { useOutsideClick, useWarn } from "~/hooks"
 import { Contact } from "~/types/user"
 
 import { Avatar } from "~/components"
@@ -8,17 +8,11 @@ import { Avatar } from "~/components"
 import {
   Container,
   Close,
-  User,
   Username,
   DropdownList,
   DropdownButton,
   Dropdown,
   DropdownItem,
-  Inner,
-  Header,
-  Option,
-  OptionSelected,
-  Content,
 } from "~/styles/components/Room/Info"
 import {
   FiX,
@@ -31,8 +25,8 @@ type InfoProps = {
 }
 
 export default function Info({ contact, close }: InfoProps) {
+  const actionsRef = useRef(null)
   const [showDropdown, setShowDropdown] = useState(false)
-  const [option, setOption] = useState<"friends" | "groups">("friends")
 
   const warn = useWarn()
 
@@ -41,13 +35,14 @@ export default function Info({ contact, close }: InfoProps) {
     warn.info(`${contact.username} foi ${contact.you_blocked ? "" : "des"}bloqueado!`)
   }
 
+  useOutsideClick(actionsRef, () => setShowDropdown(false))
+
   return (
     <>
-      <div className="overlay" onClick={() => close()} />
+      <div className="overlay" onClick={close} />
 
       <Container>
-        <User>
-          <Close onClick={() => close()}>
+          <Close onClick={close}>
             <FiX />
           </Close>
 
@@ -60,36 +55,13 @@ export default function Info({ contact, close }: InfoProps) {
             </DropdownButton>
 
             {showDropdown ? (
-              <DropdownList>
-                <DropdownItem onClick={() => close()}>
-                  Mensagem
-                </DropdownItem>
-
-                <DropdownItem className={!contact.you_blocked ? "danger" : ""} onClick={() => block()}>
+              <DropdownList ref={actionsRef}>
+                <DropdownItem className={!contact.you_blocked ? "danger" : ""} onClick={block}>
                   {contact.you_blocked ? "Desbloquear" : "Bloquear"}
                 </DropdownItem>
               </DropdownList>
             ) : null}
           </Dropdown>
-        </User>
-
-        <Inner>
-          <Header>
-            <Option onClick={() => setOption("friends")}>
-              Amigos em comum
-              <OptionSelected selected={option === "friends"} />
-            </Option>
-
-            <Option onClick={() => setOption("groups")}>
-              Grupos em comum
-              <OptionSelected selected={option === "groups"} />
-            </Option>
-          </Header>
-
-          <Content>
-            <h2>Em Desenvolvimento :)</h2>
-          </Content>
-        </Inner>
       </Container>
     </>
   )
