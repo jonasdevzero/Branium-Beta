@@ -8,7 +8,7 @@ import userService from "../services/api/userService"
 import { constant } from "../constant"
 
 
-import { Header, Footer, Loading } from "../components"
+import { Header, Footer, Loading, BraniumAnimation } from "../components"
 import {
   Container,
   Content,
@@ -100,6 +100,8 @@ export default function Entrar() {
 
           <Footer />
         </>)}
+
+        <BraniumAnimation />
     </Container>
   )
 }

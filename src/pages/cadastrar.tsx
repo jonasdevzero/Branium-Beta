@@ -7,7 +7,7 @@ import { AxiosError } from "axios"
 import { useWarn } from "../hooks"
 import { constant } from "../constant"
 
-import { Header, Footer } from "../components"
+import { Header, Footer, BraniumAnimation } from "../components"
 import {
   Container,
   Content,
@@ -92,6 +92,8 @@ export default function Cadastrar() {
       </Content>
 
       <Footer />
+
+      <BraniumAnimation />
     </Container>
   )
 }
