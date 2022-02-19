@@ -1,15 +1,15 @@
-import { useEffect } from "react"
 import Head from "next/head"
 import Link from "next/link"
 import Image from "next/image"
 import { constant } from "../constant"
-import { inViewAddClass } from "~/helpers/dom"
 
 import { Header, Footer } from "../components"
 import {
   Container,
+  Landing,
+  LandingText,
+  SlideDown,
   Section,
-  Presentation,
   CallToAction,
   SectionInner,
   Info,
@@ -26,18 +26,21 @@ import {
   FiPhone,
   FiFile,
   FiMic,
-  FiActivity
+  FiActivity,
+  FiChevronDown,
 } from "react-icons/fi"
 
 export default function Home() {
-  useEffect(() => {
-    const elements = document.getElementsByClassName('scroll__animation')
-    const iterableElements: Element[] = []
 
-    for (let i = 0; i < elements.length; i++) iterableElements.push(elements[i]);
+  function slideDown() {
+    const landing = document.getElementById("landing")
+    if (!landing) return;
 
-    window.addEventListener('scroll', () => inViewAddClass(iterableElements, 'in-view'))
-  }, [])
+    window.scroll({
+      top: landing.offsetHeight,
+      behavior: "smooth"
+    })
+  }
 
   return (
     <Container>
@@ -47,15 +50,25 @@ export default function Home() {
 
       <Header links={true} />
 
-      <Section>
-        <Presentation>
-          <h1>Um Chat Brasileiro para Brasileiros</h1>
+      <Landing id="landing">
+        <div className="text">
+          <LandingText>
+            Um Chat Brasileiro para
+          </LandingText>
 
-          <Link href={constant.routes.SIGN_UP} passHref>
-            <CallToAction>Começe agora!</CallToAction>
-          </Link>
-        </Presentation>
-      </Section>
+          <LandingText>
+            Brasileiros
+          </LandingText>
+        </div>
+
+        <Link href={constant.routes.SIGN_UP} passHref>
+          <CallToAction>Começe agora!</CallToAction>
+        </Link>
+
+        <SlideDown type="button" onClick={slideDown}>
+          <FiChevronDown />
+        </SlideDown>
+      </Landing>
 
       <Section className="info">
         <SectionInner>
@@ -64,7 +77,7 @@ export default function Home() {
             <p>Converse com seus amigos num espaço confortável e brasileiro.</p>
           </Info>
 
-          <SectionImage className="scroll__animation">
+          <SectionImage>
             <Image src="/images/chat-baloons.svg" alt="" layout="fill" className="image" />
           </SectionImage>
         </SectionInner>
@@ -72,7 +85,7 @@ export default function Home() {
 
       <Section className="info">
         <SectionInner>
-          <Features className="scroll__animation">
+          <Features>
             <div className='row'>
               <Feature>
                 <FeatureIcon> <FiUser /> </FeatureIcon>

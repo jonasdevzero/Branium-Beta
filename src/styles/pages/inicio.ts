@@ -1,5 +1,26 @@
 import styled from 'styled-components';
 
+export const Landing = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+
+  div.text {
+    margin-top: 10rem;
+  }
+`;
+
+export const LandingText = styled.h1`
+  font-size: 8rem;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  max-width: 90rem;
+  text-align: center;
+`;
+
 export const Section = styled.section`
   display: flex;
   flex-direction: column;
@@ -7,30 +28,12 @@ export const Section = styled.section`
   justify-content: center;
 
   width: 100%;
-  height: 100vh;
-
-  &:nth-child(odd) {
-    background-color: #131313;
-  }
+  height: 45rem;
+  border-top: thin solid #131313;
 
   &.info {
     height: 45rem;
     padding: 2rem 0;
-  }
-`;
-
-export const Presentation = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 5rem;
-
-  h1 {
-    font-size: 6.4rem;
-    font-family: 'Arial', sans-serif;
-    font-weight: 400;
-    max-width: 90rem;
-    text-align: center;
   }
 `;
 
@@ -41,17 +44,46 @@ export const CallToAction = styled.a`
   width: 28rem;
   height: 7rem;
 
-  background-color: #121212;
+  background-color: #111;
   margin-top: 3rem;
-  border: solid .1rem #141414;
+  border: thin solid #198754;
   border-radius: 1.5rem;
   font-size: 2.4rem;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease;
 
   &:hover {
-    opacity: .7;
+    opacity: 0.8;
   }
 `;
+
+export const SlideDown = styled.button`
+  position: relative;
+  color: #fff;
+  background-color: transparent;
+  margin-top: 3rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  svg {
+    font-size: 4rem;
+  }
+
+  @keyframes up-down {
+    0% {
+      top: 0;
+    }
+    50% {
+      top: 1rem;
+    }
+    100% {
+      top: 0;
+    }
+  }
+
+  animation: up-down 3s infinite;
+`;
+
 export const SectionInner = styled.div`
   max-width: 80%;
   height: fit-content;
@@ -101,7 +133,7 @@ export const SectionImage = styled.div`
   &.scroll__animation {
     position: relative;
     left: 12rem;
-    opacity: .3;
+    opacity: 0.3;
 
     transition: left 1s ease-in-out, opacity 1s ease;
 
@@ -128,7 +160,7 @@ export const Features = styled.div`
   &.scroll__animation {
     position: relative;
     right: 5rem;
-    opacity: .3;
+    opacity: 0.3;
 
     transition: right 1s ease-in-out, opacity 1s ease;
 
@@ -200,6 +232,9 @@ export const Container = styled.div`
   flex-direction: column;
   width: 100%;
 
+  animation: fade-in 1s;
+  scroll-behavior: smooth;
+
   @media (max-width: 1100px) {
     ${Info} {
       h2 {
@@ -237,7 +272,7 @@ export const Container = styled.div`
   }
 
   @media (max-width: 900px) {
-    ${Presentation} > h1 {
+    ${Landing} > h1 {
       font-size: 5rem;
       max-width: 70rem;
     }
@@ -289,7 +324,7 @@ export const Container = styled.div`
   }
 
   @media (max-width: 600px) {
-    ${Presentation} {
+    ${Landing} {
       h1 {
         font-size: 4rem;
       }

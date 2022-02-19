@@ -28,11 +28,10 @@ export default createGlobalStyle`
         width: .8rem;
     };
     ::-webkit-scrollbar-thumb {
-        background-color: #777;
-        border-left: solid .1rem #303030;
+        background-color: #222;
     };
     ::-webkit-scrollbar-thumb:hover {
-        background-color: #555;
+        background-color: #272727;
     };
 
     .overlay {
