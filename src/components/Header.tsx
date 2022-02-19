@@ -9,7 +9,7 @@ export default function Header({ links }: { links: boolean }) {
   return (
     <Container>
       <Link href="/" passHref>
-        <Logo>Branium</Logo>
+        <Logo aria-label="Página principal">Branium</Logo>
       </Link>
 
       {links ? (
@@ -19,7 +19,7 @@ export default function Header({ links }: { links: boolean }) {
           </Link>
 
           <Link href="/cadastrar" passHref>
-            <StyledLink>Cadastrar</StyledLink>
+            <StyledLink className="signup">Cadastrar</StyledLink>
           </Link>
         </nav>
       ) : null}

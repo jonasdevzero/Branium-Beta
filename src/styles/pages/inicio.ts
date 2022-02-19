@@ -44,7 +44,7 @@ export const CallToAction = styled.a`
   width: 28rem;
   height: 7rem;
 
-  background-color: #111;
+  background-color: #131313;
   margin-top: 3rem;
   border: thin solid #198754;
   border-radius: 1.5rem;
@@ -223,7 +223,7 @@ export const CallToActionCard = styled.div`
     text-align: center;
   }
   a {
-    background-color: #0a0a0a;
+    background-color: #131313;
   }
 `;
 

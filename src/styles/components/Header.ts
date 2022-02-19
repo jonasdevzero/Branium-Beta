@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Logo = styled.a`
   font-size: 4.8rem;
   font-family: 'Roboto', sans-serif;
-  font-weight: 700;
+  font-weight: 500;
   margin-left: 2rem;
   cursor: pointer;
 `;
@@ -15,11 +15,14 @@ export const StyledLink = styled.a`
   line-height: 2rem;
   text-decoration: none;
 
-  padding: 0.9rem 2rem;
-  border-radius: 0.3rem;
+  padding: 1rem 2.5rem;
   cursor: pointer;
   transition: opacity 0.2s ease;
 
+  &.signup {
+    border: solid .1rem #198754;
+    border-radius: 1.2rem;
+  }
   & + & {
     margin-left: 1.5rem;
   }
