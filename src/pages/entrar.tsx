@@ -8,7 +8,7 @@ import userService from "../services/api/userService"
 import { constant } from "../constant"
 
 
-import { Header, Footer, Loading, BraniumAnimation } from "../components"
+import { Header, Footer, Loading, CpuAnimation } from "../components"
 import {
   Container,
   Content,
@@ -30,6 +30,7 @@ export default function Entrar() {
   const [loadingRequest, setLoadingRequest] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string>()
+  const [color, setColor] = useState<"green" | "red">("green")
 
   useEffect(() => {
     const { ["branium.jwt"]: jwt } = parseCookies(null)
@@ -47,12 +48,17 @@ export default function Entrar() {
 
     setError(undefined)
     setLoadingRequest(true)
+    setColor("green")
     userService.login({ login, password })
       .then(() => {
         setSuccess(true)
         Router.push(constant.routes.chat.HOME)
       })
-      .catch(message => setError(message))
+      .catch(message => {
+        setError(message)
+        setColor("red")
+        setTimeout(() => setColor("green"), 600)
+      })
       .then(() => setLoadingRequest(false))
   }
 
@@ -101,7 +107,7 @@ export default function Entrar() {
           <Footer />
         </>)}
 
-        <BraniumAnimation />
+        <CpuAnimation color={color} />
     </Container>
   )
 }

@@ -7,7 +7,7 @@ import { AxiosError } from "axios"
 import { useWarn } from "../hooks"
 import { constant } from "../constant"
 
-import { Header, Footer, BraniumAnimation } from "../components"
+import { Header, Footer, CpuAnimation } from "../components"
 import {
   Container,
   Content,
@@ -29,6 +29,8 @@ export default function Cadastrar() {
   const [loadingRequest, setLoadingRequest] = useState(false)
   const [error, setError] = useState(undefined)
   const [newRegistration, setNewRegistration] = useState(false)
+  const [cpuColor, setCpuColor] = useState<"green" | "red">("green")
+
   const warn = useWarn()
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -36,9 +38,14 @@ export default function Cadastrar() {
 
     setError(undefined)
     setLoadingRequest(true)
+    setCpuColor("green")
     userService.preRegistration({ name, email })
       .then(handleSuccess)
-      .catch((error: AxiosError) => setError(error.response?.data.message))
+      .catch((error: AxiosError) => {
+        setError(error.response?.data.message)
+        setCpuColor("red")
+        setTimeout(() => setCpuColor("green"), 600)
+      })
       .then(() => setLoadingRequest(false))
   }
 
@@ -93,7 +100,7 @@ export default function Cadastrar() {
 
       <Footer />
 
-      <BraniumAnimation />
+      <CpuAnimation color={cpuColor} />
     </Container>
   )
 }

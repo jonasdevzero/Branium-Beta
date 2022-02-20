@@ -18,19 +18,28 @@ export const Content = styled.div<ContentI>`
   height: 100vh;
 
   padding: 0 10rem;
+
+  @media (max-width: 500px) {
+    justify-content: center;
+  }
 `;
 
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 32rem;
+  min-width: 32rem;
   min-height: 43rem;
   position: relative;
 
-  background-color: #252525;
+  background-color: #202020;
   padding: 3.5rem 2.5rem;
   border-radius: 0.4rem;
+
+  @media (max-width: 500px) {
+    justify-content: center;
+    min-width: 38rem;
+  }
 `;
 
 export const FitForm = styled(Form)`
@@ -85,7 +94,7 @@ export const Input = styled.input`
 
   border: none;
   outline: none;
-  background-color: #404040;
+  background-color: #282828;
   padding: 0 0.5rem;
   color: #fff;
   border-radius: 0.4rem;
@@ -98,7 +107,7 @@ export const Submit = styled.button`
   align-items: center;
   justify-content: center;
 
-  background-color: #2e2e2e;
+  background-color: #252525;
   margin-top: 0.7rem;
   margin-bottom: 3rem;
   border: none;
@@ -119,7 +128,7 @@ export const Submit = styled.button`
   }
 
   &:hover {
-    background-color: #2c2c2c;
+    background-color: #232323;
   }
 `;
 
