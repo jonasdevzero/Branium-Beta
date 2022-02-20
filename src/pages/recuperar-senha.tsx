@@ -6,7 +6,7 @@ import userService from "../services/api/userService"
 import { useWarn } from "../hooks"
 import { constant } from "../constant"
 
-import { Header, Footer } from "../components"
+import { Header, Footer, BinaryAnimation } from "../components"
 import {
   Container,
   Content,
@@ -73,6 +73,8 @@ export default function FinalizarCadastro() {
       </Content>
 
       <Footer />
+
+      <BinaryAnimation />
     </Container>
   )
 }

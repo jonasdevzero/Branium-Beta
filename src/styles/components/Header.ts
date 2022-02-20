@@ -20,7 +20,7 @@ export const StyledLink = styled.a`
   transition: opacity 0.2s ease;
 
   &.signup {
-    border-bottom: solid .1rem green;
+    border-bottom: solid .2rem green;
   }
   & + & {
     margin-left: 1.5rem;

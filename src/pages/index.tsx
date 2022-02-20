@@ -3,7 +3,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { constant } from "../constant"
 
-import { Header, Footer } from "../components"
+import { Header, Footer, BinaryAnimation } from "../components"
 import {
   Container,
   Landing,
@@ -140,6 +140,8 @@ export default function Home() {
       </Section>
 
       <Footer />
+
+      <BinaryAnimation />
     </Container >
   )
 }

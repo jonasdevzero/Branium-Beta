@@ -7,3 +7,4 @@ export { default as AudioPlayer } from './Room/AudioPlayer';
 export { default as ImagesViewer } from './Room/ImagesViewer';
 export { default as MediasRender } from './Room/MediasRender';
 export { default as CpuAnimation } from './Animations/Cpu';
+export { default as BinaryAnimation } from './Animations/Binary';

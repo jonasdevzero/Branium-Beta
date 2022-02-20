@@ -44,15 +44,23 @@ export const CallToAction = styled.a`
   width: 28rem;
   height: 7rem;
 
+  color: #ddd;
+  font-size: 2.4rem;
   background-color: #131313;
   margin-top: 3rem;
-  border: thin solid #198754;
+  border: thin solid green;
   border-radius: 1.5rem;
-  font-size: 2.4rem;
+  box-shadow: inset 0 0 1.5rem green, 0 0 1rem green;
   transition: opacity 0.3s ease;
 
   &:hover {
     opacity: 0.8;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 2rem;
+    width: 23rem;
+    height: 6rem;
   }
 `;
 
