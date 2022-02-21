@@ -4,3 +4,4 @@ export * from './useAuth';
 export * from './useRedux';
 export { default as useMsgContainer } from './useMsgContainer';
 export { default as useOutsideClick } from './useOutsideClick';
+export { default as useElementInView } from './useElementInView';
