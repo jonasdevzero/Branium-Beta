@@ -29,7 +29,7 @@ export const Section = styled.section`
 
   width: 100%;
   height: 45rem;
-  border-top: thin solid #131313;
+  border-top: thin solid #141414;
 
   &.info {
     height: 45rem;
@@ -111,6 +111,8 @@ export const Info = styled.div`
   flex-direction: column;
   max-width: 46%;
   font-family: 'Red Hat Text', sans-serif;
+  transition: opacity 1.5s ease-in;
+  opacity: 1;
 
   h2 {
     font-size: 6.5rem;
@@ -122,33 +124,10 @@ export const Info = styled.div`
     font-size: 2.8rem;
     margin-top: 2rem;
   }
-`;
 
-export const SectionImage = styled.div`
-  width: 45%;
-
-  span {
-    position: unset !important;
-  }
-
-  .image {
-    object-fit: contain;
-    width: 100% !important;
-    position: relative !important;
-    height: unset !important;
-  }
-
-  &.scroll__animation {
-    position: relative;
-    left: 12rem;
-    opacity: 0.3;
-
-    transition: left 1s ease-in-out, opacity 1s ease;
-
-    &.in-view {
-      opacity: 1;
-      left: 0;
-    }
+  &#section__info-1.unview,
+  &#section__info-2.unview {
+    opacity: 0;
   }
 `;
 
@@ -157,6 +136,9 @@ export const Features = styled.div`
   flex-direction: column;
   width: 40%;
   max-width: 40rem;
+  position: relative;
+  left: 0;
+  transition: left 3s ease, opacity 1.5s ease-in;
 
   & > div.row {
     display: flex;
@@ -165,17 +147,9 @@ export const Features = styled.div`
     margin-top: 3rem;
   }
 
-  &.scroll__animation {
-    position: relative;
-    right: 5rem;
-    opacity: 0.3;
-
-    transition: right 1s ease-in-out, opacity 1s ease;
-
-    &.in-view {
-      opacity: 1;
-      right: 0;
-    }
+  &.unview {
+    left: -5rem;
+    opacity: 0;
   }
 `;
 
@@ -187,10 +161,11 @@ export const Feature = styled.div`
   height: 15rem;
 
   cursor: pointer;
-  transition: 0.3s transform ease-in-out;
 
   &:hover {
-    transform: translateY(-0.5rem);
+    span > svg {
+      transform: translateY(-0.5rem);
+    }
   }
 `;
 
@@ -201,10 +176,10 @@ export const FeatureIcon = styled.span`
   width: 10rem;
   height: 10rem;
 
-  border-radius: 1.5rem;
-  border: solid 0.1rem #555;
+  border-bottom: solid thin #ddd;
 
   svg {
+    transition: 0.3s transform ease-in-out;
     font-size: 4.5rem;
   }
 `;
@@ -347,10 +322,6 @@ export const Container = styled.div`
 
   @media (max-width: 550px) {
     ${Features} {
-      display: none;
-    }
-
-    ${SectionImage} {
       display: none;
     }
 

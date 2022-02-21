@@ -1,6 +1,6 @@
 import Head from "next/head"
 import Link from "next/link"
-import Image from "next/image"
+import { useElementInView } from "~/hooks"
 import { constant } from "../constant"
 
 import { Header, Footer, BinaryAnimation } from "../components"
@@ -13,13 +13,13 @@ import {
   CallToAction,
   SectionInner,
   Info,
-  SectionImage,
   Features,
   Feature,
   FeatureIcon,
   FeatureText,
   CallToActionCard
-} from "../styles/pages/inicio"
+} from "../styles/pages/Landing"
+import Balloons from "~/styles/pages/Landing/Balloons"
 import {
   FiUser,
   FiUsers,
@@ -32,6 +32,9 @@ import {
 
 export default function Home() {
 
+  const addUnviewClass = (el: Element, inView: boolean) =>
+    !inView ? el.classList.add("unview") : el.classList.remove("unview")
+
   function slideDown() {
     const landing = document.getElementById("landing")
     if (!landing) return;
@@ -41,6 +44,11 @@ export default function Home() {
       behavior: "smooth"
     })
   }
+
+  useElementInView("#balloons", addUnviewClass)
+  useElementInView("#section__info-1", addUnviewClass)
+  useElementInView("#section__info-2", addUnviewClass)
+  useElementInView("#features", addUnviewClass)
 
   return (
     <Container>
@@ -72,20 +80,30 @@ export default function Home() {
 
       <Section className="info">
         <SectionInner>
-          <Info>
+          <Info id="section__info-1">
             <h2>Simples e Rápido</h2>
             <p>Converse com seus amigos num espaço confortável e brasileiro.</p>
           </Info>
 
-          <SectionImage>
-            <Image src="/images/chat-baloons.svg" alt="" layout="fill" className="image" />
-          </SectionImage>
+          <Balloons id="balloons">
+            <div className="balloon balloon__1">
+              <span className="row"></span>
+              <span className="row"></span>
+              <span className="row"></span>
+              <span className="row"></span>
+            </div>
+            <div className="balloon balloon__2">
+              <span className="row row-reverse"></span>
+              <span className="row row-reverse"></span>
+              <span className="row row-reverse"></span>
+            </div>
+          </Balloons>
         </SectionInner>
       </Section>
 
       <Section className="info">
         <SectionInner>
-          <Features>
+          <Features id="features">
             <div className='row'>
               <Feature>
                 <FeatureIcon> <FiUser /> </FeatureIcon>
@@ -121,7 +139,7 @@ export default function Home() {
             </div>
           </Features>
 
-          <Info>
+          <Info id="section__info-2">
             <h2>Plataforma completa</h2>
             <p>Tenha uma experiência completa com tudo o que um chat possui.</p>
           </Info>

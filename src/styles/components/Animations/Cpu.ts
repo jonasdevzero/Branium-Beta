@@ -640,8 +640,8 @@ export const RowV1G10 = styled(RowVertical)`
 
 export const RowH2G10 = styled(RowHorizontal)`
   top: 44vh;
-  left: 13.7vw;
-  width: 20vw;
+  left: 13.2vw;
+  width: 20.3vw;
   z-index: -2;
 
   &::after {
