@@ -80,7 +80,7 @@ export default function Home() {
 
       <Section className="info">
         <SectionInner>
-          <Info id="section__info-1">
+          <Info id="section__info-1" className="unview">
             <h2>Simples e Rápido</h2>
             <p>Converse com seus amigos num espaço confortável e brasileiro.</p>
           </Info>
@@ -103,7 +103,7 @@ export default function Home() {
 
       <Section className="info">
         <SectionInner>
-          <Features id="features">
+          <Features id="features" className="unview">
             <div className='row'>
               <Feature>
                 <FeatureIcon> <FiUser /> </FeatureIcon>
@@ -139,7 +139,7 @@ export default function Home() {
             </div>
           </Features>
 
-          <Info id="section__info-2">
+          <Info id="section__info-2" className="unview">
             <h2>Plataforma completa</h2>
             <p>Tenha uma experiência completa com tudo o que um chat possui.</p>
           </Info>

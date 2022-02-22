@@ -143,15 +143,10 @@ export namespace Actions {
       field: UserRooms;
       where: Actions.Where;
     };
-    
-    removeBidirectionalMessage({
-      where,
-    }: {
-      where: Actions.Where;
-    }): {
+
+    removeBidirectionalMessage({ where }: { where: Actions.Where }): {
       type: string;
       where: Actions.Where;
-    }
-  };
-
+    };
+  }
 }

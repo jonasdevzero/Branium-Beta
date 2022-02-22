@@ -109,7 +109,7 @@ export const Input = styled.input`
   color: #bbb;
   background-color: #202020;
   padding: 0 0.5rem;
-  border: solid 0.1rem #252525;
+  border: none;
   outline: none;
 `;
 
@@ -187,10 +187,10 @@ export const UpdateEmailForm = styled.form`
   left: 50%;
   transform: translateY(-50%) translateX(-50%);
 
-  width: 32rem;
+  width: 31rem;
 
   background-color: #191818;
-  border: solid 0.1rem #222;
+  border: solid 0.1rem #151515;
   padding: 4rem 0;
   z-index: 2;
 
@@ -222,10 +222,16 @@ export const UpdateEmailForm = styled.form`
     position: absolute;
     top: 1.2rem;
     right: 1.2rem;
+    opacity: 1;
+    transition: opacity .2s ease-in-out;
 
     svg {
       font-size: 2.3rem;
       cursor: pointer;
+    }
+
+    :hover {
+      opacity: .7;
     }
   }
 `;

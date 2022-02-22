@@ -209,7 +209,6 @@ export const RoomsContainer = styled.div`
   }
   ::-webkit-scrollbar-thumb {
     background-color: #202020;
-    border-left: none;
   }
   ::-webkit-scrollbar-thumb:hover {
     background-color: #252525;
@@ -233,6 +232,7 @@ export const Room = styled.div`
     font-size: 1.6rem;
     font-weight: 500;
     margin-left: 1rem;
+    text-overflow: ellipsis;
   }
 
   :hover {

@@ -11,6 +11,7 @@ export const constant = {
       ACCOUNT: '/branium/conta',
       CONTACT: (id: string) => `/branium/contato/${id}`,
       GROUP: (id: string) => `/branium/grupo/${id}`,
+      EDIT_GROUP: (id: string) => `/branium/grupo/${id}/editar`,
       GAMES: '/branium/jogos',
     },
     FAQ: '/faq',

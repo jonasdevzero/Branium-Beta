@@ -1,4 +1,5 @@
 import { createContext, useState } from "react"
+import Peer from "simple-peer"
 import { CallContextType } from "../types/contexts"
 
 import {
@@ -14,7 +15,9 @@ import {
 export const CallContext = createContext({} as CallContextType)
 
 export function CallProvider({ children }: { children: React.ReactChild }) {
-  const [minimized, setMinimized] = useState(true)
+  const [minimized, setMinimized] = useState(true);
+
+  const [myStream, setMyStream] = useState<MediaStream>();
 
   function callTo() {
     setMinimized(false)

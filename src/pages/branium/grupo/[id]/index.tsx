@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { authPage, useAuth, useAppSelector, useAppDispatch } from "~/hooks"
+import { useAuth, useAppSelector } from "~/hooks"
 import { constant } from "~/constant"
 
 import { Sidebar } from "~/components"
@@ -39,7 +39,7 @@ export default function Contact() {
           </Inner>
 
           {showMembers ? (<Members group={group} />) : null}
-          {showInfo ? (<Info close={() => setShowInfo(false)} />) : null}
+          {showInfo ? (<Info group={group} close={() => setShowInfo(false)} />) : null}
         </>
       ) : null}
     </Container>

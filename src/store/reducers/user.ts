@@ -324,12 +324,13 @@ const reducers = {
   [userReducers.UPDATE_GROUP_USER](state, action) {
     const { where, set } = action;
 
+    const { id: group_id, member_id } = where;
     const keys = Object.keys(set);
 
     state.groups = state.groups.map((g) => {
-      if (g.users.find((u) => u.id === where.member_id)) {
+      if (g.id === group_id) {
         g.users = g.users.map((gU: any) => {
-          if (gU.id === where.member_id)
+          if (gU.id === member_id)
             for (const key of keys) gU[key] = set[key];
 
           return gU;
