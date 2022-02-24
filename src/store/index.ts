@@ -7,7 +7,7 @@ const persistConfig = {
   key: 'branium',
   storage,
   whitelist: ['settings'],
-  blacklist: ['user'],
+  blacklist: ['user', 'call'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

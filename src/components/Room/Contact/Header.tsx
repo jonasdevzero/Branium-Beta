@@ -35,6 +35,15 @@ export default function Header({ contact, toggleInfo }: HeaderProps) {
   const warn = useWarn();
   const dispatch = useAppDispatch();
 
+  function call(media: "audio" | "video") {
+    callTo({
+      callTo: contact.id,
+      callMedia: media,
+      callFormat: "contact",
+      roomId: contact.id
+    })
+  }
+
   function clearMessages() {
     contactService.messages.clear(contact.id)
       .then(() => {
@@ -72,12 +81,12 @@ export default function Header({ contact, toggleInfo }: HeaderProps) {
         <h2>{contact.username}</h2>
       </Room>
 
-      <Icon onClick={() => callTo()}>
-        <FiPhone />
+      <Icon onClick={() => call("video")}>
+        <FiVideo />
       </Icon>
 
-      <Icon onClick={() => callTo()}>
-        <FiVideo />
+      <Icon onClick={() => call("audio")}>
+        <FiPhone />
       </Icon>
 
       <Icon ref={dropdownRef} onClick={() => setShowDropdown(!showDropdown)}>

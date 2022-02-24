@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import Router from "next/router";
 import { useAppDispatch, useAppSelector, useOutsideClick, useWarn } from "~/hooks";
 import { CallContext } from "~/contexts/CallContext";
@@ -35,6 +35,7 @@ export default function Header({ group, toggleInfo }: HeaderI) {
 
   const userId = useAppSelector(state => state.user.id)
   const isAdm = useAppSelector(state => state.user.groups.find(g => g.id === group.id)?.role === 0)
+  const members = useMemo(() => group.users.map(u => u.id), [group, group.users])
 
   const dropdownRef = useRef(null)
   const [showDropdown, setShowDropdown] = useState(false);
@@ -45,6 +46,15 @@ export default function Header({ group, toggleInfo }: HeaderI) {
   const warn = useWarn();
 
   useOutsideClick(dropdownRef, () => setShowDropdown(false))
+
+  function call(media: "audio" | "video") {
+    callTo({
+      callTo: members,
+      callMedia: media,
+      callFormat: "group",
+      roomId: group.id,
+    })
+  }
 
   function leaveGroup() {
     groupService.leave(group.id).then(() => {
@@ -65,12 +75,12 @@ export default function Header({ group, toggleInfo }: HeaderI) {
         <h2>{group.name}</h2>
       </Room>
 
-      <Icon onClick={() => callTo()}>
-        <FiPhone />
+      <Icon onClick={() => call("video")}>
+        <FiVideo />
       </Icon>
 
-      <Icon onClick={() => callTo()}>
-        <FiVideo />
+      <Icon onClick={() => call("audio")}>
+        <FiPhone />
       </Icon>
 
       <Icon onClick={() => dispatch(SettingsActions.room.toggleShowMembers())}>

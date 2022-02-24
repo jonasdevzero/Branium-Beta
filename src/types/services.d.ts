@@ -6,6 +6,8 @@ export namespace Services {
 
     search(username: string): Promise<SearchUser[]>;
 
+    get(id: string): Promise<SearchUser>;
+
     getPreRegistration(id: string): Promise<{ pending: boolean }>;
 
     preRegistration(data: { name: string; email: string }): Promise<string>;

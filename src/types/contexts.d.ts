@@ -37,7 +37,18 @@ export type AuthContextType = {
   loadingAuth: boolean;
 };
 
+export type CallToConstraints = {
+  callTo: string | string[];
+  callMedia: 'video' | 'audio';
+  callFormat?: 'contact' | 'group';
+  roomId?: string;
+}
 export type CallContextType = {
   inCall: boolean;
-  callTo(): void;
+  callTo({
+    callTo,
+    callMedia,
+    callFormat,
+    roomId
+  }: CallToConstraints): void;
 };

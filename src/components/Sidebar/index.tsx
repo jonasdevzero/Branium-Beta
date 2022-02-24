@@ -6,6 +6,7 @@ import { useAppSelector, useAppDispatch } from "~/hooks"
 import socket from "~/services/socket"
 import { constant } from "~/constant"
 import SettingsActions from "~/store/actions/SettingsActions"
+import CallActions from "~/store/actions/CallActions"
 import { Contact, Group } from "~/types/user"
 
 import { Avatar } from "../"
@@ -40,10 +41,11 @@ import {
   FiPlus,
   FiBell,
   FiPower,
+  FiPhone,
 } from "react-icons/fi"
 
 export default function Sidebar() {
-  const { user, config } = useAppSelector(state => ({ user: state.user, config: state.settings.sidebar }))
+  const { user, config, call } = useAppSelector(state => ({ user: state.user, config: state.settings.sidebar, call: state.call }))
 
   const [searchContactResult, setSearchContactResult] = useState<Contact[]>()
   const [groupSearchResult, setSearchGroupResult] = useState<Group[]>()
@@ -133,6 +135,12 @@ export default function Sidebar() {
                 </PendingInvitations>
               ) : null}
             </Option>
+
+            {call.inCall ? (
+              <Option onClick={() => dispatch(CallActions.toggleCallMinimized())}>
+                <FiPhone />
+              </Option>
+            ) : null}
           </OptionsInner>
 
           <OptionsPlus>

@@ -21,6 +21,17 @@ const userService = {
     });
   },
 
+  get(id: string) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await api.get(`/user/${id}`);
+        resolve(response.data.user);
+      } catch (error: any) {
+        reject(error.response?.data.message);
+      }
+    });
+  },
+
   getPreRegistration(id) {
     return new Promise(async (resolve, reject) => {
       try {
