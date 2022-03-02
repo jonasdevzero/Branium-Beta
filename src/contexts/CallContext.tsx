@@ -1,6 +1,6 @@
 import { createContext, useState, useRef, useEffect } from "react"
 import Peer from "simple-peer"
-import { useAppDispatch, useAppSelector } from "~/hooks"
+import { useAppDispatch, useAppSelector, useWarn } from "~/hooks"
 import CallActions from "~/store/actions/CallActions"
 import { CallContextType, CallToConstraints } from "../types/contexts"
 import socket from "~/services/socket"
@@ -34,7 +34,7 @@ type CallUser = {
   picture: string | undefined;
 }
 
-const Video = ({ peer, user }: { peer: Peer.Instance, user?: CallUser }) => {
+const PeerVideo = ({ peer, user }: { peer: Peer.Instance, user?: CallUser }) => {
   const ref = useRef<HTMLVideoElement>(null);
   const [mediaState, setMediaState] = useState({ audio: false, video: false })
 
@@ -82,21 +82,22 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
   const peersRef = useRef<Array<{ peerId: string, peer: Peer.Instance }>>([])
   const [callUsers, setCallUsers] = useState<Array<CallUser>>([])
 
-  const myStreamRef = useRef<MediaStream>()
+  const streamRef = useRef<MediaStream>()
   const [videoEnabled, setVideoEnabled] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [error, setError] = useState<string>()
 
-  const gridCol = peers.length + 1 === 1 ? 1 : peers.length + 1 <= 4 ?  peers.length + 1 : 4;
+  const gridCol = peers.length + 1 === 1 ? 1 : peers.length + 1 <= 4 ? peers.length + 1 : 4;
   const gridRow = peers.length + 1 <= 4 ? 1 : peers.length + 1 <= 12 ? 2 : peers.length + 1 <= 16 ? 3 : 4;
 
   const dispatch = useAppDispatch()
+  const warn = useWarn()
 
   async function callTo({ callTo, callMedia, roomId, callFormat }: CallToConstraints) {
     dispatch(CallActions.toggleCallMinimized())
     setVideoEnabled(callMedia === "video")
 
-    const callToArray = (Array.isArray(callTo) ? callTo : [callTo]);
+    let callToArray = (Array.isArray(callTo) ? callTo : [callTo]);
 
     if (callFormat === "group" && !callToArray.find(u => u == user.id) && roomId) {
       const gUsers = await groupService.users.index(roomId)
@@ -104,17 +105,10 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
         .filter(u => u.id !== user.id)
         .forEach(gU => callToArray.push(gU.id))
     }
-    callToArray.filter(u => u !== user.id)
+    callToArray = callToArray.filter(u => u !== user.id)
 
-    const [stream, usersToCall] = await Promise.all([
-      navigator.mediaDevices.getUserMedia({ audio: true, video: true }),
-
-      // getting all users online
-      new Promise((resolve: (users: Array<{ id: string, online: boolean }>) => void) =>
-        socket.emit('is-online', callToArray, (u: any) => { resolve(u) })),
-    ])
-
-    callMedia !== "video" ? stream.getVideoTracks().map(v => v.enabled = false) : null
+    const usersToCall = await new Promise((resolve: (users: Array<{ id: string, online: boolean }>) => void) =>
+      socket.emit('is-online', callToArray, (u: any) => { resolve(u) }))
 
     callFormat === "contact" && !usersToCall[0].online ?
       setError("Contato offline, não é possível ligar para este contato!") : null
@@ -124,16 +118,51 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
 
     if (error) return;
 
-    myStreamRef.current = stream;
-    userVideo.current!.srcObject = stream;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      callMedia !== "video" ? stream.getVideoTracks().map(v => v.enabled = false) : null;
 
-    socket.emit("call:create", { to: usersToCall.map(u => u.id), callMedia }, (callId: string) => {
-      dispatch(CallActions.startCall(callId, user.id, "video"))
-    })
+      streamRef.current = stream;
+      userVideo.current!.srcObject = stream;
 
-    socket.on("call:user-join", userJoin(stream))
+      const usersToCallId = usersToCall.filter(u => u.online).map(u => u.id)
+      socket.emit("call:create", { to: usersToCallId, callMedia }, (callId: string) => {
+        dispatch(CallActions.startCall(callId, user.id, "video"))
+      })
 
-    socket.on("call:user-leave", userLeave)
+      socket.on("call:rejected", (refuserId: string) => {
+        const c = contacts.find(c => c.id === refuserId);
+
+        if (usersToCallId.filter(id => id !== refuserId).length === 0) {
+          if (callFormat === "contact") {
+            leaveCall();
+
+            warn.info(`${c?.username} recusou a chamada!`);
+          } else {
+            leaveCall()
+            warn.info("Todos as pessoas online do grupo recusaram a chamada!")
+          }
+        } else {
+          warn.info(`${c?.username} recusou a chamada!`);
+        }
+      })
+      socket.on("call:user-join", userJoin(stream))
+      socket.on("call:user-leave", userLeave)
+      socket.on("call:end", callEnd)
+    } catch (error: any) {
+      console.log(error)
+
+      switch (error.toString()) {
+        case "NotReadableError: Could not start video source":
+          setTimeout(() => dispatch(CallActions.finishCall()), 100)
+          setTimeout(() => warn.error("Algo no seu navegador não deixa acessar à camera!"), 700)
+          break;
+        case "NotAllowedError: Permission denied":
+          setTimeout(() => dispatch(CallActions.finishCall()), 100)
+          setTimeout(() => warn.error("Permita o acesso a câmera/microfone para ligar!"), 700)
+          break;
+      }
+    }
   }
 
   function answerCall() {
@@ -141,7 +170,7 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
 
     navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(stream => {
       call.callMedia !== "video" ? stream.getVideoTracks().map(v => v.enabled = false) : null
-      myStreamRef.current = stream;
+      streamRef.current = stream;
 
       userVideo.current!.srcObject = stream;
 
@@ -160,8 +189,11 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
             peer,
           })
 
-          const u = contacts.find(c => c.id === uId)
-          u ? setCallUsers(callUsers => [...callUsers, { id: uId, username: u.username, picture: u.picture }])
+          const callUser = contacts
+            .map(c => ({ id: c.id, username: c.username, picture: c.picture }))
+            .find(c => c.id === uId)
+
+          callUser ? setCallUsers(callUsers => [...callUsers, callUser])
             : userService.get(uId).then(user => setCallUsers(callUsers => [...callUsers, user]))
         })
 
@@ -176,10 +208,15 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
       })
 
       socket.on("call:user-leave", userLeave)
+
+      socket.on("call:end", callEnd)
     })
   }
 
-  function rejectCall() { }
+  function rejectCall() {
+    socket.emit("call:reject", { callerId: call.callerId })
+    dispatch(CallActions.finishCall())
+  }
 
   function createPeer(userToSignal: string, callerId: string, stream: MediaStream) {
     const peer = new Peer({
@@ -218,14 +255,18 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
   function userJoin(stream: MediaStream) {
     return ({ signal, callerId }: { signal: Peer.SignalData, callerId: string }) => {
       const peer = addPeer(signal, callerId, stream)
+
       peersRef.current.push({
         peerId: callerId,
         peer,
       })
       setPeers(peers => [...peers, { userId: callerId, peer }])
 
-      const u = contacts.find(c => c.id === callerId)
-      u ? setCallUsers(callUsers => [...callUsers, { id: callerId, username: u.username, picture: u.picture }])
+      const newUser = contacts
+        .map(c => ({ id: c.id, username: c.username, picture: c.picture }))
+        .find(c => c.id === callerId)
+
+      newUser ? setCallUsers(callUsers => [...callUsers, newUser])
         : userService.get(callerId).then(user => setCallUsers(callUsers => [...callUsers, user]))
     }
   }
@@ -235,9 +276,14 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
     peersRef.current.filter(p => p.peerId !== userId)
 
     setPeers(peers => peers.filter(p => p.userId !== userId))
+
+    const callUser = callUsers.find(c => c.id === userId)
+    callUser ? warn.info(`${callUser.username} saiu da ligação!`) : null
+
+    setCallUsers(callUsers => callUsers.filter(c => c.id !== userId))
   }
 
-  function finishCall() {
+  function leaveCall() {
     socket.emit("call:leave", call.callId)
 
     setError(undefined)
@@ -247,26 +293,34 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
     peers.forEach(p => p.peer.destroy())
     setPeers([])
     peersRef.current = []
+    setCallUsers([])
 
     socket.off("call:users")
     socket.off("call:user-join")
     socket.off("call:user-leave")
     socket.off("call:returned-signal")
+    socket.off("call:rejected")
+    socket.off("call:end")
 
-    myStreamRef.current?.getAudioTracks()
+    streamRef.current?.getAudioTracks()
       .forEach(audioTrack => audioTrack.stop())
 
-    myStreamRef.current?.getVideoTracks()
+    streamRef.current?.getVideoTracks()
       .forEach(videoTrack => videoTrack.stop())
 
     dispatch(CallActions.finishCall())
   }
 
-  function toggleMicStatus() {
-    if (myStreamRef.current) {
-      const enabled = myStreamRef.current.getAudioTracks()[0].enabled;
+  function callEnd() {
+    leaveCall()
+    warn.info("Chamada encerrada!")
+  }
 
-      myStreamRef.current.getAudioTracks()[0].enabled = !enabled;
+  function toggleMicStatus() {
+    if (streamRef.current) {
+      const enabled = streamRef.current.getAudioTracks()[0].enabled;
+
+      streamRef.current.getAudioTracks()[0].enabled = !enabled;
       setAudioEnabled(!enabled);
 
       updateMediaStatus()
@@ -274,10 +328,10 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
   };
 
   function toggleVideoStatus() {
-    if (myStreamRef.current) {
-      const enabled = myStreamRef.current.getVideoTracks()[0].enabled;
+    if (streamRef.current) {
+      const enabled = streamRef.current.getVideoTracks()[0].enabled;
 
-      myStreamRef.current.getVideoTracks()[0].enabled = !enabled;
+      streamRef.current.getVideoTracks()[0].enabled = !enabled;
       setVideoEnabled(!enabled);
 
       updateMediaStatus()
@@ -285,8 +339,8 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
   };
 
   function updateMediaStatus(peer?: Peer.Instance) {
-    const audio = myStreamRef.current?.getAudioTracks()[0].enabled
-    const video = myStreamRef.current?.getVideoTracks()[0].enabled
+    const audio = streamRef.current?.getAudioTracks()[0]?.enabled || false;
+    const video = streamRef.current?.getVideoTracks()[0]?.enabled || false;
 
     const data = JSON.stringify(["call:update-media", { audio, video }])
     peer ? peer.send(data) : peersRef.current.forEach(p => p.peer.send(data))
@@ -300,7 +354,7 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
           <EventScreen>
             <h1>{error}</h1>
 
-            <button type="button" className="close" onClick={finishCall}>
+            <button type="button" className="close" onClick={leaveCall}>
               <FiX />
             </button>
           </EventScreen>
@@ -315,7 +369,7 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
                 <FiPhone />
               </button>
 
-              <button type="button" className="reject" onClick={answerCall}>
+              <button type="button" className="reject" onClick={rejectCall}>
                 <FiPhoneMissed />
               </button>
             </div>
@@ -344,7 +398,7 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
               const user = callUsers.find(u => u.id === peer.userId)
 
               return (
-                <Video user={user} key={peer.userId} peer={peer.peer} />
+                <PeerVideo user={user} key={peer.userId} peer={peer.peer} />
               )
             })}
           </Screens>
@@ -354,7 +408,7 @@ export function CallProvider({ children }: { children: React.ReactChild }) {
               {videoEnabled ? (<FiVideo />) : (<FiVideoOff />)}
             </Option>
 
-            <Option className="call__end" onClick={finishCall}>
+            <Option className="call__end" onClick={leaveCall}>
               <FiPhone />
             </Option>
 
