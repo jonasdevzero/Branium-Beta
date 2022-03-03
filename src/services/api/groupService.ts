@@ -42,7 +42,10 @@ const groupService = {
   update_picture(group_id, picture) {
     return new Promise(async (resolve, reject) => {
       try {
-        const response = await api.patch(`/group/${group_id}`, { picture });
+        const formData = new FormData()
+        formData.append("picture", picture)
+
+        const response = await api.patch(`/group/${group_id}/picture`, formData);
 
         resolve(response.data.picture);
       } catch (error: any) {
