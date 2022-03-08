@@ -1,5 +1,4 @@
 <h1 align="center">Branium</h1>
-<h2 align="center">:construction: Building :construction:</h2>
 
 <img src="https://github.com/jonasdevzero/MediaHub/blob/master/projects/branium/home.png" />
 
@@ -21,7 +20,7 @@ This project is a super web chat made with ReactJs and NodeJs, from a brazilian 
 - [ ] Status feature <br />
 
 ## Deploy
-[Branium](https://branium.vercel.app)
+Beta avaliable - [Branium](https://branium.vercel.app)
 
 ## Contact
 
