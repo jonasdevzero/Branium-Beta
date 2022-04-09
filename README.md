@@ -4,7 +4,6 @@
 
 ## Index
 * [About](#about)
-* [Deploy](#deploy)
 * [Contact](#contact)
 * [Knowledge Acquired](#knowledge-acquired)
 
