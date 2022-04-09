@@ -19,9 +19,6 @@ This project is a super web chat made with ReactJs and NodeJs, from a brazilian 
 - [x] Call feature <br />
 - [ ] Status feature <br />
 
-## Deploy
-Beta avaliable - [Branium](https://branium.vercel.app)
-
 ## Contact
 
 <a target="_blank" href="https://www.linkedin.com/in/jonasdevzero">
